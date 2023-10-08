@@ -1,0 +1,11 @@
+:root{
+    --text-color: #ffffff;
+    --text-color-reverse: #ffffff;
+    --background-color: #272921;
+    --background-color-dim-light: #656565;
+    --background-color-dim: #4f4f4f;
+    --background-color-dim-strong: #323232;
+    --background-color-button-light: #48a377;
+    --background-color-button: #3c755a;
+    --box-shadow: rgba(255, 255, 255, 0.24) 0px 3px 8px;
+}
