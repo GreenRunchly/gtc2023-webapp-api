@@ -18,7 +18,7 @@
 <script src="js/skrip.js?ver=3"></script>
 <script>
     // Penyetelan Aplikasi
-    const appServer = 'http://localhost:25000/';
+    const appServer = '';
 
     // Penyetelan Tanggal dan Waktu
     let appDate = new Date();
@@ -472,7 +472,7 @@
     moduleUserTheme();
 
     $.ajax({
-        url: appServer + 'app-data',
+        url: appServer + 'app-data.json',
         dataType: "json",
         success: function( response ) {
 
