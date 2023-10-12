@@ -16,8 +16,7 @@ app.use(cors())
 app.get('/app-data', (req, res) => {
 	function bacaFile(aksiLanjutan, filePath) {
 		let file = fs.readFileSync(filePath, { encoding: 'utf8', flag: 'r' });
-		let informasi = fs.readFileSync(path.join(__dirname, "data", "informasi-penting.html"), { encoding: 'utf8', flag: 'r' });
-		aksiLanjutan(JSON.parse(file), (informasi));
+		aksiLanjutan(JSON.parse(file));
 	}
 	bacaFile( (fileTerbaca, informasi) => {
 		delete fileTerbaca['rundown'];

@@ -133,7 +133,6 @@ function appLoadPage(selectedPage) {
         success: function( response ) {
             appSplashHide();
             $(".app").html(response);
-            console.log(response);
         },
         error: function() {
             appSplashShow();

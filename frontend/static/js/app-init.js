@@ -10,7 +10,7 @@ let appDateHour = appDate.getHours();
 let appDateMinute = appDate.getMinutes();
 let appDateSecond = appDate.getSeconds();
 let appDateFormat = appDate.getHours() + ":" + appDate.getMinutes() + ":" + appDate.getSeconds();
-let appDateDayFormat = itsIntToDay(appDateDay);
+let appDateDayFormat = appFuncIntToDay(appDateDay);
 let appDateTimestamp = Math.floor(Date.now() / 1000);
 
 // Memperbaharui value appTime
@@ -22,15 +22,23 @@ setInterval(() => {
     appDateMinute = appDate.getMinutes();
     appDateSecond = appDate.getSeconds();
     appDateFormat = appDate.getHours() + ":" + appDate.getMinutes() + ":" + appDate.getSeconds();
-    appDateDayFormat = itsIntToDay(appDateDay);
+    appDateDayFormat = appFuncIntToDay(appDateDay);
     appDateTimestamp = Math.floor(Date.now() / 1000);
 }, 1000);
 
 // Load App Data
+let appDataThumbnail = [];
 $.ajax({
     url: `${appAPIServer}/app-data`, dataType: "json",
     success: function( response ) {
-        
+        // Data Countdown
+        appDataCountdownDate = response.data.utama.countdown;
+        // Data Thumbnail
+        appDataThumbnail = response.data.utama.thumbnail;
+        // Data Rundown
+        appDataRundown = response.data.utama.rundown;
+        // Data HelpDesk
+        appDataHelpdesk = response.data.utama.helpdesk;
     },
     error: function() {
         appSplashHide();
