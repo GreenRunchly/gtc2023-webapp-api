@@ -252,7 +252,10 @@ textarea.readonly{
 .swiper.round-half{
     border-radius: 0rem 0rem 1rem 1rem;
 }
-
+.swiper-slide{
+    border-radius: 1rem;
+    overflow: hidden;
+}
 /* rundown-perjalanan */
 #rundown-perjalanan{
     display: flex;

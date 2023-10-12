@@ -26,7 +26,13 @@ setInterval(() => {
     appDateTimestamp = Math.floor(Date.now() / 1000);
 }, 1000);
 
-// Membuat format waktu 00:00
-function appFuncTimeFormat(num) {
-    return (num < 10) ? '0' + num : num;
-}
+// Load App Data
+$.ajax({
+    url: `${appAPIServer}/app-data`, dataType: "json",
+    success: function( response ) {
+        
+    },
+    error: function() {
+        appSplashHide();
+    }
+});

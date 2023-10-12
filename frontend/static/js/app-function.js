@@ -46,14 +46,14 @@ function is_exists(variable) {
     ///if (variable !== null) || (variable !== undefined){
 }
 ///Urut key array
-function itsSortObj(obj) {
+function appFuncSortObj(obj) {
     return Object.keys(obj).sort().reduce(function (result, key) {
         result[key] = obj[key];
         return result;
     }, {});
 }
 ///Acak Array
-function itsRandomArray(arra1) {
+function appFuncRandomArray(arra1) {
     var ctr = arra1.length, temp, index;
 
     // While there are elements in the array
@@ -70,7 +70,7 @@ function itsRandomArray(arra1) {
     return arra1;
 }
 ///Angka jadi hari
-function itsIntToDay(angkaHari){
+function appFuncIntToDay(angkaHari){
     switch (angkaHari) {
         case 6:
             formatHari = "Sabtu";
@@ -98,8 +98,12 @@ function itsIntToDay(angkaHari){
     }
     return formatHari;
 }
-function itsRound(vval,vmax) {
+function appFuncMathRound(vval,vmax) {
     return Math.round( ( (vval) / vmax )*(vmax/100) );
+}
+// Membuat format waktu 00:00
+function appFuncTimeFormat(num) {
+    return (num < 10) ? '0' + num : num;
 }
 // Menyembunyikan splashscreen
 function appSplashHide() {
@@ -128,7 +132,7 @@ function appLoadPage(selectedPage) {
         dataType: "html",
         success: function( response ) {
             appSplashHide();
-            $("#app").html(response);
+            $(".app").html(response);
             console.log(response);
         },
         error: function() {
