@@ -2,7 +2,7 @@
 const express = require('express');
 const app = express();
 // Port yang dipakai ExpressJS untuk menjalankan webserver listen()
-const port = 25000;
+const port = 62000;
 
 // Library Tambahan untuk melengkapi fitur yang dipakai
 const fs = require('fs');
