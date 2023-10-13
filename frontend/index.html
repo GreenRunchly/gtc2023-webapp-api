@@ -306,6 +306,24 @@
     <div class="splashscreen">
         <i class="fad fa-map"></i>
     </div>
+    <div class="model on" id="app-login">
+        <div class="app">
+            <div class="container">
+                <div class="content">
+                    <h2 class="title">Identifikasi Pengguna</h2>
+                    <p>Harap masukan nomor WhatsApp yang aktif agar NIS dapat dihubungkan.</p>
+                    <input type="phone" placeholder="628XXXXXXXXXX">
+                    <br>
+                    <button class="toggle" toggle-id="app-pengaturan" onclick="moduleAkunOTPWA();">Kirim OTP</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        function moduleAkunOTPWA() {
+            $('#app_pengaturan_kelas').val()
+        }
+    </script>
     <div class="model off" id="app-pengaturan">
         <div class="app">
             <div class="container">
