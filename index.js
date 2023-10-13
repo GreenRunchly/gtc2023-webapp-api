@@ -15,7 +15,7 @@ const cors = require('cors');
 app.use(cors());
 
 // Mengakses static file (main web)
-app.use('/', express.static(path.join(__dirname, 'static')))
+app.use('/', express.static(path.join(__dirname, 'frontend')))
 
 // Menjalankan webserver ExpressJS
 app.listen(port, () => {

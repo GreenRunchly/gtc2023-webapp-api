@@ -261,6 +261,11 @@
         console.log("Savee berhasil");
     }
 
+    function moduleUserLogout() {
+        appDeleteStorage('all');
+        location.reload();
+    }
+
     function moduleUser(data=null) {
         if (data !== null){
             let ohtml = ``;
@@ -271,6 +276,7 @@
             }); 
 
             $("#app_pengaturan_kelas").html(ohtml);
+            
         }
 
         // Load Datanya
@@ -284,6 +290,12 @@
         }else{
             $("#app-pengaturan").removeClass('off');
             $("#app-pengaturan").addClass('on');
+        }
+
+        if (loadData('appUserNIS')){
+            let nisUser = loadData('appUserNIS');
+            $(".module-user-nis").html(nisUser);
+            // $("#ppsiswa").css('--bgimg',`url('https://kelas.riko.my.id/fotosiswa/${nisUser}')`)
         }
     }
 
@@ -306,24 +318,6 @@
     <div class="splashscreen">
         <i class="fad fa-map"></i>
     </div>
-    <div class="model on" id="app-login">
-        <div class="app">
-            <div class="container">
-                <div class="content">
-                    <h2 class="title">Identifikasi Pengguna</h2>
-                    <p>Harap masukan nomor WhatsApp yang aktif agar NIS dapat dihubungkan.</p>
-                    <input type="phone" placeholder="628XXXXXXXXXX">
-                    <br>
-                    <button class="toggle" toggle-id="app-pengaturan" onclick="moduleAkunOTPWA();">Kirim OTP</button>
-                </div>
-            </div>
-        </div>
-    </div>
-    <script>
-        function moduleAkunOTPWA() {
-            $('#app_pengaturan_kelas').val()
-        }
-    </script>
     <div class="model off" id="app-pengaturan">
         <div class="app">
             <div class="container">
@@ -336,16 +330,117 @@
                         <option value="stylesheet-disable">Disable</option>
                     </select>
                     <br>
-                    <button class="toggle" toggle-id="app-pengaturan" onclick="moduleUserSave();">Simpan</button>
+                    <button class="toggle" toggle-id="app-pengaturan" onclick="moduleUserSave();">Simpan</button><br>
+                    <button class="toggle" toggle-id="app-pengaturan" onclick="moduleUserLogout();">Logout</button>
                 </div>
             </div>
         </div>
     </div>
+    <div class="model on" id="app-login">
+        <div class="app">
+            <div class="container">
+                <div class="content">
+                    <h2 class="title">Identifikasi Pengguna</h2>
+                    <p>Harap masukan nomor WhatsApp yang aktif agar NIS dapat dihubungkan.</p><br>
+                    <input type="phone" id="phonenum" placeholder="628XXXXXXXXXX">
+                    <br>
+                    <button id="otpbutton" onclick="moduleAkunOTPWA();">Kirim OTP</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="model off" id="app-login-otp">
+        <div class="app">
+            <div class="container">
+                <div class="content">
+                    <h2 class="title">Verifikasi OTP</h2>
+                    <p>Masukan NIS mu dan masukan kode OTP yang sudah dikirim! *Hanya berbentuk angka!</p>
+                    <p>Jangan reload halaman ini!</p><br>
+                    <input type="text" id="nissiswa" placeholder="Masukan NIS">
+                    <input type="number" id="otpver" placeholder="Paste OTP disini!">
+                    <br>
+                    <button onclick="moduleAkunOTPWAVerify();" >Verifikasi</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        // Load Datanya
+        if (loadData('appOTP')){
+            let OTP = loadData('appOTP');
+        }else{
+            
+        }
+
+        let OTP = 100000 + (Math.round( Math.random()*899999));
+
+        if ((loadData('appOTPPhoneNumber')) && (loadData('appUserNIS'))){
+            $("#app-login").addClass('off');
+            $("#app-login-otp").addClass('off');
+            $("#app-login").removeClass('on');
+            $("#app-login-otp").removeClass('on');
+        }
+        
+        function moduleAkunOTPWA() {
+            // Kode ini hanya prototype, proses pengiriman akan berbeda saat masa production!
+            let phoneNumber = $('#phonenum').val();
+            $("#otpbutton").attr('disabled');
+            $.ajax({
+                url: `https://wa.ieu.link/send?destinasi=${phoneNumber}&pesan=${OTP}`,
+                dataType: "json",
+                success: function( response ) {
+                    if (response.code == 'ok'){
+                        alert(`OTP berhasil dikirim! Tunggu paling cepat 1 menit kurang untuk OTP sampai ke WA!`)
+                        $("#app-login").addClass('off');
+                        $("#app-login-otp").removeClass('off');
+                        $("#app-login-otp").addClass('on');
+                    }else{
+                        alert('OTP gagal dikirim'); 
+                    }
+                },
+                error: function() {
+                    alert('OTP gagal dikirim'); 
+                }
+            });
+            console.log('Mengirim OTP...');
+        }
+        function moduleAkunOTPWAVerify() {
+            let OTPInput = $('#otpver').val();
+            if (OTPInput == OTP){
+                $("#app-login-otp").removeClass('on');
+                $("#app-login-otp").addClass('off');
+                // Set Datanya
+                setData(OTP,'appOTP');
+                setData($('#phonenum').val(),'appOTPPhoneNumber');
+                setData($('#nissiswa').val(),'appUserNIS')
+                location.reload();
+            }else{
+                alert('OTP yang dimasukan tidak cocok!')
+            }
+        }
+    </script>
     <div class="app">
         <div class="container">
             <div class="content">
                 <h2 class="module-greeting"></h2>
-                <h4 class="module-user-kelas">...</h4>
+                <h4><span class="module-user-nis"></span> - <span class="module-user-kelas"></span></h4>
+                <div class="content" style="justify-content: center;display: flex;margin-bottom: -50px;">
+                    <div id="ppsiswa"></div>
+                </div>
+                <style>
+                    #ppsiswa{
+                        --bgimg : url('https://kelas.riko.my.id/fotosiswa/unknow');
+                        width: 120px;
+                        height: 120px;
+                        border-radius: 50%;
+                        background-position: center;
+                        background-size: cover;
+                        background-position: center;
+                        background-color: white;
+                        background-image: var(--bgimg);
+                        z-index: 4;
+                    }
+                </style>
                 <div class="swiper round do-swipe">
                     <div class="swiper-wrapper">
                         <div class="swiper-slide">
