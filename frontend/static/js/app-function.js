@@ -140,12 +140,16 @@ function appLoadPage(selectedPage) {
     });
 }
 // Control Display Content
-function appLoadContent(target, contentSource) {
+function appLoadContent(target, contentSource, replace=false) {
     $.ajax({
-        url: appServer + `/app-pages/${contentSource}`,
+        url: appServer + `/${contentSource}`,
         dataType: "html",
         success: function( response ) {
-            $(target).html(response);
+            if (replace){
+                $(target).replaceWith(response);
+            }else{
+                $(target).html(response);
+            }
         },
         error: function() {
             $(target).html(`

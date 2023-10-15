@@ -1,0 +1,73 @@
+<!-- Module Countdown -->
+<div class="content" id="countdown">
+    <div class="container module-countdown countdown-container" style="padding-bottom:0rem;padding-top: 1rem;" >
+        <h1 class="countdown-title">
+            <span>Goes To Campus</span><span>Count Down</span>
+        </h1>
+        <div id="daftar-siswa" class="pencil-style"></div>
+        <div class="digits digits-special">
+            <div class="digit">
+                <div class="number">0</div>
+                <div class="label">Hari lagi!</div>
+            </div>
+        </div>
+        <div class="digits">
+            <div class="digit">
+                <div class="number">00</div>
+                <div class="label">Jam</div>
+            </div>
+            <div class="digit">
+                <div class="number">00</div>
+                <div class="label">Menit</div>
+            </div>
+            <div class="digit">
+                <div class="number">00</div>
+                <div class="label">Detik</div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    // Module Countdown
+    function moduleMainCountdown(target, data) {
+        let procCountDown = setInterval(() => {
+            // Init Countdown
+            let finaleCountDown = new Date(data).getTime();
+            let resultCountDown = `...`;
+
+            // Starter
+            let timeNow = appDate;
+            let timeLeft = finaleCountDown - timeNow;
+
+            // Kalkulai masing-masing waktu
+            let timeSec = Math.floor((timeLeft % (1000 * 60)) / 1000);
+            let timeMin = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
+            let timeHour = Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            let timeDay = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
+
+            // Tampilkan countdown atau ended
+            if (timeLeft > 0){
+                // Detik
+                $(`#countdown .digits .digit`).eq(3).children().eq(0).html(appFuncTimeFormat(timeSec));
+                // Menit
+                $(`#countdown .digits .digit`).eq(2).children().eq(0).html(appFuncTimeFormat(timeMin));
+                // Jam
+                $(`#countdown .digits .digit`).eq(1).children().eq(0).html(appFuncTimeFormat(timeHour));
+                // Hari
+                $(`#countdown .digits .digit`).eq(0).children().eq(0).html(timeDay);
+                $(`#countdown`).show();
+            }else{
+                // Ganti menjadi teks ended
+                $(`#countdown .digits.digits-special .digit .number`).html(`End`);
+                $(`#countdown .digits.digits-special .digit .label`).remove();
+                $(`#countdown`).hide();
+                // Matikan proses Count Down
+                clearInterval(procCountDown);
+            }
+        }, 1000);
+    }
+    let loopProcMainCountdown = setInterval(() => {
+        moduleMainCountdown($('#countdown'), appDataCountdownDate);
+    }, 1000);
+</script>
+<!-- Module Countdown -->

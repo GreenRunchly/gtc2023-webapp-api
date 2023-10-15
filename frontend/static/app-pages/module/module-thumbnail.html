@@ -1,0 +1,44 @@
+<!-- Module Thumbnail -->
+<div class="swiper module-thumb-swipe round">
+    <div class="swiper-wrapper"></div>
+</div>
+<script>
+    // Module Thumbnail
+
+    // Init obj Swiper Thumbnail
+    let mainThumbnailSwipe = new Swiper('.module-thumb-swipe', {
+        slidesPerView: 'auto',
+        spaceBetween: 8,
+        autoplay: {
+            delay: 2000,
+            disableOnInteraction: false,
+        },
+        loop: true
+    });
+    moduleMainThumbnail(mainThumbnailSwipe, appDataThumbnail);
+    function moduleMainThumbnail(target, data) {
+        let ohtml = [];
+        if (data != []){
+            $.each(data, function( i, v ) {
+                let thumnailUrl = v;
+                ohtml.push(`
+                    <div class="swiper-slide">
+                        <div class="thumbnail" style="--src: url('${thumnailUrl}');"></div>
+                    </div>
+                `);
+            }); 
+        }else{
+            ohtml.push(`
+                <div class="swiper-slide">
+                    <div class="thumbnail" style="--src: url('../assets/foto-destinasi/trikabta.jpeg');"></div>
+                </div>
+            `);
+        }
+
+        // Menghapus isi slide yang ada dan timpa html dengan yang baru dari urlSource
+        // target.removeAllSlides();
+        target.appendSlide(ohtml);
+        console.log(ohtml);
+    };
+</script>
+<!-- Module Thumbnail -->
