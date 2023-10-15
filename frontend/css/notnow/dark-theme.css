@@ -1,0 +1,52 @@
+body{
+	background-color: #303841;
+	color: white;
+}
+h1, .h1,
+h2, .h2,
+h3, .h3,
+h4, .h4,
+h5, .h5,
+h6, .h6,
+label {
+    color: white !important;
+}
+button, input[type=submit], .main-button{
+	background-color: #4e6f8e;
+}
+.nav-button i{
+	color: #f4f6fb;
+}
+.nav-parent.blur{
+	background-color: #73a3ce;
+}
+.bg-effect,.bg-effect-bottom{
+	filter: invert(20%) sepia(18%) saturate(576%) hue-rotate(171deg) brightness(85%) contrast(88%);
+}
+.slider-input-container:has(.slider-input){
+	background-color: #ffffff;
+}
+.slider-input::-webkit-slider-thumb{
+	/*background-color: #4e6f8e;*/
+}
+.slider-input-effect{
+	background-color: #88c1f4;
+}
+.slider-input-effect i{
+    background-color: #4e6f8e ;
+}
+.swipe-parent .swipe-content .swiper-slide .swipe-box{
+	background-color: #4e6f8e;
+}
+.swiper-count-water .swipe-content .swiper-slide.swiper-slide-next h4{
+	color: black !important;
+}
+textarea.readonly{
+	color: white;
+}
+.hr{
+	background-color: white;
+}
+.explore-parent .explore-content .explore-subcontent-block a:link{
+    color: #73a3ce;
+}

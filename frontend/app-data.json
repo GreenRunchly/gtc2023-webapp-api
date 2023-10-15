@@ -1,0 +1,460 @@
+{
+    "code": "ok",
+    "msg": "Berhasil!",
+    "data": {
+        "utama": {
+            "countdown": "Dec 6, 2023 00:00:00",
+            "thumbnail": [
+                "../foto-destinasi/bali.jpeg",
+                "../foto-destinasi/denpasar.jpeg",
+                "../foto-destinasi/padawa-bali.jpg",
+                "../foto-destinasi/semarang.jpg",
+                "../foto-destinasi/trikabta.jpeg",
+                "../foto-destinasi/bromo.jpg"
+            ],
+            "user": {
+                "kelas": [
+                    "11-MIPA-1",
+                    "11-MIPA-2",
+                    "11-MIPA-3",
+                    "11-MIPA-4",
+                    "11-MIPA-5",
+                    "11-MIPA-6",
+                    "11-MIPA-7",
+                    "11-IPS-1",
+                    "11-IPS-2",
+                    "11-IPS-3",
+                    "11-IPS-4",
+                    "11-IPS-5"
+                ]
+            },
+            "helpdesk": {
+                "11-MIPA-1": "KzYyODEyODMxNzE2MTc=",
+                "11-MIPA-2": "KzYyODE5MDYwMDAwMzI=",
+                "11-MIPA-3": "KzYyODc3NzIzOTg0ODI=",
+                "11-MIPA-4": "KzYyODEyOTY4MTMzMA==",
+                "11-MIPA-5": "KzYyODc3NzE3NzQ4NTE=",
+                "11-MIPA-6": "KzYyODEyODM4NzkyMjc=",
+                "11-MIPA-7": "KzYyODU3NzEyNzExNjU=",
+                "11-IPS-1": "KzYyODg4MDk5MTI4MDA=",
+                "11-IPS-2": "KzYyODU2MjExMTI4Ng==",
+                "11-IPS-3": "KzYyODEzMTEwNzM5NDY=",
+                "11-IPS-4": "KzYyODU4OTIxMjUxMDQ=",
+                "11-IPS-5": "KzYyODEyOTI1MTUxOQ=="
+            },
+            "pembayaran": [
+                {
+                    "no": 1,
+                    "nama": "ABDUH SYADZAA FIRMANNUURUDDIN",
+                    "status": "LUNAS"
+                },
+                {
+                    "no": 3,
+                    "nama": "AHMAD RAFAIL FARDIAN",
+                    "status": "LUNAS"
+                },
+                {
+                    "no": 4,
+                    "nama": "ALYA SHANA SHAFIA",
+                    "status": "LUNAS"
+                },
+                {
+                    "no": 6,
+                    "nama": "ANNISA PUTRI ROSID",
+                    "status": "LUNAS"
+                },
+                {
+                    "no": 8,
+                    "nama": "CATANIA KAYLA FAZIRA",
+                    "status": "LUNAS"
+                },
+                {
+                    "no": 9,
+                    "nama": "DANU TRI PAMUNGKAS",
+                    "status": "LUNAS"
+                },
+                {
+                    "no": 10,
+                    "nama": "DELLA CHRIS SAMANTHA PANJAITAN",
+                    "status": "LUNAS"
+                },
+                {
+                    "no": 13,
+                    "nama": "DUSTIN NATHANIEL BERNADI",
+                    "status": "LUNAS"
+                },
+                {
+                    "no": 15,
+                    "nama": "FAKHRI RAMADHAN",
+                    "status": "LUNAS"
+                },
+                {
+                    "no": 17,
+                    "nama": "GIFTA SALVATIA SUSANTO",
+                    "status": "LUNAS"
+                },
+                {
+                    "no": 18,
+                    "nama": "HANDIKA SRI RAJASA",
+                    "status": "LUNAS"
+                },
+                {
+                    "no": 21,
+                    "nama": "KEVIN ANGGA PRADILA",
+                    "status": "LUNAS"
+                },
+                {
+                    "no": 22,
+                    "nama": "KEYSHIA MAYDAYANA",
+                    "status": "LUNAS"
+                },
+                {
+                    "no": 27,
+                    "nama": "MUHAMMAD RADITYA AKBAR",
+                    "status": "LUNAS"
+                },
+                {
+                    "no": 30,
+                    "nama": "NAIFAH KUSUMASTUTI",
+                    "status": "LUNAS"
+                },
+                {
+                    "no": 31,
+                    "nama": "NASYA SALSABILLA",
+                    "status": "LUNAS"
+                },
+                {
+                    "no": 32,
+                    "nama": "NAYYARA REFARIZQITA WIBOWO",
+                    "status": "LUNAS"
+                },
+                {
+                    "no": 33,
+                    "nama": "NITA NIRMALA",
+                    "status": "LUNAS"
+                },
+                {
+                    "no": 37,
+                    "nama": "RENALDY JOSUA LAOLI",
+                    "status": "LUNAS"
+                },
+                {
+                    "no": 38,
+                    "nama": "REYFANDO DIMAS EDY SISWANTO",
+                    "status": "LUNAS"
+                },
+                {
+                    "no": 39,
+                    "nama": "RONA RIZQI EMILIA",
+                    "status": "LUNAS"
+                },
+                {
+                    "no": 42,
+                    "nama": "SYAILLA BILLA PUTRI CHASANAH",
+                    "status": "LUNAS"
+                },
+                {
+                    "no": 43,
+                    "nama": "TIO DAVID MANDELA",
+                    "status": "LUNAS"
+                }
+            ],
+            "rundown":[
+                {
+                    "harike" : "1",
+                    "title" : "Tangerang - Semarang",
+                    "tanggal" : "6",
+                    "bulan" : "December",
+                    "tahun" : "2023",
+                    "kegiatan" : [
+                        {
+                            "deskripsi" : "Peserta kami berangkatkan menuju Semarang snack kami bagikan di perjalanan.",
+                            "jammulai" : "21:00",
+                            "jamselesai" : "21:30"
+                        },
+                        {
+                            "deskripsi" : "Berhenti di KM 102 untuk mengondisikan Peserta / cek poin.",
+                            "jammulai" : "23:00",
+                            "jamselesai" : "23:30"
+                        }
+                    ]
+                    
+                },
+                {
+                    "harike" : "2",
+                    "title" : "Semarang - Solo - Ketapang",
+                    "tanggal" : "7",
+                    "bulan" : "December",
+                    "tahun" : "2023",
+                    "kegiatan" : [
+                        {
+                            "deskripsi" : "Sholat Subuh di RM. Kurnia Kendal, dilanjutkan mandi dan makan pagi",
+                            "jammulai" : "05:00",
+                            "jamselesai" : "07:30"
+                        },
+                        {
+                            "deskripsi" : "Kunjungan ke Akpol Semarang",
+                            "jammulai" : "09:00",
+                            "jamselesai" : "10:30"
+                        },
+                        {
+                            "deskripsi" : "Perjalanan menuju UNS Solo dan makan siang dengan Box dalam perjalanan",
+                            "jammulai" : "11:00",
+                            "jamselesai" : "13:00"
+                        },
+                        {
+                            "deskripsi" : "Sholat Luhur dilanjutkan Kunjungan di Kampus UNS, Universitas Sebelas Maret di Solo.",
+                            "jammulai" : "13:00",
+                            "jamselesai" : "15:30"
+                        },
+                        {
+                            "deskripsi" : "Makan malam di RM.Nirwana di Ndanjuk , dan melanjutkan perjalanan menuju Ketapang",
+                            "jammulai" : "18:00",
+                            "jamselesai" : "19:30"
+                        }
+                    ]
+                    
+                },
+                {
+                    "harike" : "3",
+                    "title" : "Ketapang - Denpasar City Tour",
+                    "tanggal" : "8",
+                    "bulan" : "December",
+                    "tahun" : "2023",
+                    "kegiatan" : [
+                        {
+                            "deskripsi" : "Sholat Subuh dan mandi dilanjukan makan pagi di RM Grafika Ketapang",
+                            "jammulai" : "04:30",
+                            "jamselesai" : "06:30"
+                        },
+                        {
+                            "deskripsi" : "Menyebrang ke Bali dengan 2 Kapal Feri, 1 Feri 6 Bus",
+                            "jammulai" : "07:00",
+                            "jamselesai" : "09:00"
+                        },
+                        {
+                            "deskripsi" : "Makan siang di RM.Soka Indah Tabanan",
+                            "jammulai" : "12:00",
+                            "jamselesai" : "13:30"
+                        },
+                        {
+                            "deskripsi" : "Wisata di Tanah lot",
+                            "jammulai" : "15:00",
+                            "jamselesai" : "16:30"
+                        },
+                        {
+                            "deskripsi" : "Makan malam di Dewata",
+                            "jammulai" : "17:00",
+                            "jamselesai" : "18:30"
+                        },
+                        {
+                            "deskripsi" : "Check in Hotel The Brits Legian Bali****",
+                            "jammulai" : "20:00",
+                            "jamselesai" : "20:30"
+                        }
+                    ]
+                },
+                {
+                    "harike" : "4",
+                    "title" : "Bali City Tour",
+                    "tanggal" : "9",
+                    "bulan" : "December",
+                    "tahun" : "2023",
+                    "kegiatan" : [
+                        {
+                            "deskripsi" : "Makan pagi di Hotel",
+                            "jammulai" : "06:00",
+                            "jamselesai" : "07:00"
+                        },
+                        {
+                            "deskripsi" : "Wisata di Pantai Tanjung Benoa, dan makan siang dilokasi",
+                            "jammulai" : "09:00",
+                            "jamselesai" : "12:30"
+                        },
+                        {
+                            "deskripsi" : "Wiata pantai Pandawa",
+                            "jammulai" : "13:30",
+                            "jamselesai" : "15:30"
+                        },
+                        {
+                            "deskripsi" : "Wisata di GWK ( Garuda Wisnu Kencana ) dan menyaksikan tari kecak",
+                            "jammulai" : "16:00",
+                            "jamselesai" : "18:00"
+                        },
+                        {
+                            "deskripsi" : "Makan malam di Pantai Jimbaran sambil mendengarkan deburan ombak di Pantai Jimbaran dan kembali ke hotel",
+                            "jammulai" : "19:00",
+                            "jamselesai" : "20:30"
+                        }
+                    ]
+                },
+                {
+                    "harike" : "5",
+                    "title" : "City Tour Bali",
+                    "tanggal" : "10",
+                    "bulan" : "December",
+                    "tahun" : "2023",
+                    "kegiatan" : [
+                        {
+                            "deskripsi" : "Makan pagi di Hotel",
+                            "jammulai" : "06:00",
+                            "jamselesai" : "07:00"
+                        },
+                        {
+                            "deskripsi" : "Wisata di Desa Wisata Panglipuran",
+                            "jammulai" : "09:00",
+                            "jamselesai" : "11:00"
+                        },
+                        {
+                            "deskripsi" : "Makan siang di RM Krisna Blangsinga",
+                            "jammulai" : "11:30",
+                            "jamselesai" : "13:00"
+                        },
+                        {
+                            "deskripsi" : "Wisata Pabrik kata - kata di Joger",
+                            "jammulai" : "14:00",
+                            "jamselesai" : "16:00"
+                        },
+                        {
+                            "deskripsi" : "Wisata di Pantai Kuta",
+                            "jammulai" : "16:30",
+                            "jamselesai" : "18:00"
+                        },
+                        {
+                            "deskripsi" : "Makan malam di Grafika Krisna dilanjukan belanja oleh – oleh makanan khas Bali dan kembali ke hotel",
+                            "jammulai" : "18:30",
+                            "jamselesai" : "20:30"
+                        }
+                    ]
+                },
+                {
+                    "harike" : "6",
+                    "title" : "Denpasar Gtc Udayana - Probolinggo",
+                    "tanggal" : "11",
+                    "bulan" : "December",
+                    "tahun" : "2023",
+                    "kegiatan" : [
+                        {
+                            "deskripsi" : "Makan pagi di Hotel dilanjukan Check out menuju Kampus Udayana",
+                            "jammulai" : "06:00",
+                            "jamselesai" : "07:30"
+                        },
+                        {
+                            "deskripsi" : "Kunjungan Kampus Udayana",
+                            "jammulai" : "09:00",
+                            "jamselesai" : "10:30"
+                        },
+                        {
+                            "deskripsi" : "Makan siang di RM Dewata",
+                            "jammulai" : "12:00",
+                            "jamselesai" : "13:30"
+                        },
+                        {
+                            "deskripsi" : "Penyebrangan dari Gilimanuk ke Ketapang dengan Feri",
+                            "jammulai" : "17:30",
+                            "jamselesai" : "18:30"
+                        },
+                        {
+                            "deskripsi" : "Makan malam di Grafika Batu Dodol di Ketapang",
+                            "jammulai" : "19:30",
+                            "jamselesai" : "21:00"
+                        }
+                    ]
+                },
+                {
+                    "harike" : "7",
+                    "title" : "Probolinggo",
+                    "tanggal" : "12",
+                    "bulan" : "December",
+                    "tahun" : "2023",
+                    "kegiatan" : [
+                        {
+                            "deskripsi" : "Transit ke Bromo dengan Minibus 1 minibus 16 orang",
+                            "jammulai" : "02:30",
+                            "jamselesai" : "03:00"
+                        },
+                        {
+                            "deskripsi" : "Wisata Sholat Subuh, di Pananjakan 3, melihat Sunrise di Puncak Mentigen, makan pagi di lokasi dilanjukan wisata ke Obyek Bromo dengan Jeep, 1 Jeep 7 orang",
+                            "jammulai" : "04:30",
+                            "jamselesai" : "08:00"
+                        },
+                        {
+                            "deskripsi" : "Transit mandi dilanjukan makan siang di RM Bromo Asri",
+                            "jammulai" : "09:30",
+                            "jamselesai" : "12:30"
+                        },
+                        {
+                            "deskripsi" : "Wisata Petik Apel di Kebun Apel",
+                            "jammulai" : "14:30",
+                            "jamselesai" : "16:00"
+                        },
+                        {
+                            "deskripsi" : "Makan malam di RM Brawijaya 2",
+                            "jammulai" : "17:00",
+                            "jamselesai" : "18:30"
+                        },
+                        {
+                            "deskripsi" : "Check in Hotel Radho Sariah di Malang",
+                            "jammulai" : "19:00",
+                            "jamselesai" : "20:00"
+                        }
+                    ]
+                },
+                {
+                    "harike" : "8",
+                    "title" : "Malang GTC – Tangerang",
+                    "tanggal" : "13",
+                    "bulan" : "December",
+                    "tahun" : "2023",
+                    "kegiatan" : [
+                        {
+                            "deskripsi" : "Makan pagi di Hotel dilanjutkan check out",
+                            "jammulai" : "06:00",
+                            "jamselesai" : "07:00"
+                        },
+                        {
+                            "deskripsi" : "Kunjungan Kampus Brawijaya UB dan Kampus Politeknik Negeri Malang dan makan siang Box di perjalanan menuju Jogja",
+                            "jammulai" : "09:00",
+                            "jamselesai" : "11:30"
+                        },
+                        {
+                            "deskripsi" : "Makan malam di Rm Ramayana Prambanan",
+                            "jammulai" : "17:00",
+                            "jamselesai" : "18:00"
+                        },
+                        {
+                            "deskripsi" : "Wisata di oleh oleh khas Jogja bakpia Java",
+                            "jammulai" : "19:00",
+                            "jamselesai" : "20:00"
+                        },
+                        {
+                            "deskripsi" : "Wisata di sepanjang jalan Malioboro",
+                            "jammulai" : "20:30",
+                            "jamselesai" : "22:00"
+                        },
+                        {
+                            "deskripsi" : "Check in Hotel Radho Sariah di Malang",
+                            "jammulai" : "19:00",
+                            "jamselesai" : "20:00"
+                        }
+                    ]
+                },
+                {
+                    "harike" : "9",
+                    "title" : "Sampai Tangerang",
+                    "tanggal" : "14",
+                    "bulan" : "December",
+                    "tahun" : "2023",
+                    "kegiatan" : [
+                        {
+                            "deskripsi" : "Kami perkirakan sudah sampai di Tangerang, peserta kami antar sampai ketempat penjemputan semula, sampai jumpa di acara GTC yang akan datang, Terimakasih",
+                            "jammulai" : "06:00",
+                            "jamselesai" : "09:00"
+                        }
+                    ]
+                }
+            ]
+        },
+        "informasi": "<h2>Pusat Informasi</h2>\n<p>Pengawas dapat memberikan informasi kepada seluruh siswa pada kelas yang bersangkutan dan dapat dilihat pada dropdown ini.</p>"
+    }
+}

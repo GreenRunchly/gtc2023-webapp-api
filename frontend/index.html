@@ -1,0 +1,640 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GTC SMAN 3 Kabupaten Tangerang 2023</title>
+
+    <link rel="stylesheet" href="js/swiper/swiper-bundle.min.css">
+    <script src="js/swiper/swiper-bundle.min.js"></script>
+    <script src="js/jquery-3.5.1.min.js"></script>
+
+    <link rel="stylesheet" href="css/kulit.css?ver=3">
+    <link rel="stylesheet" href="css/kulit-hitam.css?ver=3" id="css-theme-dark">
+    <link rel="stylesheet" href="css/icons/web/css/all.css?ver=3"/>
+    <link rel="stylesheet" href="css/countdown.css?ver=3">
+</head>
+<script src="js/function.js?ver=3"></script>
+<script src="js/skrip.js?ver=3"></script>
+<script>
+    // Penyetelan Aplikasi
+    const appServer = '';
+
+    // Penyetelan Tanggal dan Waktu
+    let appDate = new Date();
+    let appDateTime = appDate.getTime();
+    let appDateDay = appDate.getDay();
+    let appDateHour = appDate.getHours();
+    let appDateMinute = appDate.getMinutes();
+    let appDateSecond = appDate.getSeconds();
+    let appDateFormat = appDate.getHours() + ":" + appDate.getMinutes() + ":" + appDate.getSeconds();
+    let appDateDayFormat = itsIntToDay(appDateDay);
+    let appDateTimestamp = Math.floor(Date.now() / 1000);
+
+    // Returnnya string coyyy
+    function showNum(num) {
+        return (num < 10) ? '0' + num : num;
+    }
+
+    // Clock Module
+    function moduleClock() {
+        // Proses berjalan
+        let procClock = setInterval(() => {
+
+            // Starter
+            let timeNow = new Date();
+
+            // Menit
+            $(`#clock .digits .digit`).eq(2).children().eq(0).html(showNum(timeNow.getMinutes()));
+            // Jam
+            $(`#clock .digits .digit`).eq(1).children().eq(0).html(showNum(timeNow.getHours()));  
+            // Tanggal
+            $(`#clock .digits .digit`).eq(0).children().eq(0).html(showNum(timeNow.getDate()));   
+            // Hari
+            $(`#clock .digits .digit`).eq(0).children().eq(1).html(itsIntToDay(timeNow.getDay()));            
+        
+        }, 1000);
+    }
+
+    // Countdown module
+    function moduleCountDown(date="Dec 6, 2025 00:00:00") {
+
+        // Init
+        let finaleCountDown = new Date(date).getTime();
+        let resultCountDown = `...`;
+
+        // Proses berjalan
+        let procCountDown = setInterval(() => {
+
+            // Starter
+            let timeNow = new Date();
+            let timeLeft = finaleCountDown - timeNow;
+
+            // Kalkulai masing-masing waktu
+            let timeSec = Math.floor((timeLeft % (1000 * 60)) / 1000);
+            let timeMin = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
+            let timeHour = Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            let timeDay = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
+
+            // Tampilkan countdown atau ended
+            if (timeLeft > 0){
+                // Detik
+                $(`#countdown .digits .digit`).eq(3).children().eq(0).html(showNum(timeSec));
+                // Menit
+                $(`#countdown .digits .digit`).eq(2).children().eq(0).html(showNum(timeMin));
+                // Jam
+                $(`#countdown .digits .digit`).eq(1).children().eq(0).html(showNum(timeHour));
+                // Hari
+                $(`#countdown .digits .digit`).eq(0).children().eq(0).html(timeDay);
+                $(`#countdown`).show();
+            }else{
+                // Ganti menjadi teks ended
+                $(`#countdown .digits.digits-special .digit .number`).html(`End`);
+                $(`#countdown .digits.digits-special .digit .label`).remove();
+                $(`#countdown`).hide();
+                // Matikan proses Count Down
+                clearInterval(procCountDown);
+            }
+            
+            
+        }, 1000);
+    }
+
+    function moduleRunDown(data) {
+        let ohtml = ``;
+        if (data){
+            $.each(data, function( i, v ) {
+                const thisDate = new Date(`${v.tanggal}-${v.bulan}-${v.tahun}`);
+                let thisDateDay = thisDate.getDay();
+
+                // Now
+                let timeNow = new Date();
+                // let timeNow = new Date("Dec 12, 2023 00:00:00");
+        
+                // Pembuka hari
+                ohtml += `
+                    <div class="listing-container ${ (parseInt(v.tanggal) === timeNow.getDate()) ? 'spotlight' : '' }">
+                        <div class="listing-box header toggle ${ (parseInt(v.tanggal) === timeNow.getDate()) ? 'current' : '' }" toggle-id="rundown-hari-${v.harike}">
+                            <div class="cube">
+                                <h1>${v.tanggal}</h1>
+                                <h4>${itsIntToDay(thisDateDay)}</h4>
+                            </div>
+                            <div>
+                                <h3>${v.title}</h3>
+                                <h4>${v.bulan} ${v.tahun}</h4>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="listing-container ${ (parseInt(v.tanggal) === timeNow.getDate()) ? 'spotlight' : '' }">
+                        <div class="listing-content ${ (parseInt(v.tanggal) === timeNow.getDate()) ? 'on' : 'off' }" id="rundown-hari-${v.harike}">
+                `;
+                // Kegiatan masing-masing hari
+                $.each(v.kegiatan, function( ki, kval ) {
+                    ohtml += `
+                            <div class="listing-box">
+                                <h4><span class="${ (parseInt(v.tanggal) === timeNow.getDate()) ? 'time' : '' }">${kval.jammulai} - ${kval.jamselesai}</span></h4>
+                                <p>${kval.deskripsi}</p>
+                            </div> 
+                    `;
+                });
+                // Penutup hari
+                ohtml += `
+                        </div>
+                    </div>
+                `;
+            });
+        }else{
+            // Kalau Kosong
+            ohtml += `
+                <div class="listing-container spotlight">
+                    <div class="listing-box header current">
+                        <div class="cube">
+                            <h1><i class="fas fa-exclamation-triangle"></i></h1>
+                        </div>
+                        <div>
+                            <h3>Data Kosong</h3>
+                            <h4>Coba lagi dalam beberapa saat.</h4>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+        $("#rundown-perjalanan").html(ohtml);
+    }
+
+    function moduleInformasiPenting(data) {
+        let ohtml = ``;
+        if (data){
+            ohtml = data;
+        }else{
+            // Kalau Kosong
+            ohtml += `
+                <div class="listing-container spotlight">
+                    <div class="listing-box header current">
+                        <div class="cube">
+                            <h1><i class="fas fa-exclamation-triangle"></i></h1>
+                        </div>
+                        <div>
+                            <h3>Data Kosong</h3>
+                            <h4>Coba lagi dalam beberapa saat.</h4>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+        $("#informasi-penting").html(ohtml);
+    }
+
+    function moduleThumbnail(data) {
+        let ohtml = ``;
+        $.each(data, function( i, v ) {
+            let thumnailUrl = v;
+            ohtml += `
+                <div class="swiper-slide">
+                    <div class="thumbnail" style="--src: url('${thumnailUrl}');"></div>
+                </div>
+            `;
+        }); 
+        return ohtml;
+        // console.log(ohtml);
+    }
+
+    function moduleHelpDesk(data=null) {
+        // Proses berjalan
+        let procHelpDesk= setInterval(() => {
+            let tmpkelas = $("#app_pengaturan_kelas").val();
+            let number = data[tmpkelas];
+            $("#helpdesk").attr('href',`https://wa.me/${atob(number)}`);
+        });
+    }
+
+    function moduleGreeting() {
+        let ohtml = ``;
+
+        // Starter
+        let timeNow = new Date();
+
+        // Proses berjalan
+        let procGreeting = setInterval(() => {
+            if (timeNow.getHours() > 20) {
+                ohtml = `Selamat Malam! <i class="fas fa-moon-stars"></i>`;
+            } else if (timeNow.getHours() > 17) {
+                ohtml = `Selamat Sore! <i class="fas fa-sun-haze"></i>`;
+            } else if (timeNow.getHours() > 10) {
+                ohtml = `Selamat Siang! <i class="fas fa-sun"></i>`;
+            } else{
+                ohtml = `Selamat Pagi! <i class="fas fa-sun-haze"></i>`;
+            }
+
+            $(".module-greeting").html(ohtml);
+        }, 1000);
+    }
+
+    function moduleUserTheme(save=false) {
+
+        let tmptheme = 'stylesheet';
+
+        if (loadData('app_theme')){
+            tmptheme = loadData('app_theme');
+        }
+
+        if (save === true){
+            // Khusus Stylesheet
+            if (tmptheme == 'stylesheet'){
+                tmptheme = 'stylesheet-disable';
+            } else if (tmptheme == 'stylesheet-disable') {
+                tmptheme = 'stylesheet';
+            }
+            setData(tmptheme,'app_theme');
+        }   
+
+        $("#css-theme-dark").attr('rel',tmptheme);
+        
+        $('#app_theme').val(tmptheme);
+    }
+
+    function moduleUserSave() {
+        // Set Datanya
+        setData($('#app_pengaturan_kelas').val(),'app_kelas');
+        // Reload Data Kelas
+        moduleUser();
+        console.log("Savee berhasil");
+    }
+
+    function moduleUserLogout() {
+        appDeleteStorage('all');
+        location.reload();
+    }
+
+    function moduleUser(data=null) {
+        if (data !== null){
+            let ohtml = ``;
+            $.each(data, function( indexKelas, kelas ) {
+                ohtml += `
+                    <option value="${kelas}">${(kelas).replace(/-/g,' ')}</option>
+                `;
+            }); 
+
+            $("#app_pengaturan_kelas").html(ohtml);
+            
+        }
+
+        // Load Datanya
+        if (loadData('app_kelas')){
+            let tmpkelas = loadData('app_kelas');
+            
+            let htmlkelas = (tmpkelas).replace(/-/g,' ');
+            $("#app_pengaturan_kelas").val(tmpkelas);
+            $(".module-user-kelas").html(`Kelas ${htmlkelas}`);
+
+        }else{
+            $("#app-pengaturan").removeClass('off');
+            $("#app-pengaturan").addClass('on');
+        }
+
+        if (loadData('appUserNIS')){
+            let nisUser = loadData('appUserNIS');
+            $(".module-user-nis").html(nisUser);
+            // $("#ppsiswa").css('--bgimg',`url('https://kelas.riko.my.id/fotosiswa/${nisUser}')`)
+        }
+    }
+
+    
+    function modulePembayaran(data) {
+        // console.log(data);
+        let ohtml = ``;
+        $.each(data, function( i, v ) {
+            ohtml += `
+                <div class="swiper-slide">
+                    <h3 style="text-align:center;">${v.nama}</h3>
+                </div>
+            `;
+        }); 
+        return ohtml;
+        console.log(ohtml);
+    }
+</script>
+<body>
+    <div class="splashscreen">
+        <i class="fad fa-map"></i>
+    </div>
+    <div class="model off" id="app-pengaturan">
+        <div class="app">
+            <div class="container">
+                <div class="content">
+                    <h2 class="title">Pilih Kelas</h2>
+                    <p>Harap memilih kelas yang sesuai agar dapat mendapatkan walikelas yang sesuai.</p>
+                    <select name="app_kelas" id="app_pengaturan_kelas"></select>
+                    <select style="display: none;" name="app_theme" id="app_theme">
+                        <option value="stylesheet">Enable</option>
+                        <option value="stylesheet-disable">Disable</option>
+                    </select>
+                    <br>
+                    <button class="toggle" toggle-id="app-pengaturan" onclick="moduleUserSave();">Simpan</button><br>
+                    <button class="toggle" toggle-id="app-pengaturan" onclick="moduleUserLogout();">Logout</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="model on" id="app-login">
+        <div class="app">
+            <div class="container">
+                <div class="content">
+                    <h2 class="title">Identifikasi Pengguna</h2>
+                    <p>Harap masukan nomor WhatsApp yang aktif agar NIS dapat dihubungkan.</p><br>
+                    <input type="phone" id="phonenum" placeholder="628XXXXXXXXXX">
+                    <br>
+                    <button id="otpbutton" onclick="moduleAkunOTPWA();">Kirim OTP</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="model off" id="app-login-otp">
+        <div class="app">
+            <div class="container">
+                <div class="content">
+                    <h2 class="title">Verifikasi OTP</h2>
+                    <p>Masukan NIS mu dan masukan kode OTP yang sudah dikirim! *Hanya berbentuk angka!</p>
+                    <p>Jangan reload halaman ini!</p><br>
+                    <input type="text" id="nissiswa" placeholder="Masukan NIS">
+                    <input type="number" id="otpver" placeholder="Paste OTP disini!">
+                    <br>
+                    <button onclick="moduleAkunOTPWAVerify();" >Verifikasi</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        // Load Datanya
+        if (loadData('appOTP')){
+            let OTP = loadData('appOTP');
+        }else{
+            
+        }
+
+        let OTP = 100000 + (Math.round( Math.random()*899999));
+
+        if ((loadData('appOTPPhoneNumber')) && (loadData('appUserNIS'))){
+            $("#app-login").addClass('off');
+            $("#app-login-otp").addClass('off');
+            $("#app-login").removeClass('on');
+            $("#app-login-otp").removeClass('on');
+        }
+        
+        function moduleAkunOTPWA() {
+            // Kode ini hanya prototype, proses pengiriman akan berbeda saat masa production!
+            let phoneNumber = $('#phonenum').val();
+            $("#otpbutton").attr('disabled');
+            $.ajax({
+                url: `https://wa.ieu.link/send?destinasi=${phoneNumber}&pesan=${OTP}`,
+                dataType: "json",
+                success: function( response ) {
+                    if (response.code == 'ok'){
+                        alert(`OTP berhasil dikirim! Tunggu paling cepat 1 menit kurang untuk OTP sampai ke WA!`)
+                        $("#app-login").addClass('off');
+                        $("#app-login-otp").removeClass('off');
+                        $("#app-login-otp").addClass('on');
+                    }else{
+                        alert('OTP gagal dikirim'); 
+                    }
+                },
+                error: function() {
+                    alert('OTP gagal dikirim'); 
+                }
+            });
+            console.log('Mengirim OTP...');
+        }
+        function moduleAkunOTPWAVerify() {
+            let OTPInput = $('#otpver').val();
+            if (OTPInput == OTP){
+                $("#app-login-otp").removeClass('on');
+                $("#app-login-otp").addClass('off');
+                // Set Datanya
+                setData(OTP,'appOTP');
+                setData($('#phonenum').val(),'appOTPPhoneNumber');
+                setData($('#nissiswa').val(),'appUserNIS')
+                location.reload();
+            }else{
+                alert('OTP yang dimasukan tidak cocok!')
+            }
+        }
+    </script>
+    <div class="app">
+        <div class="container">
+            <div class="content">
+                <h2 class="module-greeting"></h2>
+                <h4><span class="module-user-nis"></span> - <span class="module-user-kelas"></span></h4>
+                <div class="content" style="justify-content: center;display: flex;margin-bottom: -50px;">
+                    <div id="ppsiswa"></div>
+                </div>
+                <style>
+                    #ppsiswa{
+                        --bgimg : url('https://kelas.riko.my.id/fotosiswa/unknow');
+                        width: 120px;
+                        height: 120px;
+                        border-radius: 50%;
+                        background-position: center;
+                        background-size: cover;
+                        background-position: center;
+                        background-color: white;
+                        background-image: var(--bgimg);
+                        z-index: 4;
+                    }
+                </style>
+                <div class="swiper round do-swipe">
+                    <div class="swiper-wrapper">
+                        <div class="swiper-slide">
+                            <div class="thumbnail" style="--src: url('../foto-destinasi/trikabta.jpeg');"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="content" id="countdown">
+                    <div class="container module-countdown countdown-container" style="padding-bottom:0rem;padding-top: 1rem;" >
+                        <h1 class="countdown-title">
+                            <span>Goes To Campus</span><span>Count Down</span>
+                        </h1>
+                        <div id="daftar-siswa" class="pencil-style"></div>
+                        <div class="digits digits-special">
+                            <div class="digit">
+                                <div class="number">0</div>
+                                <div class="label">Hari lagi!</div>
+                            </div>
+                        </div>
+                        <div class="digits">
+                            <div class="digit">
+                                <div class="number">00</div>
+                                <div class="label">Jam</div>
+                            </div>
+                            <div class="digit">
+                                <div class="number">00</div>
+                                <div class="label">Menit</div>
+                            </div>
+                            <div class="digit">
+                                <div class="number">00</div>
+                                <div class="label">Detik</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="container swiper round do-swipe-countdown-special">
+                        <div class="swiper-wrapper">
+                            <div class="swiper-slide">
+                                <h3>...</h3>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="container swiper round do-swipe-static">
+                    <div class="swiper-wrapper">
+                        <div class="swiper-slide">
+                            <a class="tombol" id="helpdesk" target="_blank" href="">
+                                <h2><span><i class="fab fa-whatsapp"></i></span></h2>
+                                <h4>Wali Kelas</h4>
+                            </a>
+                        </div>
+                        <div class="swiper-slide">
+                            <a class="tombol" target="_blank" href="e-book">
+                                <h2><span><i class="fas fa-book"></i></span></h2>
+                                <h4>E-Book</h4>
+                            </a>
+                        </div>
+                        <div class="swiper-slide">
+                            <a class="tombol" onclick="moduleUserTheme(true);">
+                                <h2><span><i class="fas fa-adjust"></i></span></h2>
+                                <h4>Ganti Tema</h4>
+                            </a>
+                        </div>
+                        <div class="swiper-slide">
+                            <a class="tombol toggle" toggle-id="app-pengaturan">
+                                <h2><span><i class="fas fa-chalkboard-teacher"></i></span></h2>
+                                <h4>Ganti Kelas</h4>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="listing-container">
+                    <div class="listing-box header tombol toggle" toggle-id="informasi-penting" >
+                        <h3><span><i class="fas fa-info-circle"></i></span>Informasi Penting</h3>
+                    </div>
+                </div>
+                <div class="listing-container">
+                    <div class="listing-content off" id="informasi-penting">
+                        
+                    </div>
+                </div>
+                <div id="clock" class="container module-countdown nocolumn countdown-container" >
+                    <div class="digits">
+                        <div class="digit">
+                            <div class="number">00</div>
+                            <div class="label">Hari</div>
+                        </div>
+                    </div>
+                    <div class="digits">
+                        <div class="digit">
+                            <div class="number">00</div>
+                            <div class="label">Jam</div>
+                        </div>
+                        <div class="digit">
+                            <div class="number">00</div>
+                            <div class="label">Menit</div>
+                        </div>
+                    </div>
+                </div>
+                <h2 class="wide">Rundown Perjalanan</h2>
+                <div id="rundown-perjalanan"></div>
+            </div>
+        </div>
+    </div>
+</body>
+<script>
+    // Untuk thumbnail
+    var swipedrawer = new Swiper('.do-swipe', {
+        slidesPerView: 'auto',
+        spaceBetween: 8,
+        autoplay: {
+            delay: 2000,
+            disableOnInteraction: false,
+        },
+        centeredSlides: false,
+        loop: true,
+        pagination: {
+            el: ".swiper-pagination",
+            clickable: true,
+        },
+    });
+
+    // Untuk menus
+    var swipedrawerstatic = new Swiper('.do-swipe-static', {
+        slidesPerView: 2,
+        spaceBetween: 8
+    });
+
+    // Untuk Countdown khusus
+    var swipedrawerstaticpembayaran = new Swiper('.do-swipe-countdown-special', {
+        slidesPerView: 'auto',
+        spaceBetween: 8,
+        loop: true,
+        autoplay: {
+            delay: 1000,
+            disableOnInteraction: false,
+        },
+        speed: 3000
+    });
+
+    // Greeting
+    moduleGreeting();
+
+    // Theme
+    moduleUserTheme();
+
+    $.ajax({
+        url: appServer + 'app-data.json',
+        dataType: "json",
+        success: function( response ) {
+
+            let responseData = response.data.utama;
+            let responseDataInformasi = response.data.informasi;
+
+            // Proses berjalan
+            let procOneTime = setInterval(() => {
+                
+                // Clock
+                moduleClock();
+
+                // Informasi Penting
+                moduleInformasiPenting(responseDataInformasi);
+
+                // Countdown
+                moduleCountDown(responseData.countdown);
+
+                // Rundown
+                moduleRunDown(responseData.rundown);
+
+                // Load User Data
+                moduleUser(responseData.user.kelas);
+                moduleHelpDesk(responseData.helpdesk);
+
+                // Slide Thumbnail
+                swipedrawer.removeAllSlides();
+                swipedrawer.appendSlide(moduleThumbnail(responseData.thumbnail));
+
+                // Slide Pembayara
+                swipedrawerstaticpembayaran.removeAllSlides();
+                swipedrawerstaticpembayaran.appendSlide(modulePembayaran(responseData.pembayaran));
+
+                // Remove Splash Screen
+                $(".splashscreen").addClass('hide');
+                let procSplash = setInterval(() => {
+                    $(".splashscreen").remove();
+                    clearInterval(procSplash);
+                }, 1000);
+                clearInterval(procOneTime)
+            }, 1000);
+            
+        },
+        error: function() {
+            alert('Rundown data failed to gather'); 
+        }
+    });
+
+</script>
+</html>
