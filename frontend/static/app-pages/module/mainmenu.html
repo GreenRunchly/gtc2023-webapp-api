@@ -46,7 +46,7 @@
     function moduleMainMenuHelpdesk() {
         let target = $("#helpdesk");
         let data = appData.helpdesk;
-        if (data != []){
+        if (data !== null){
             target.attr('href',`https://wa.me/${atob(data.nomor)}`);
         }
     }
@@ -56,7 +56,7 @@
     function moduleInformasi() {
         let target = $("#informasi-penting");
         let data = appData.informasi
-        if (data != []){
+        if (data !== null){
             target.html(data.konten);
         }
     }

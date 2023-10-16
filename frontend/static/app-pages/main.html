@@ -8,6 +8,7 @@
     </div>
 </div>
 <script>
+// Load App Data dan User Data, please note this need to wait for it's finish
 $.ajax({
     url: `${appAPIServer}/account/alive`, dataType: "json",
     method: "POST", data:{
@@ -19,7 +20,7 @@ $.ajax({
             // appDeleteStorage('all');
             // window.location.reload();
         }
-        console.log(response);
+        
         // Simpan appdata dan account data
         if (response.appdata){
             appData = response.appdata;
@@ -27,16 +28,14 @@ $.ajax({
         if (response.accountdata){
             appAccount = response.accountdata;
         }
+
+        // Load Content
+        appLoadContent($("module-greeting"), 'app-pages/module/greeting.html', true);
+        appLoadContent($("module-thumbnail"), 'app-pages/module/thumbnail.html', true);
+        appLoadContent($("module-mainmenu"), 'app-pages/module/mainmenu.html', true);
     },
     error: function() {
         appSplashHide();
     }
 });
-</script>
-<script class="loadPageScript">
-    appLoadContent($("module-greeting"), 'app-pages/module/greeting.html', true);
-    appLoadContent($("module-thumbnail"), 'app-pages/module/thumbnail.html', true);
-    appLoadContent($("module-mainmenu"), 'app-pages/module/mainmenu.html', true);
-    // Menghapus page script
-    $(".loadPageScript").remove();
 </script>

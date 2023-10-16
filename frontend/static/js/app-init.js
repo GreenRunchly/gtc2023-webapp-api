@@ -30,4 +30,4 @@ setInterval(() => {
 }, 1000);
 
 var appData = [];
-var appAccount = [];
+var appAccount = []
