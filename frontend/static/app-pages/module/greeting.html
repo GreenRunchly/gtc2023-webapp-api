@@ -1,0 +1,37 @@
+<!-- Module Greeting -->
+<div class="container">
+    <h2 class="module-greeting"><span></span></h2>
+    <h4 class="module-user-kelas"><span></span></h4>
+</div>
+<script>
+    // Module Greeting
+    function moduleMainGreeting() {
+        let targetGreeting = $('.module-greeting').children();
+        let namaPanggilan = (appAccount.nama).split(" ")[0];
+
+        let ohtml = ``;
+        if (appDateHour != []){
+            if (appDateHour > 20) {
+                ohtml = `Selamat Malam, ${namaPanggilan}! <i class="fas fa-moon-stars"></i>`;
+            } else if (appDateHour > 15) {
+                ohtml = `Selamat Sore, ${namaPanggilan}! <i class="fas fa-sun-haze"></i>`;
+            } else if (appDateHour > 10) {
+                ohtml = `Selamat Siang, ${namaPanggilan}! <i class="fas fa-sun"></i>`;
+            } else{
+                ohtml = `Selamat Pagi, ${namaPanggilan}! <i class="fas fa-sun-haze"></i>`;
+            }
+        }else{
+            ohtml = `Selamat Pagi, ${namaPanggilan}! <i class="fas fa-sun-haze"></i>`;
+        }
+        targetGreeting.html(ohtml);
+
+        // Menulis kelas dan nis
+        let nis = appAccount.kode_akun;
+        let kelas = (appAccount.kode_kelas).replaceAll('-',' ');
+        let targetKelas = $('.module-user-kelas').children();
+        targetKelas.html(`${nis} - ${kelas}`);
+    };
+
+    moduleMainGreeting();
+</script>      
+<!-- Module Greeting -->

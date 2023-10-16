@@ -1,9 +1,9 @@
 // Penyetelan Aplikasi
-let appServer = '';
-let appAPIServer = 'https://gtcapp.ieu.link';
+// let appServer = '';
+// let appAPIServer = 'https://gtcapp.ieu.link';
 
-// let appServer = 'http://localhost:61000';
-// let appAPIServer = 'http://localhost:62000';
+let appServer = '';
+let appAPIServer = 'http://localhost:62000';
 
 // Penyetelan Tanggal dan Waktu
 let appDate = new Date();
@@ -29,21 +29,5 @@ setInterval(() => {
     appDateTimestamp = Math.floor(Date.now() / 1000);
 }, 1000);
 
-// // Load App Data
-// let appDataThumbnail = [];
-// $.ajax({
-//     url: `${appAPIServer}/app-data`, dataType: "json",
-//     success: function( response ) {
-//         // Data Countdown
-//         appDataCountdownDate = response.data.utama.countdown;
-//         // Data Thumbnail
-//         appDataThumbnail = response.data.utama.thumbnail;
-//         // Data Rundown
-//         appDataRundown = response.data.utama.rundown;
-//         // Data HelpDesk
-//         appDataHelpdesk = response.data.utama.helpdesk;
-//     },
-//     error: function() {
-//         appSplashHide();
-//     }
-// });
+var appData = [];
+var appAccount = [];

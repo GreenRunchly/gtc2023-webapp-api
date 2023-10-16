@@ -3,12 +3,39 @@
 
         <module-greeting></module-greeting>
         <module-thumbnail></module-thumbnail>
+        <module-mainmenu></module-mainmenu>
 
     </div>
 </div>
+<script>
+$.ajax({
+    url: `${appAPIServer}/account/alive`, dataType: "json",
+    method: "POST", data:{
+        sesi: loadData('akun_sesi')
+    },
+    success: function( response ) {
+        // Logout jika sesi habis / tidak berlaku
+        if (response.logout){
+            appDeleteStorage('all');
+            window.location.reload();
+        }
+        // Simpan appdata dan account data
+        if (response.appdata){
+            appData = response.appdata;
+        }
+        if (response.accountdata){
+            appAccount = response.accountdata;
+        }
+    },
+    error: function() {
+        appSplashHide();
+    }
+});
+</script>
 <script class="loadPageScript">
-    appLoadContent($("module-greeting"), 'app-pages/module/module-greeting.html', true);
-    appLoadContent($("module-thumbnail"), 'app-pages/module/module-thumbnail.html', true);
+    appLoadContent($("module-greeting"), 'app-pages/module/greeting.html', true);
+    appLoadContent($("module-thumbnail"), 'app-pages/module/thumbnail.html', true);
+    appLoadContent($("module-mainmenu"), 'app-pages/module/mainmenu.html', true);
     // Menghapus page script
     $(".loadPageScript").remove();
 </script>

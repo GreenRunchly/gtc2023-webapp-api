@@ -73,10 +73,20 @@ app.post('/account/alive', [
 	let sqlsyn = `
 		SELECT * FROM tb_akun WHERE sesi=?;
 		SELECT * FROM tb_appdata_thumbnail;
-		SELECT * FROM tb_appdata_kelas;
-		SELECT * FROM tb_appdata_helpdesk;
+
+		/* Dipakai nanti -- SELECT * FROM tb_appdata_kelas; */
+
+		/* Mengambil Nomor Helpdesk dan Kode Kelas */
+		SELECT tb_appdata_helpdesk.kode_kelas,tb_appdata_helpdesk.nomor FROM tb_appdata_helpdesk 
+		INNER JOIN tb_akun ON tb_akun.kode_kelas = tb_appdata_helpdesk.kode_kelas
+		WHERE tb_akun.sesi=?;
+
+		/* Mengambil informasi terbaru sesuai kelas masing-masing */
+		SELECT tb_appdata_informasi.kode_kelas, tb_appdata_informasi.konten, tb_appdata_informasi.updated FROM tb_akun
+		INNER JOIN tb_appdata_informasi ON tb_appdata_informasi.kode_kelas=tb_akun.kode_kelas
+		WHERE tb_akun.sesi=?;
 	`;
-	pooldb.query(sqlsyn, [sesi], (err, result) => {
+	pooldb.query(sqlsyn, [sesi, sesi, sesi], (err, result) => {
 		// Mengambil data antrian
 		if (err){ 
 			// Menampilkan error terjadi
@@ -90,10 +100,11 @@ app.post('/account/alive', [
 				res.json({
 					code : "ok",
 					msg : "Keep Alive!",
-					data : {
-						thumbnail : result[1],
-						kelas : result[2],
-						helpdesk : result[3]
+					accountdata : result[0][0],
+					appdata : {
+						informasi : result[3][0],
+						helpdesk : result[2][0],
+						thumbnail : result[1]
 					}
 				}); return;
 			}else{
@@ -163,7 +174,8 @@ app.post('/account/request', [
 				} else {
 
 					// Kirim OTP lewat WA
-					let kirimotp = alat.webGo(`https://wa.ieu.link/send?destinasi=${nohp}&pesan=${onetimepassword}`);
+					alat.webGo(`http://localhost:63000/send?destinasi=${nohp}&pesan=${onetimepassword}`);
+					
 					res.json({
 						code : "ok",
 						msg : "OTP berhasil dikirim!"

@@ -150,6 +150,7 @@ textarea.readonly{
     min-width: 100px;
     width: auto;
     height: 4rem;
+    font-size: 1rem;
     background-color: var(--background-color-button-light);
     color: var(--text-color-reverse);
     border-radius: 1rem;
@@ -159,9 +160,10 @@ textarea.readonly{
     user-select: none;
 }
 .tombol:active{
-    transform: scale(0.9);
+    /* transform: scale(0.95); */
     transition: 0s;
     -webkit-tap-highlight-color: transparent;
+    filter: brightness(2);
 }
 .tombol h3{
     display: flex;

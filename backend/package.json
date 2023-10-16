@@ -5,8 +5,10 @@
     "express": "^4.18.2",
     "express-validator": "^7.0.1",
     "mysql2": "^3.6.2",
+    "node-libcurl": "^3.0.0",
     "nodemon": "^3.0.1",
-    "tiny-json-http": "^7.5.1"
+    "tiny-json-http": "^7.5.1",
+    "x-ray": "^2.3.4"
   },
   "name": "gtc2023",
   "version": "1.0.0",

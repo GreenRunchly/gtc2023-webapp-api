@@ -23,11 +23,13 @@
     </div>
     <div class="app"></div>
 </body>
-<script>
+<script class="loadMainPageScript">
     if (loadData('akun_sesi')){
         appLoadPage('main');
     }else{
         appLoadPage('setup-akun');
     }
+    // Menghapus load Main page script
+    $(".loadMainPageScript").remove();
 </script>
 </html>

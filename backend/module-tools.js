@@ -16,17 +16,12 @@ tools.numberGen = function (antara=6){
 }
 
 tools.webGo = function (urlMe='https://google.com') {
-    let tiny = require('tiny-json-http');
-    let url = urlMe;
+    const Xray = require('x-ray');
+    const x = Xray()
 
-    tiny.get({url}, function _get(err, result) {
-        if (err) {
-            return err;
-        }
-        else {
-            return result;
-        }
-    })
+    x(urlMe, {})((err, result) => {
+        // console.log(result);
+    });
 }
 
 module.exports = tools;

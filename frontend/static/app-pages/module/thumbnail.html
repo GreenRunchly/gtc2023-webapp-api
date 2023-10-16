@@ -1,0 +1,48 @@
+<!-- Module Thumbnail -->
+<div class="swiper module-thumb-swipe round">
+    <div class="swiper-wrapper"></div>
+</div>
+<script>
+    // Module Thumbnail
+    // Init obj Swiper Thumbnail
+    let mainThumbnailSwipe = new Swiper('.module-thumb-swipe', {
+        slidesPerView: 'auto',
+        spaceBetween: 8,
+        autoplay: {
+            delay: 2000,
+            disableOnInteraction: false,
+        },
+        loop: true
+    });
+    
+    function moduleMainThumbnail() {
+        let target = mainThumbnailSwipe;
+        let data = appData.thumbnail;
+
+        let ohtml = [];
+        if (data != []){
+            $.each(data, function( i, v ) {
+                let thumnailUrl = v.source;
+                let thumnailUrlRep = thumnailUrl.replaceAll('https://gtc.ieu.link/app', appServer + '/assets');
+                ohtml.push(`
+                    <div class="swiper-slide">
+                        <div class="thumbnail" style="--src: url('${thumnailUrlRep}');"></div>
+                    </div>
+                `);
+            }); 
+        }else{
+            ohtml.push(`
+                <div class="swiper-slide">
+                    <div class="thumbnail" style="--src: url('../assets/foto-destinasi/trikabta.jpeg');"></div>
+                </div>
+            `);
+        }
+
+        // Menghapus isi slide yang ada dan timpa html dengan yang baru dari urlSource
+        target.removeAllSlides();
+        target.appendSlide(ohtml);
+    };
+    
+    moduleMainThumbnail();
+</script>
+<!-- Module Thumbnail -->
