@@ -163,7 +163,6 @@ textarea.readonly{
     /* transform: scale(0.95); */
     transition: 0s;
     -webkit-tap-highlight-color: transparent;
-    filter: brightness(2);
 }
 .tombol h3{
     display: flex;
