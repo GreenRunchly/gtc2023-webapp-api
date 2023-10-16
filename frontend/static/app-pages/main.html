@@ -32,9 +32,9 @@ $.ajax({
         console.log(response);
 
         // Load Content
-        appLoadContent($(".module-greeting"), 'app-pages/module/greeting.html', true);
-        appLoadContent($(".module-thumbnail"), 'app-pages/module/thumbnail.html', true);
-        appLoadContent($(".module-mainmenu"), 'app-pages/module/mainmenu.html', true);
+        appLoadContent($(".module-greeting"), 'app-pages/module/greeting.html', false);
+        appLoadContent($(".module-thumbnail"), 'app-pages/module/thumbnail.html', false);
+        appLoadContent($(".module-mainmenu"), 'app-pages/module/mainmenu.html', false);
     },
     error: function() {
         appSplashHide();
