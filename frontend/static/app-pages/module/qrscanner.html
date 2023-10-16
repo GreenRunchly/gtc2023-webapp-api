@@ -10,7 +10,7 @@
 
     // QR Reader
     const html5QrCode = new Html5Qrcode("qrReader");
-    html5QrCode.start( { facingMode: "user" },{ fps: 10, qrbox: { width: 200, height: 200 } }, onScanSuccess,
+    html5QrCode.start( { facingMode: "environment" },{ fps: 10, qrbox: { width: 200, height: 200 } }, onScanSuccess,
     (errorMessage) => {
         // Gk perlu error
     }).catch((err) => {
