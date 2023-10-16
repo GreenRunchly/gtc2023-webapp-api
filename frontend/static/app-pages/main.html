@@ -16,9 +16,10 @@ $.ajax({
     success: function( response ) {
         // Logout jika sesi habis / tidak berlaku
         if (response.logout){
-            appDeleteStorage('all');
-            window.location.reload();
+            // appDeleteStorage('all');
+            // window.location.reload();
         }
+        console.log(response);
         // Simpan appdata dan account data
         if (response.appdata){
             appData = response.appdata;
