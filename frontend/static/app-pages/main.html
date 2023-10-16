@@ -17,10 +17,10 @@ $.ajax({
     success: function( response ) {
         // Logout jika sesi habis / tidak berlaku
         if (response.logout){
-            // appDeleteStorage('all');
-            // window.location.reload();
+            appDeleteStorage('all');
+            window.location.reload();
         }
-        
+
         // Simpan appdata dan account data
         if (response.appdata){
             appData = response.appdata;
@@ -28,6 +28,8 @@ $.ajax({
         if (response.accountdata){
             appAccount = response.accountdata;
         }
+
+        console.log(response);
 
         // Load Content
         appLoadContent($("module-greeting"), 'app-pages/module/greeting.html', true);

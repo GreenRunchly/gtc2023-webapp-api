@@ -236,10 +236,11 @@ app.post('/account/assign', [
 				}else{
 					sqlsyn = `
 						DELETE FROM tb_otp WHERE kode_akun=?;
+						/* ? */
 						UPDATE tb_akun SET sesi=? WHERE kode_akun=?
 					`;
 				}
-				
+				// console.log(sqlsyn);
 				pooldb.query(sqlsyn, [nis, nohp, sesi, nis], (err, result) => {
 					res.json({
 						code : "ok",
