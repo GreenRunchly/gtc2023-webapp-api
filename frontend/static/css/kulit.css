@@ -148,7 +148,7 @@ textarea.readonly{
     align-items: center;
     justify-content: center;
     min-width: 100px;
-    width: auto;
+    width: -webkit-fill-available;
     height: 4rem;
     font-size: 1rem;
     background-color: var(--background-color-button-light);
