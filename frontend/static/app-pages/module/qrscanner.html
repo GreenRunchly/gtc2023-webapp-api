@@ -1,0 +1,29 @@
+<script src="js/html5-qrcode.min.js" type="text/javascript"></script>
+<style>
+    #qrReader{
+        border-radius: 1rem;
+        overflow: hidden;
+    }
+</style>
+<div id="qrReader"></div>
+<script>
+
+    // QR Reader
+    const html5QrCode = new Html5Qrcode("qrReader");
+    html5QrCode.start( { facingMode: "user" },{ fps: 10, qrbox: { width: 200, height: 200 } }, onScanSuccess,
+    (errorMessage) => {
+        // Gk perlu error
+    }).catch((err) => {
+        // Gk perlu error juga
+    });
+
+    function onScanSuccess(decodedText, decodedResult) {
+        scanBerhasil(decodedResult);
+        html5QrCode.stop().then((ignore) => {
+            
+        }).catch((err) => {
+            // Ada error serius
+        });
+    }
+
+</script>

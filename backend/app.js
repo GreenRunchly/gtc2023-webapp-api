@@ -33,14 +33,6 @@ function mdvldResult(req, res, next) {
         return false;
     }
 }
-// Module cek kode negara nomor hp
-function moduleCekNoHP(nohp, eksekusi) {
-	// Mengecek kode negara pada nomor hp
-	let hp_kode_negara = nohp.split("")[0] + nohp.split("")[1];
-	if (hp_kode_negara !== '62'){
-		eksekusi();
-	};
-}
 
 // Menggunakan CORS agar api dapat dipakai oleh siapa saja (tanpa perlu origin server)
 app.use(cors())
@@ -67,7 +59,7 @@ const pooldb = mysql.createPool({
 });
 
 // Keep alive with data 
-app.get('/account/alive', [
+app.post('/account/alive', [
 	mdvld.body('sesi').not().isEmpty().withMessage('Sesi ini sepertinya sudah expire.').trim().escape()
 ], (req, res) => {
 
@@ -119,7 +111,7 @@ app.get('/account/alive', [
 });
 
 // Meminta OTP lewat WA
-app.get('/account/request', [
+app.post('/account/request', [
 	mdvld.body('nis').not().isEmpty().withMessage('NIS belum disiapkan.').trim().escape(),
 	mdvld.body('nohp').not().isEmpty().withMessage('Nomor hp belum dimasukan.').trim().escape()
 ], (req, res) => {
@@ -132,13 +124,14 @@ app.get('/account/request', [
 	let {nis, nohp} = req.body;
 	let onetimepassword = alat.numberGen();
 
-	// Cek kode negara nomor hp
-	moduleCekNoHP(nohp, () => {
+	// Mengecek kode negara pada nomor hp
+	let hp_kode_negara = nohp.split("")[0] + nohp.split("")[1];
+	if (hp_kode_negara !== '62'){
 		res.json({
 			code : "error",
 			msg : "Kode negara Nomor telepon harus bernegara Indonesia (62)"
 		}); return;
-	});
+	};
 
 	let sqlsyn = `
 		SELECT * FROM tb_akun WHERE kode_akun=? OR hp=?;
@@ -182,7 +175,7 @@ app.get('/account/request', [
 		}else{
 
 			res.json({
-				code : "ok",
+				code : "error",
 				msg : "OTP tidak dapat dikirimkan karena nomor telpon tidak sesuai."
 			}); return;
 
@@ -192,7 +185,7 @@ app.get('/account/request', [
 });
 
 // Menerapkan QR dan menyimpnan no telp
-app.get('/account/assign', [
+app.post('/account/assign', [
 	mdvld.body('nis').not().isEmpty().withMessage('NIS harap dimasukan.').trim().escape(),
 	mdvld.body('otp').not().isEmpty().withMessage('OTP harap dimasukan.').trim().escape(),
 	mdvld.body('nohp').not().isEmpty().withMessage('Nomor hp belum dimasukan.').trim().escape()

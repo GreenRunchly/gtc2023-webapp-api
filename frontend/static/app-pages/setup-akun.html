@@ -1,0 +1,22 @@
+<div class="container">
+    <div class="content">
+        <h2 class="title">Selamat Datang</h2>
+        <p>Scan QR pada kartu untuk melanjutkan.</p><br>
+        <module-qrscanner></module-qrscanner>
+        <script>
+            function scanBerhasil(hasil) {
+                console.log(hasil.decodedText);
+                setData(hasil.decodedText, 'akun_nis');
+                appLoadPage('setup-akun-verify');
+            }
+            if (loadData('akun_nis')){
+                appLoadPage('setup-akun-verify');
+            }
+        </script>
+    </div>
+</div>
+<script class="loadPageScript">
+    appLoadContent($("module-qrscanner"), 'app-pages/module/qrscanner.html', true);
+    // Menghapus page script
+    $(".loadPageScript").remove();
+</script>

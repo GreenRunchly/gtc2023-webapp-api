@@ -24,6 +24,10 @@
     <div class="app"></div>
 </body>
 <script>
-    appLoadPage('home');
+    if (loadData('akun_sesi')){
+        appLoadPage('main');
+    }else{
+        appLoadPage('setup-akun');
+    }
 </script>
 </html>
