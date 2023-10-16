@@ -212,9 +212,9 @@ app.post('/account/assign', [
 
 	let sqlsyn = `
 		SELECT * FROM tb_otp WHERE kode_akun=? AND otp=?;
-		SELECT * FROM tb_akun WHERE hp=? AND kode_akun=?;
+		SELECT * FROM tb_akun WHERE hp=?;
 	`;
-	pooldb.query(sqlsyn, [nis, otp, nohp, nis], (err, result) => {
+	pooldb.query(sqlsyn, [nis, otp, nohp], (err, result) => {
 		// Mengambil data antrian
 		if (err){ 
 			// Menampilkan error terjadi
