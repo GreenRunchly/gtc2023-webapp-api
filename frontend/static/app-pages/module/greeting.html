@@ -1,6 +1,7 @@
 <!-- Module Greeting -->
 <div class="container">
     <h2 class="module-greeting"><span></span></h2>
+    <!-- <h3 class="module-user-nama"><span></span></h3> -->
     <h4 class="module-user-kelas"><span></span></h4>
 </div>
 <script>
@@ -8,6 +9,7 @@
     function moduleMainGreeting() {
         let targetGreeting = $('.module-greeting').children();
         let namaPanggilan = (appAccount.nama).split(" ")[0];
+        let namaLengkap = (appAccount.nama);
 
         let ohtml = ``;
         if (appDateHour != []){
@@ -30,6 +32,9 @@
         let kelas = (appAccount.kode_kelas).replaceAll('-',' ');
         let targetKelas = $('.module-user-kelas').children();
         targetKelas.html(`${nis} - ${kelas}`);
+
+        let targetNamaLengkap = $('.module-user-nama').children();
+        targetNamaLengkap.html(`${namaLengkap}`);
     };
 
     moduleMainGreeting();

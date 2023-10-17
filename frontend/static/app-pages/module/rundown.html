@@ -1,0 +1,81 @@
+<!-- Module Rundown -->
+<div class="container">
+    <h2 class="wide">Rundown Perjalanan</h2>
+    <div id="rundown-perjalanan"></div>
+</div>
+<script>
+$( document ).ready(function() {
+    // Rundown
+    function moduleMainRundown() {
+        let target = $("#rundown-perjalanan");
+        let data = appData.rundown;
+        let ohtml = ``;
+        if (data !== null){
+            $.each(data, function( i, v ) {
+                const thisDate = new Date(`${v.tanggal}-${v.bulan}-${v.tahun}`);
+                let thisDateDay = thisDate.getDay();
+
+                // Now
+                let timeNow = new Date();
+                // let timeNow = new Date("Dec 12, 2023 00:00:00");
+        
+                // Pembuka hari
+                ohtml += `
+                    <div class="listing-container ${ (parseInt(v.tanggal) === timeNow.getDate()) ? 'spotlight' : '' }">
+                        <div class="listing-box header toggle ${ (parseInt(v.tanggal) === timeNow.getDate()) ? 'current' : '' }" toggle-id="rundown-hari-${v.harike}">
+                            <div class="cube">
+                                <h1>${v.tanggal}</h1>
+                                <h4>${appFuncIntToDay(thisDateDay)}</h4>
+                            </div>
+                            <div>
+                                <h3>${v.title}</h3>
+                                <h4>${v.bulan} ${v.tahun}</h4>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="listing-container ${ (parseInt(v.tanggal) === timeNow.getDate()) ? 'spotlight' : '' }">
+                        <div class="listing-content ${ (parseInt(v.tanggal) === timeNow.getDate()) ? 'on' : 'off' }" id="rundown-hari-${v.harike}">
+                `;
+                // Kegiatan masing-masing hari
+                $.each(v.kegiatan, function( ki, kval ) {
+                    ohtml += `
+                            <div class="listing-box">
+                                <h4><span class="${ (parseInt(v.tanggal) === timeNow.getDate()) ? 'time' : '' }">${kval.jammulai} - ${kval.jamselesai}</span></h4>
+                                <p>${kval.deskripsi}</p>
+                            </div> 
+                    `;
+                });
+                // Penutup hari
+                ohtml += `
+                        </div>
+                    </div>
+                `;
+            });
+        }else{
+            // Kalau Kosong
+            ohtml += `
+                <div class="listing-container spotlight">
+                    <div class="listing-box header current">
+                        <div class="cube">
+                            <h1><i class="fas fa-exclamation-triangle"></i></h1>
+                        </div>
+                        <div>
+                            <h3>Data Kosong</h3>
+                            <h4>Coba lagi dalam beberapa saat.</h4>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+        target.html(ohtml);
+    }
+
+    moduleMainRundown();
+
+    function moduleRunDown(data) {
+        
+        $("#rundown-perjalanan").html(ohtml);
+    }
+});
+</script>
+<!-- Module Rundown -->

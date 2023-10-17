@@ -13,8 +13,8 @@ app.on('uncaughtException', function (err) {
 });
 
 // Library Tambahan untuk melengkapi fitur yang dipakai
-// const fs = require('fs');
-// const path = require("path");
+const fs = require('fs');
+const path = require("path");
 const cors = require('cors');
 const alat = require('./module-tools');
 
@@ -97,16 +97,21 @@ app.post('/account/alive', [
 			}); return;
 		}else{
 			if (result[0].length !== 0) {
-				res.json({
-					code : "ok",
-					msg : "Keep Alive!",
-					accountdata : result[0][0],
-					appdata : {
-						informasi : result[3][0],
-						helpdesk : result[2][0],
-						thumbnail : result[1]
-					}
-				}); return;
+				fs.readFile('./data/app-data-rundown.json', 'utf8', function(err, dataRundown){ 
+					let dataRun = JSON.parse(dataRundown);
+					res.json({
+						code : "ok",
+						msg : "Keep Alive!",
+						accountdata : result[0][0],
+						appdata : {
+							countdown: "Dec 6, 2023 00:00:00",
+							informasi: result[3][0],
+							helpdesk: result[2][0],
+							thumbnail: result[1],
+							rundown: dataRun
+						}
+					}); return;
+				}); 
 			}else{
 				res.json({
 					code : "error",

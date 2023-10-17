@@ -14,7 +14,7 @@
             </a>
         </div>
         <div class="swiper-slide">
-            <a class="tombol">
+            <a class="tombol" onclick="appThemeSwitch()">
                 <h2><span><i class="fas fa-adjust"></i></span></h2>
                 <h4>Tema</h4>
             </a>
@@ -39,7 +39,7 @@
     // Untuk menus
     let mainMenuSwipe = new Swiper('.module-swipe-mainmenu', {
         slidesPerView: 2,
-        spaceBetween: 8
+        spaceBetween: 14
     });
 
     // Helpdesk Subpart
@@ -52,7 +52,7 @@
     }
     moduleMainMenuHelpdesk();
 
-    // Theme Subpart
+    // Informasi Subpart
     function moduleInformasi() {
         let target = $("#informasi-penting");
         let data = appData.informasi
@@ -61,5 +61,26 @@
         }
     }
     moduleInformasi();
+
+    // Theme Subpart
+    moduleTheme();
+    function moduleTheme() {
+        let target = $("#css-theme-dark");
+        let data = loadData('app_theme');
+        if (data !== null){
+            target.attr('rel', data);
+        }
+    }
+    function appThemeSwitch() {
+        let checktmp = loadData('app_theme');
+        if (checktmp === 'stylesheet'){
+            setData('no-stylesheet', 'app_theme');
+        }else{
+            setData('stylesheet', 'app_theme');
+        }
+        moduleTheme();
+    }
+
+
 </script>
 <!-- Module Main Menu -->

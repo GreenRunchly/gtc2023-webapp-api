@@ -153,7 +153,7 @@ function appLoadContent(target, contentSource, replace=false) {
                 });
             }else{
                 $( document ).ready(function() {
-                    $(target).html(response);
+                    $(target).append(response);
                 });
             }
         },
