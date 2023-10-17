@@ -132,7 +132,9 @@ function appLoadPage(selectedPage) {
         dataType: "html",
         success: function( response ) {
             appSplashHide();
-            $(".app").html(response);
+            $( document ).ready(function() {
+                $(".app").html(response);
+            });
         },
         error: function() {
             appSplashShow();
@@ -146,9 +148,13 @@ function appLoadContent(target, contentSource, replace=false) {
         dataType: "html",
         success: function( response ) {
             if (replace){
-                $(target).replaceWith(response);
+                $( document ).ready(function() {
+                    $(target).replaceWith(response);
+                });
             }else{
-                $(target).html(response);
+                $( document ).ready(function() {
+                    $(target).html(response);
+                });
             }
         },
         error: function() {
