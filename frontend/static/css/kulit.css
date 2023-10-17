@@ -27,12 +27,14 @@
 html{
     font-family: "MainFonts";
     scroll-behavior: smooth;
+    overflow: hidden;
+    overflow-y: auto;
 }
 body {
     color: var(--text-color);
     margin:0px;
     padding: 0px;
-    overflow-x: hidden;
+    overflow: hidden;
     overflow-y: auto;
     background-color: var(--background-color);
 }
