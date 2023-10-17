@@ -1,12 +1,45 @@
 <div class="container">
     <div class="content">
         <h2 class="title">Selamat Datang</h2>
-        <p>Scan QR pada kartu untuk melanjutkan.</p><br>
-        <module-qrscanner></module-qrscanner>
+        <logoption>
+            <p>Mohon pilih salah satu dari kedua metode otentikasi dibawah untuk melanjutkan.</p><br>
+            <div class="swiper modulelogoption round">
+                <div class="swiper-wrapper">
+                    <div class="swiper-slide">
+                        <a class="tombol" onclick="loginOption('qr')">
+                            <h2><span><i class="far fa-qrcode"></i></span></h2>
+                            <h4>QR Code</h4>
+                        </a>
+                    </div>
+                    <div class="swiper-slide">
+                        <a class="tombol" onclick="loginOption('ecard')">
+                            <h2><span><i class="far fa-id-card"></i></h2>
+                            <h4>E-Card</h4>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </logoption>
         <script>
+            // Untuk menus
+            let swipeloginOption = new Swiper('.modulelogoption', {
+                slidesPerView: 2,
+                spaceBetween: 14
+            });
+            function loginOption(option) {
+                switch (option) {
+                    case 'qr':
+                        appLoadContent($("logoption"), 'app-pages/module/qrscanner.html', true);
+                        break;
+                
+                    default:
+                        appLoadContent($("logoption"), 'app-pages/module/ecard.html', true);
+                        break;
+                }
+            }
             function scanBerhasil(hasil) {
-                console.log(hasil.decodedText);
-                setData(hasil.decodedText, 'akun_nis');
+                console.log(hasil);
+                setData(hasil, 'akun_nis');
                 appLoadPage('setup-akun-verify');
             }
             if (loadData('akun_nis')){
@@ -16,5 +49,5 @@
     </div>
 </div>
 <script class="loadPageScript">
-    appLoadContent($("module-qrscanner"), 'app-pages/module/qrscanner.html', true);
+
 </script>

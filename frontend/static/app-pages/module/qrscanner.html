@@ -5,7 +5,8 @@
         overflow: hidden;
     }
 </style>
-<div id="qrReader"></div>
+<p>Scan QR pada kartu/gunakan E-Card untuk melanjutkan.</p><br>
+<div id="qrReader"></div><br>
 <script>
 
     // QR Reader
@@ -18,7 +19,7 @@
     });
 
     function onScanSuccess(decodedText, decodedResult) {
-        scanBerhasil(decodedResult);
+        scanBerhasil(decodedText);
         html5QrCode.stop().then((ignore) => {
             
         }).catch((err) => {
