@@ -1,0 +1,46 @@
+<h2 class="title">Upload Virtual Card</h2>
+<p>Upload Virtual Card untuk identifikasi akun.</p><br>
+<label class="tombol">
+    <input type="file" id="qr-input-file" accept="image/*">
+    <h2><span><i class="fas fa-folder-upload"></i></span></h2>
+    <h4>Upload</h4>
+</label><br>
+<div id="qrReader"></div>
+<style>
+    input[type="file"] {
+        display: none;
+    }
+    #qrReader{
+        max-height: 0px;
+    }
+</style>
+<a class="tombol" metode="kembali">
+    <h2><span><i class="fas fa-chevron-left"></i></span></h2>
+    <h4>Kembali</h4>
+</a>
+<script src="js/html5-qrcode.min.js" type="text/javascript"></script>
+<script>
+
+    function pageLoginOptionVirtualCardScanner() {
+        // Virtual Card Reader
+        let html5QrCode = new Html5Qrcode("qrReader");
+        let fileinput = $("#qr-input-file");
+        fileinput.on('change', (e) => {
+            // Return kosong saat file belum dipilih
+            if (e.target.files.length == 0) {
+                return;
+            }
+            // Gambar yang dipilih dimasukan ke variable
+            let imageFile = e.target.files[0];
+            // Scan QR Code dari gambar yang ada di variable tadi
+            html5QrCode.scanFile(imageFile, true).then(decodedText => {
+                // Mengirim secretKey ke function otentikasi untuk diolah
+                otentikasiLogin(decodedText);
+            }).catch(err => {
+                alert(`Error scanning virtual card. (${err})`)
+            });
+        });
+    }
+    pageLoginOptionVirtualCardScanner();
+
+</script>

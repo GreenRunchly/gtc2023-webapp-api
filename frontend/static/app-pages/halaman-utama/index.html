@@ -1,0 +1,46 @@
+<div class="container">
+    <div class="content">
+        <header-container></header-container>
+        <header-jumbotron-container></header-jumbotron-container>
+    </div>
+</div>
+<script>    
+    function appInit() {
+        // Initial Page Content
+        appLoadContent($("header-container"),
+        'app-pages/halaman-utama/header.html', {replace: true});
+
+        appLoadContent($("header-jumbotron-container"),
+        'app-pages/halaman-utama/header-jumbotron.html', {replace: true});
+    }
+    function appLogin() {
+        // Load App Data dan User Data, please note this need to wait for it's finish
+        $.ajax({
+            url: `${appAPIServer}/account/alive`, dataType: "json",
+            method: "POST", data:{
+                sesi: loadData('loginSesi')
+            },
+            success: function( response ) {
+                // Logout jika sesi habis / tidak berlaku
+                if (response.logout){
+                    appDeleteStorage('all');
+                    window.location.reload();
+                }
+
+                // Simpan appdata dan account data
+                if (response.appdata){
+                    appData = response.appdata;
+                }
+                if (response.accountdata){
+                    appAccount = response.accountdata;
+                }
+                appInit();
+            },
+            error: function() {
+                appSplashHide();
+            }
+        });
+    }
+    appLogin();
+    
+</script>

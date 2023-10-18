@@ -58,6 +58,48 @@ const pooldb = mysql.createPool({
 	multipleStatements: true
 });
 
+// Check account availablity
+app.post('/account/check', [
+	mdvld.body('nis').not().isEmpty().withMessage('NIS belum disiapkan.').trim().escape(),
+], (req, res) => {
+
+	// Cek Error pada validasi input
+    if ( mdvldResult(req, res) ){ // Jika ditemukan masalah akan return true
+        return;
+	};
+
+	let {nis} = req.body;
+
+	let sqlsyn = `
+		SELECT * FROM tb_akun WHERE kode_akun=?;
+	`;
+	pooldb.query(sqlsyn, [nis], (err, result) => {
+		// Mengambil data antrian
+		if (err){ 
+			// Menampilkan error terjadi
+			console.log(err);
+			res.json({
+				code : "error",
+				msg : err
+			}); return;
+		}else{
+			if (result.length !== 0) {
+				res.json({
+					code : "ok",
+					msg : "Akun ditemukan!",
+					preview : result[0].nama
+				}); return;
+			}else{
+				res.json({
+					code : "error",
+					msg : "Akun tidak ditemukan!"
+				}); return;
+			}
+		}
+	});
+
+});
+
 // Keep alive with data 
 app.post('/account/alive', [
 	mdvld.body('sesi').not().isEmpty().withMessage('Sesi ini sepertinya sudah expire.').trim().escape()
@@ -141,18 +183,31 @@ app.post('/account/request', [
 	let onetimepassword = alat.numberGen();
 
 	// Mengecek kode negara pada nomor hp
-	let hp_kode_negara = nohp.split("")[0] + nohp.split("")[1];
-	if (hp_kode_negara !== '62'){
+	let hp_kode_negara = nohp.split("")[0] + nohp.split("")[1] + nohp.split("")[2];
+	if (hp_kode_negara !== '+62'){
 		res.json({
 			code : "error",
 			msg : "Kode negara Nomor telepon harus bernegara Indonesia (62)"
 		}); return;
 	};
+	// Menghilangkan +
+	nohp = nohp.replace('+','');
 
 	let sqlsyn = `
-		SELECT * FROM tb_akun WHERE kode_akun=? OR hp=?;
+		/* Mencari ketersediaan akun */ 
+		SELECT tb_akun.kode_akun,tb_akun.hp FROM tb_akun 
+		WHERE tb_akun.kode_akun=?;
+
+		/* Mengecek apakah OTP sudah di minta dalam waktu 5 menit */ 
+		SELECT tb_akun.kode_akun,tb_akun.hp,tb_otp.created FROM tb_akun 
+		INNER JOIN tb_otp ON tb_otp.kode_akun=tb_akun.kode_akun
+		WHERE tb_akun.kode_akun=? AND tb_otp.updated BETWEEN (DATE_SUB(NOW(),INTERVAL 5 MINUTE)) AND NOW();
 	`;
-	pooldb.query(sqlsyn, [nis, nohp], (err, result) => {
+	pooldb.query(sqlsyn, [nis, nis], (err, result) => {
+
+		if (result[1].length !== 0){
+			console.log(result[1][0]);
+		}
 		// Mengambil data antrian
 		if (err){ 
 			// Menampilkan error terjadi
@@ -161,13 +216,13 @@ app.post('/account/request', [
 				code : "error",
 				msg : err
 			}); return;
-		}else if ((result[0]['hp'] === '') || (result[0]['hp'] === nohp)) {
+		}else if ((result[0][0]['hp'] === '') || (result[0][0]['hp'] === nohp)) {
 
 			let sqlsyn = `
-				DELETE FROM tb_otp WHERE kode_akun=? OR hp=?;
+				DELETE FROM tb_otp WHERE kode_akun=?;
 				INSERT INTO tb_otp (kode_akun, otp, hp) VALUES (?,?,?)
 			`;
-			pooldb.query(sqlsyn, [nis, nohp, nis, onetimepassword, nohp], (err, result) => {
+			pooldb.query(sqlsyn, [nis, nis, onetimepassword, nohp], (err, result) => {
 				// Mengambil data antrian
 				if (err){ 
 					// Menampilkan error terjadi
@@ -193,7 +248,7 @@ app.post('/account/request', [
 
 			res.json({
 				code : "error",
-				msg : "OTP tidak dapat dikirimkan karena nomor telpon tidak sesuai."
+				msg : "Akun sudah terhubung dengan nomor wa sebelumnya, harap login dengan nomor wa yang sama dengan yang didaftarkan pertama kali."
 			}); return;
 
 		}
@@ -215,11 +270,30 @@ app.post('/account/assign', [
 
 	let {nis, otp, nohp} = req.body;
 
+	// Mengecek kode negara pada nomor hp
+	let hp_kode_negara = nohp.split("")[0] + nohp.split("")[1] + nohp.split("")[2];
+	if (hp_kode_negara !== '+62'){
+		res.json({
+			code : "error",
+			msg : "Kode negara Nomor telepon harus bernegara Indonesia (62)"
+		}); return;
+	};
+	// Menghilangkan +
+	nohp = nohp.replace('+','');
+
 	let sqlsyn = `
-		SELECT * FROM tb_otp WHERE kode_akun=? AND otp=?;
-		SELECT * FROM tb_akun WHERE hp=?;
+		/* Mengecek apakah OTP sama atau tidak */ 
+		SELECT tb_akun.kode_akun,tb_akun.hp,tb_otp.otp FROM tb_akun 
+		INNER JOIN tb_otp ON tb_otp.kode_akun=tb_akun.kode_akun
+		WHERE tb_otp.kode_akun=? AND tb_otp.otp=? AND tb_otp.hp=? AND tb_otp.updated BETWEEN (DATE_SUB(NOW(),INTERVAL 5 MINUTE)) AND NOW();
+
+		/* Cek apakah sudah ada nomor hp atau tidak */
+		SELECT tb_akun.hp FROM tb_akun WHERE tb_akun.kode_akun=?;
+
+		/* Cek apakah sudah ada yang memakai nomor telepon tersebut atau tidak */
+		SELECT tb_akun.kode_akun FROM tb_akun WHERE tb_akun.hp=? AND tb_akun.kode_akun<>?;
 	`;
-	pooldb.query(sqlsyn, [nis, otp, nohp], (err, result) => {
+	pooldb.query(sqlsyn, [nis, otp, nohp, nis, nohp, nis], (err, result) => {
 		// Mengambil data antrian
 		if (err){ 
 			// Menampilkan error terjadi
@@ -231,32 +305,49 @@ app.post('/account/assign', [
 		} else {
 			if (result[0].length !== 0) {
 				
+				// Generate Token Sesi
 				let sesi = Buffer.from((alat.numberGen(12)).toString()).toString('base64');
 				
-				if (result[1].length === 0){
-					sqlsyn = `
-						DELETE FROM tb_otp WHERE kode_akun=?;
-						UPDATE tb_akun SET hp=?, sesi=? WHERE kode_akun=?
-					`;
+				if (result[1].length !== 0){
+					console.log(result[1][0].hp);
+					if (result[1][0].hp === ''){
+						// Dengan assign hp
+						sqlsyn = `
+							DELETE FROM tb_otp WHERE kode_akun=?;
+							UPDATE tb_akun SET hp=?, sesi=? WHERE kode_akun=?
+						`;
+					}else{
+						// Tanpa assign hp
+						sqlsyn = `
+							DELETE FROM tb_otp WHERE kode_akun=?;
+							/* ? */
+							UPDATE tb_akun SET sesi=? WHERE kode_akun=?
+						`;
+					}
+					if (result[2].length === 0){
+						pooldb.query(sqlsyn, [nis, nohp, sesi, nis], (err, result) => {
+							res.json({
+								code : "ok",
+								msg : "OTP cocok.",
+								sesi : sesi
+							}); return;
+						});
+					}else{
+						res.json({
+							code : "error",
+							msg : "Nomor telepon sudah disandingkan dengan akun lain."
+						}); return;
+					}
 				}else{
-					sqlsyn = `
-						DELETE FROM tb_otp WHERE kode_akun=?;
-						/* ? */
-						UPDATE tb_akun SET sesi=? WHERE kode_akun=?
-					`;
-				}
-				// console.log(sqlsyn);
-				pooldb.query(sqlsyn, [nis, nohp, sesi, nis], (err, result) => {
 					res.json({
-						code : "ok",
-						msg : "OTP is match!",
-						sesi : sesi
+						code : "error",
+						msg : "Internal Error"
 					}); return;
-				});
+				}
 			}else{
 				res.json({
 					code : "error",
-					msg : "OTP is not match!"
+					msg : "OTP tidak cocok."
 				}); return;
 			}
 		}

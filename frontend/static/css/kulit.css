@@ -106,7 +106,7 @@ textarea.readonly{
     cursor: pointer;
 }
 
-.app{
+#app{
     display: block;
     margin-left: auto;
     margin-right: auto;
@@ -162,8 +162,8 @@ textarea.readonly{
     user-select: none;
 }
 .tombol:active{
-    /* transform: scale(0.95); */
-    transition: 0s;
+    transform: scale(0.9);
+    transition: 0.05s;
     -webkit-tap-highlight-color: transparent;
 }
 .tombol h3{
@@ -296,4 +296,8 @@ textarea.readonly{
 }
 .splashscreen.hide{
     opacity: 0;
+}
+
+.toggle-content[contentDisplay='false']{
+    display: none;
 }

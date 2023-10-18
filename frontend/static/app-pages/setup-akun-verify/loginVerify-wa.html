@@ -1,0 +1,24 @@
+<h2 class="title">Verifikasi Akun</h2>
+<p class="account_preview"></p>
+<p>Silahkan masukan nomor WhatsApp aktif untuk melanjutkan!</p><br>
+<input type="tel" class="input_wa_number" value="" onInput="this.value = phoneFormat(this.value)" maxlength="24" placeholder="+62 XXX XXXX XXXX">
+<a class="tombol" aksi="check-number">
+    <h2><span><i class="fas fa-paper-plane"></i></h2>
+    <h4>Kirim OTP</h4>
+</a>
+<script>
+    $(".account_preview").html(`Hai, ${loadData('loginAccountPreview')}!<br>${loadData('loginInputUsername')}`);
+    function phoneFormat(input) {//returns (###) ###-####
+        input = input.replace('+62','');
+        input = input.replace(/\D/g,'');
+        var size = input.length;
+        if (size>0) {input="+62"+input}
+        // +62
+        if (size>2) {input=input.slice(0,3)+" "+input.slice(3)} 
+        // XXX
+        if (size>3) {input=input.slice(0,7)+" " +input.slice(7)}
+        // XXX XXXX
+        if (size>7) {input=input.slice(0,12)+" " +input.slice(12)}
+        return input;
+    }
+</script>

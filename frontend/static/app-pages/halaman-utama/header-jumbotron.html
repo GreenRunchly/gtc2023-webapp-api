@@ -1,0 +1,57 @@
+<div class="container">
+    <div class="swiper jumboTron round">
+        <div class="swiper-wrapper">
+            <div class="swiper-slide">
+                <div class="thumbnail" style="--src: url('../assets/foto-destinasi/trikabta.jpeg');"></div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    
+    function headerJumboTron() {
+        // Init Jumbotron
+        let jumboTron = new Swiper('.jumboTron', {
+            slidesPerView: 'auto',
+            spaceBetween: 14,
+            autoplay: {
+                delay: 2000,
+                disableOnInteraction: false,
+            }, loop: false
+        });
+
+        // Load Latest Thumbnail Banner from server
+        let procOnceJumboTron = setInterval(() => {
+            let target = jumboTron;
+            let data = appData.thumbnail;
+
+            let ohtml = '';
+            if (data != []){
+                $.each(data, function( i, v ) {
+                    let thumnailUrl = v.source;
+                    let thumnailUrlRep = thumnailUrl.replaceAll('https://gtc.ieu.link/app', appServer + '/assets');
+                    ohtml += `
+                        <div class="swiper-slide">
+                            <div class="thumbnail" style="--src: url('${thumnailUrlRep}');"></div>
+                        </div>
+                    `;
+                }); 
+            }else{
+                ohtml += `
+                    <div class="swiper-slide">
+                        <div class="thumbnail" style="--src: url('../assets/foto-destinasi/trikabta.jpeg');"></div>
+                    </div>
+                `;
+            }
+            console.log(ohtml);
+            // Menghapus isi slide yang ada dan timpa html dengan yang baru dari urlSource
+            target.removeAllSlides();
+            target.appendSlide(ohtml);
+
+            // Done loading Thumbnail
+            clearInterval(procOnceJumboTron);
+        }, 300);
+    }
+    headerJumboTron();
+
+</script>

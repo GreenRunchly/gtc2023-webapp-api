@@ -124,43 +124,39 @@ function appSplashShow() {
     $(".splashscreen").removeClass('hide');
     $(".splashscreen").show();
 }
-// Control Display Page
-function appLoadPage(selectedPage) {
-    appSplashShow();
-    $.ajax({
-        url: appServer + `/app-pages/${selectedPage}.html`,
-        dataType: "html",
-        success: function( response ) {
-            appSplashHide();
-            $( document ).ready(function() {
-                $(".app").html(response);
-            });
-        },
-        error: function() {
-            appSplashShow();
-        }
-    });
-}
-// Control Display Content
-function appLoadContent(target, contentSource, replace=false) {
+// Control Load Content
+function appLoadContent(target, contentSource, optionParams={}) {
     $.ajax({
         url: appServer + `/${contentSource}`,
         dataType: "html",
         success: function( response ) {
-            if (replace){
-                $( document ).ready(function() {
-                    $(target).replaceWith(response);
-                });
+            if (optionParams.replace == true){
+                $(target).replaceWith(response);
             }else{
-                $( document ).ready(function() {
-                    $(target).append(response);
-                });
-            }
+                $(target).html(response);
+            };
         },
         error: function() {
             $(target).html(`
                 <p>Error Fetch Content</p>
             `);
         }
-    });
+    })
+}
+
+
+// Encoder and Decoder
+function appEncode(input) {
+    try {
+        return btoa(btoa(input))
+    } catch (error) {
+        return 'error';
+    }
+}
+function appDecode(input) {
+    try {
+        return atob(atob(input))
+    } catch (error) {
+        return 'error';
+    }
 }

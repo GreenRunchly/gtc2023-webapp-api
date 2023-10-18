@@ -6,7 +6,7 @@
 </div>
 <script>
     // Module Greeting
-    function moduleMainGreeting() {
+    function containerHeader() {
         let targetGreeting = $('.module-greeting').children();
         let namaPanggilan = (appAccount.nama).split(" ")[0];
         let namaLengkap = (appAccount.nama);
@@ -36,7 +36,6 @@
         let targetNamaLengkap = $('.module-user-nama').children();
         targetNamaLengkap.html(`${namaLengkap}`);
     };
-
-    moduleMainGreeting();
+    containerHeader();
 </script>      
 <!-- Module Greeting -->

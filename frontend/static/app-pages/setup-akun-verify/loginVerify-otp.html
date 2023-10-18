@@ -1,0 +1,10 @@
+<h2 class="title">Verifikasi Akun</h2>
+<p class="account_preview"></p><br>
+<input type="number" class="input_otp_number" placeholder="XXXXXX">
+<a class="tombol" aksi="assign-number">
+    <h2><span><i class="fas fa-check"></i></h2>
+    <h4>Verifikasi</h4>
+</a>
+<script>
+    $(".account_preview").html(`OTP berhasil dikirim ke nomor (${loadData('loginInputHP')}) dan akan sampai paling cepat ~1 menit.`);
+</script>

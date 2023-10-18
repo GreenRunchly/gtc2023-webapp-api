@@ -18,16 +18,17 @@
     <div class="splashscreen">
         <i class="fad fa-map"></i>
     </div>
-    <div class="app">
-        
-    </div>
+    <div id="app"></div>
 </body>
 <script class="loadMainPageScript">
-    $( document ).ready(function() {
-        if (loadData('akun_sesi')){
-            appLoadPage('main');
+    // Load app pages for first time
+    $(document).ready(function() {
+        if (loadData('loginSesi')){
+            appLoadContent('#app', 'app-pages/halaman-utama/index.html');
+            appSplashHide();
         }else{
-            appLoadPage('setup-akun');
+            appLoadContent('#app', 'app-pages/setup-akun/index.html');
+            appSplashHide();
         }
     });
 </script>

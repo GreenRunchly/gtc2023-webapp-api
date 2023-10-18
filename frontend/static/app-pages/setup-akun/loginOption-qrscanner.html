@@ -1,0 +1,31 @@
+<h2 class="title">Scan QR Code</h2>
+<p>Scan QR pada kartu/gunakan E-Card untuk melanjutkan.</p><br>
+<div id="qrReader">
+</div><br>
+<style>
+    #qrReader{
+        background-color: white;
+    }
+</style>
+<a class="tombol" metode="kembali">
+    <h2><span><i class="fas fa-chevron-left"></i></span></h2>
+    <h4>Kembali</h4>
+</a>
+<script src="js/html5-qrcode.min.js" type="text/javascript"></script>
+<script>
+
+    // QR Reader dengan kamera
+    function pageLoginOptinoQRScanner() {
+        let html5QrCode = new Html5Qrcode("qrReader");
+
+        html5QrCode.start( { facingMode: "environment" },{ fps: 10, qrbox: { width: 160, height: 160 } }, 
+        (decodedText, decodedResult) => {
+            // Mengirim secretKey ke function otentikasi untuk diolah
+            otentikasiLogin(decodedText);
+        },(errorMessage) => {}).catch((err) => {
+            alert(`Error scanning QR. (${err})`)
+        });
+    }
+    pageLoginOptinoQRScanner();
+
+</script>

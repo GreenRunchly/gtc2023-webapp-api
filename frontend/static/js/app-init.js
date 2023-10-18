@@ -1,9 +1,9 @@
 // Penyetelan Aplikasi
-let appServer = '';
-let appAPIServer = 'https://gtcapp.ieu.link';
-
 // let appServer = '';
-// let appAPIServer = 'http://localhost:62000';
+// let appAPIServer = 'https://gtcapp.ieu.link';
+
+let appServer = '';
+let appAPIServer = 'http://localhost:62000';
 
 // Penyetelan Tanggal dan Waktu
 let appDate = new Date();
@@ -29,5 +29,7 @@ setInterval(() => {
     appDateTimestamp = Math.floor(Date.now() / 1000);
 }, 1000);
 
+// User and App Data
 var appData = [];
 var appAccount = []
+

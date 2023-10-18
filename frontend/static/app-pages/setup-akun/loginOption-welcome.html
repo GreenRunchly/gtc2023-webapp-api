@@ -1,0 +1,46 @@
+<h2 class="title">Selamat Datang</h2>
+<p>Silahkan pilih salah satu dari kedua metode otentikasi dibawah untuk melanjutkan.</p><br>
+<div class="swiper jumboTron round">
+    <div class="swiper-wrapper">
+        <div class="swiper-slide">
+            <div class="thumbnail" style="--src: url('../assets/foto-destinasi/trikabta.jpeg');"></div>
+        </div>
+    </div>
+</div><br>
+<div class="swiper loginOption round">
+    <div class="swiper-wrapper">
+        <div class="swiper-slide">
+            <a class="tombol" metode="qr">
+                <h2><span><i class="far fa-qrcode"></i></span></h2>
+                <h4>QR Code</h4>
+            </a>
+        </div>
+        <div class="swiper-slide">
+            <a class="tombol" metode="virtualcard">
+                <h2><span><i class="far fa-id-card"></i></h2>
+                <h4>Virtual Card</h4>
+            </a>
+        </div>
+    </div>
+</div>
+<script>
+    
+    function pageWelcome() {
+        // Jumbo tron
+        let jumboTron = new Swiper('.jumboTron', {
+            slidesPerView: 'auto',
+            spaceBetween: 14,
+            autoplay: {
+                delay: 5000,
+                disableOnInteraction: false,
+            }, loop: false
+        });
+        // Login Option
+        let loginOption = new Swiper('.loginOption', {
+            slidesPerView: 2,
+            spaceBetween: 14
+        });
+    }
+    pageWelcome();
+
+</script>

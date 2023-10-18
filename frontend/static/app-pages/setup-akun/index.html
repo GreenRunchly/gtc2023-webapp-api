@@ -1,0 +1,64 @@
+<div class="container">
+    <div class="content">
+        <login-option-container></login-option-container>
+    </div>
+</div>
+<script src="js/html5-qrcode.min.js" type="text/javascript"></script>
+<script>
+    // Initial Page Content
+    appLoadContent($("login-option-container"),
+    'app-pages/setup-akun/loginOption-welcome.html', {replace: false});
+
+    // Stand alone function, jadi hanya berlaku pada page ini saja
+    $(document).on('click','.tombol[metode]',function(e){
+        let metode = $(this).attr('metode');
+        switch (metode) {
+            case 'qr':
+                appLoadContent($("login-option-container"), 
+                'app-pages/setup-akun/loginOption-qrscanner.html', {replace: false});
+                break;
+            case 'virtualcard':
+                appLoadContent($("login-option-container"), 
+                'app-pages/setup-akun/loginOption-virtualcardscanner.html', {replace: false});
+                break;
+            case 'kembali':
+                appLoadContent($("login-option-container"), 
+                'app-pages/setup-akun/loginOption-welcome.html', {replace: false});
+                if (typeof html5QrCode !== 'undefined'){
+                    html5QrCode.stop().then((ignore) => {}).catch((err) => {});
+                }
+                break;
+        };
+    });
+
+    // Working on it
+    function otentikasiLogin(secretKey) {
+        let key = appDecode(secretKey);
+        if (key !== 'error'){
+            if (typeof html5QrCode !== 'undefined'){
+                html5QrCode.stop().then((ignore) => {}).catch((err) => {});
+            }
+            $.ajax({
+                url: `${appAPIServer}/account/check`, dataType: "json", method: "POST",
+                data: {
+                    nis: appDecode(secretKey)
+                },success: function( response ) {
+                    if (response.code == 'ok'){
+                        setData(appDecode(secretKey), 'loginInputUsername');
+                        setData(response.preview, 'loginAccountPreview');
+                        appLoadContent($("#app"), 
+                        'app-pages/setup-akun-verify/index.html', {replace: false});
+                    }else{
+                        alert(`Akun tidak ditemukan, ${response.msg}`);
+                    }
+                },
+                error: function(err) {
+                    alert(`Error : ${err.status}, ${err.statusText}`);
+                }
+            });
+        }else{
+            alert('Format tidak dikenali');
+        }
+    }
+    
+</script>

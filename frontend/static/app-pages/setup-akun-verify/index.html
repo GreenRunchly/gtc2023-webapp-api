@@ -1,0 +1,129 @@
+<div class="container">
+    <div class="content">
+        <login-verify-container></login-verify-container>
+    </div>
+</div>
+<script>
+    // Initial Page Content
+    appLoadContent($("login-verify-container"),
+    'app-pages/setup-akun-verify/loginVerify-wa.html', {replace: false});
+
+    // Stand alone function, jadi hanya berlaku pada page ini saja
+    $(document).on('click','.tombol[aksi]',function(e){
+        let aksi = $(this).attr('aksi');
+        switch (aksi) {
+            case 'check-number':
+                let phoneNumber = $('.input_wa_number').val();
+                phoneNumber = phoneNumber.replaceAll(' ', ''); // Ubah kode negara menjadi indonesia
+                if (phoneNumber){
+                    if ( confirm(`OTP akan dikirimkan ke nomor ${phoneNumber}, apa nomor sudah benar?\nHarap diingat! OTP hanya bisa dikirim ulang sebanyak 6 kali per jam.`) ) {
+                        setData(phoneNumber, 'loginInputHP');
+                        $.ajax({
+                            url: `${appAPIServer}/account/request`, dataType: "json", method: "POST",
+                            data: {
+                                nis: loadData('loginInputUsername'),
+                                nohp: loadData('loginInputHP')
+                            },success: function( response ) {
+                                if (response.code == 'ok'){
+                                    alert(`OTP berhasil dikirim!`);
+                                    appLoadContent($("login-verify-container"), 
+                                    'app-pages/setup-akun-verify/loginVerify-otp.html', {replace: false});
+                                }else{
+                                    alert(`OTP gagal dikirim, ${response.msg}`);
+                                }
+                            },
+                            error: function(err) {
+                                alert(`Error : ${err.status}, ${err.statusText}`);
+                            }
+                        });
+                    }
+                }else{
+                    alert(`Harap isi nomor telepon WA yang aktif!`);
+                }
+                break;
+            case 'assign-number':
+                let otpNumber = $('.input_otp_number').val();
+                if (otpNumber){
+                    $.ajax({
+                        url: `${appAPIServer}/account/assign`, dataType: "json", method: "POST",
+                        data: {
+                            nis: loadData('loginInputUsername'),
+                            nohp: loadData('loginInputHP'),
+                            otp: otpNumber
+                        },success: function( response ) {
+                            if (response.code == 'ok'){
+                                alert(`Verifikasi berhasil!`);
+                                setData(response.sesi, 'loginSesi');
+                                appLoadContent($("#app"), 
+                                'app-pages/halaman-utama/index.html', {replace: false});
+                            }else{
+                                alert(`Verifikasi gagal, ${response.msg}`);
+                            }
+                        },
+                        error: function(err) {
+                            alert(`Error : ${err.status}, ${err.statusText}`);
+                        }
+                    });
+                }else{
+                    alert(`Harap isi kolom OTP.`);
+                }
+                break;
+            case 'kembali':
+                appLoadContent($("login-verify-container"),
+                'app-pages/setup-akun-verify/loginVerify-wa.html', {replace: false});
+                break;
+        };
+    });
+    
+    // $(document).on('click','.action',function(e){
+    //     let aksi = $(this).attr('actionDo');
+    //     let akun_nis = loadData('akun_nis');
+    //     let akun_wa = $(".nomor_wa").val();
+    //     let akun_otp = $(".otp_wa").val();
+    //     switch (aksi) {
+    //         case 'send-otp':
+    //         $.ajax({
+    //             url: `${appAPIServer}/account/request`, dataType: "json", method: "POST",
+    //             data: {
+    //                 nis: akun_nis,
+    //                 nohp: akun_wa
+    //             },success: function( response ) {
+    //                 if (response.code == 'ok'){
+    //                     alert(`OTP berhasil dikirim!`);
+    //                     setData(akun_wa, 'akun_wa');
+    //                     $(".setup-akun-selected-wa").html(loadData('akun_wa'));
+    //                     $("kirim-otp").hide();
+    //                     $("balas-otp").show();
+    //                 }else{
+    //                     alert(`OTP gagal dikirim, ${response.msg}`);
+    //                 }
+    //             },
+    //             error: function(err) {
+    //                 alert(`Error : ${err.status}, ${err.statusText}`);
+    //             }
+    //         });    
+    //             break;
+    //         case 'verify-otp':
+    //         $.ajax({
+    //             url: `${appAPIServer}/account/assign`, dataType: "json", method: "POST",
+    //             data: {
+    //                 nis: akun_nis,
+    //                 nohp: akun_wa,
+    //                 otp: akun_otp
+    //             },success: function( response ) {
+    //                 if (response.code == 'ok'){
+    //                     alert(`Verifikasi OTP berhasil, ${response.msg}`);
+    //                     setData(response.sesi, 'akun_sesi');
+    //                     appLoadPage('main');
+    //                 }else{
+    //                     alert(`Verifikasi OTP gagal, ${response.msg}`);
+    //                 }
+    //             },
+    //             error: function(err) {
+    //                 alert(`Error : ${err.status}, ${err.statusText}`);
+    //             }
+    //         });   
+    //             break;
+    //     }
+    // });
+</script>
