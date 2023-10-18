@@ -22,6 +22,7 @@
         (decodedText, decodedResult) => {
             // Mengirim secretKey ke function otentikasi untuk diolah
             otentikasiLogin(decodedText);
+            html5QrCode.stop().then((ignore) => {}).catch((err) => {});
         },(errorMessage) => {}).catch((err) => {
             alert(`Error scanning QR. (${err})`)
         });
