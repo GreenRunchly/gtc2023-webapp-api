@@ -46,6 +46,8 @@
                     if (response.code == 'ok'){
                         setData(appDecode(secretKey), 'loginInputUsername');
                         setData(response.preview, 'loginAccountPreview');
+                        appSplashShow();
+                        appSplashHide();
                         appLoadContent($("#app"), 
                         'app-pages/setup-akun-verify/index.html', {replace: false});
                     }else{

@@ -16,15 +16,21 @@
 
     // QR Reader dengan kamera
     function pageLoginOptinoQRScanner() {
+        let scanned = false;
         let html5QrCode = new Html5Qrcode("qrReader");
 
         html5QrCode.start( { facingMode: "environment" },{ fps: 10, qrbox: { width: 160, height: 160 } }, 
         (decodedText, decodedResult) => {
+            
             // Mengirim secretKey ke function otentikasi untuk diolah
-            otentikasiLogin(decodedText);
-            html5QrCode.stop().then((ignore) => {}).catch((err) => {});
+            if (scanned == false){
+                scanned = true;
+                otentikasiLogin(decodedText);
+            }
+            
         },(errorMessage) => {}).catch((err) => {
             alert(`Error scanning QR. (${err})`)
+            scanned = false;
         });
     }
     pageLoginOptinoQRScanner();
