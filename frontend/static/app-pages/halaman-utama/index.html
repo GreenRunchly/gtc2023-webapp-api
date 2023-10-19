@@ -1,18 +1,37 @@
 <div class="container">
     <div class="content">
-        <header-container></header-container>
-        <header-jumbotron-container></header-jumbotron-container>
+        <module-modal-pembayaran></module-modal-pembayaran>
+        <module-header></module-header>
+        <module-header-jumbotron></module-header-jumbotron>
+        <module-countdown></module-countdown>
+        <module-menu></module-menu>
+        <module-rundown></module-rundown>
     </div>
 </div>
 <script>    
+
     function appInit() {
         // Initial Page Content
-        appLoadContent($("header-container"),
-        'app-pages/halaman-utama/header.html', {replace: true});
+        appLoadContent($("module-header"),
+        'app-pages/halaman-utama/module-header.html', {replace: true});
 
-        appLoadContent($("header-jumbotron-container"),
-        'app-pages/halaman-utama/header-jumbotron.html', {replace: true});
+        appLoadContent($("module-header-jumbotron"),
+        'app-pages/halaman-utama/module-header-jumbotron.html', {replace: true});
+
+        appLoadContent($("module-countdown"),
+        'app-pages/halaman-utama/module-countdown.html', {replace: true});
+
+        appLoadContent($("module-menu"),
+        'app-pages/halaman-utama/module-menu.html', {replace: true});
+
+        appLoadContent($("module-rundown"),
+        'app-pages/halaman-utama/module-rundown.html', {replace: true});
+
+        // Modal
+        appLoadContent($("module-modal-pembayaran"),
+        'app-pages/halaman-utama/module-modal-pembayaran.html', {replace: true});
     }
+
     function appLogin() {
         // Load App Data dan User Data, please note this need to wait for it's finish
         $.ajax({

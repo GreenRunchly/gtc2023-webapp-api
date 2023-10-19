@@ -143,7 +143,30 @@ function appLoadContent(target, contentSource, optionParams={}) {
         }
     })
 }
+function appClassToggle(toggleid, status) {
+    let idnya = toggleid;
+    let has = status;
 
+    if (has === 'auto'){
+        has = $("#"+idnya).hasClass("on");
+        if (has == true){
+            $("#"+idnya).addClass("off");
+            $("#"+idnya).removeClass("on");
+        }else{
+            $("#"+idnya).addClass("on");
+            $("#"+idnya).removeClass("off");
+        }
+    }else{
+        if (has == true){
+            $("#"+idnya).addClass("off");
+            $("#"+idnya).removeClass("on");
+        }else{
+            $("#"+idnya).addClass("on");
+            $("#"+idnya).removeClass("off");
+        }
+    }
+    
+}
 
 // Encoder and Decoder
 function appEncode(input) {

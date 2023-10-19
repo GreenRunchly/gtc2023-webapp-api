@@ -1,5 +1,5 @@
 <div class="container">
-    <div class="swiper jumboTron round">
+    <div class="swiper module-header-jumbo-tron round">
         <div class="swiper-wrapper">
             <div class="swiper-slide">
                 <div class="thumbnail" style="--src: url('../assets/foto-destinasi/trikabta.jpeg');"></div>
@@ -9,20 +9,20 @@
 </div>
 <script>
     
-    function headerJumboTron() {
+    function moduleHeaderJumboTron() {
         // Init Jumbotron
-        let jumboTron = new Swiper('.jumboTron', {
+        let moduleHeaderJumboTron = new Swiper('.module-header-jumbo-tron', {
             slidesPerView: 'auto',
             spaceBetween: 14,
             autoplay: {
                 delay: 2000,
-                disableOnInteraction: false,
-            }, loop: false
+                disableOnInteraction: true,
+            }, loop: true
         });
 
         // Load Latest Thumbnail Banner from server
-        let procOnceJumboTron = setInterval(() => {
-            let target = jumboTron;
+        let procOnceHeaderJumboTron = setInterval(() => {
+            let target = moduleHeaderJumboTron;
             let data = appData.thumbnail;
 
             let ohtml = '';
@@ -43,15 +43,15 @@
                     </div>
                 `;
             }
-            console.log(ohtml);
+
             // Menghapus isi slide yang ada dan timpa html dengan yang baru dari urlSource
             target.removeAllSlides();
             target.appendSlide(ohtml);
 
             // Done loading Thumbnail
-            clearInterval(procOnceJumboTron);
-        }, 300);
+            clearInterval(procOnceHeaderJumboTron);
+        }, 1000);
     }
-    headerJumboTron();
+    moduleHeaderJumboTron();
 
 </script>

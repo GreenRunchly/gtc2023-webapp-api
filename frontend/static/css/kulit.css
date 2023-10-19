@@ -211,19 +211,21 @@ textarea.readonly{
     max-height: 0px;
 }
 
-.model{
+.modal{
     display: block;
     padding: 1rem;
     background-color: var(--background-color);
     position: fixed;
     width: 100vw;
-    height: 100vh;
+    max-height: 100vh;
     bottom: 0;
-    top: 0;
+    left: 0;
+    right: 0;
     z-index: 9999;
     transition: 0.5s;
+    overflow: auto;
 }
-.model.off{
+.modal.off{
     top: 100vh;
 }
 

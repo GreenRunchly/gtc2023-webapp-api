@@ -26,6 +26,8 @@
                             },success: function( response ) {
                                 if (response.code == 'ok'){
                                     alert(`OTP berhasil dikirim!`);
+                                    appSplashShow();
+                                    appSplashHide();
                                     appLoadContent($("login-verify-container"), 
                                     'app-pages/setup-akun-verify/loginVerify-otp.html', {replace: false});
                                 }else{
@@ -54,6 +56,8 @@
                             if (response.code == 'ok'){
                                 alert(`Verifikasi berhasil!`);
                                 setData(response.sesi, 'loginSesi');
+                                appSplashShow();
+                                appSplashHide();
                                 appLoadContent($("#app"), 
                                 'app-pages/halaman-utama/index.html', {replace: false});
                             }else{
@@ -75,55 +79,4 @@
         };
     });
     
-    // $(document).on('click','.action',function(e){
-    //     let aksi = $(this).attr('actionDo');
-    //     let akun_nis = loadData('akun_nis');
-    //     let akun_wa = $(".nomor_wa").val();
-    //     let akun_otp = $(".otp_wa").val();
-    //     switch (aksi) {
-    //         case 'send-otp':
-    //         $.ajax({
-    //             url: `${appAPIServer}/account/request`, dataType: "json", method: "POST",
-    //             data: {
-    //                 nis: akun_nis,
-    //                 nohp: akun_wa
-    //             },success: function( response ) {
-    //                 if (response.code == 'ok'){
-    //                     alert(`OTP berhasil dikirim!`);
-    //                     setData(akun_wa, 'akun_wa');
-    //                     $(".setup-akun-selected-wa").html(loadData('akun_wa'));
-    //                     $("kirim-otp").hide();
-    //                     $("balas-otp").show();
-    //                 }else{
-    //                     alert(`OTP gagal dikirim, ${response.msg}`);
-    //                 }
-    //             },
-    //             error: function(err) {
-    //                 alert(`Error : ${err.status}, ${err.statusText}`);
-    //             }
-    //         });    
-    //             break;
-    //         case 'verify-otp':
-    //         $.ajax({
-    //             url: `${appAPIServer}/account/assign`, dataType: "json", method: "POST",
-    //             data: {
-    //                 nis: akun_nis,
-    //                 nohp: akun_wa,
-    //                 otp: akun_otp
-    //             },success: function( response ) {
-    //                 if (response.code == 'ok'){
-    //                     alert(`Verifikasi OTP berhasil, ${response.msg}`);
-    //                     setData(response.sesi, 'akun_sesi');
-    //                     appLoadPage('main');
-    //                 }else{
-    //                     alert(`Verifikasi OTP gagal, ${response.msg}`);
-    //                 }
-    //             },
-    //             error: function(err) {
-    //                 alert(`Error : ${err.status}, ${err.statusText}`);
-    //             }
-    //         });   
-    //             break;
-    //     }
-    // });
 </script>

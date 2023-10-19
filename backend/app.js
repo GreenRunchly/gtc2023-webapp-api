@@ -205,8 +205,12 @@ app.post('/account/request', [
 	`;
 	pooldb.query(sqlsyn, [nis, nis], (err, result) => {
 
+		// Cek jika OTP sudah dikirim sebelumnya
 		if (result[1].length !== 0){
-			console.log(result[1][0]);
+			res.json({
+				code : "error",
+				msg : "OTP sebelumnya sudah terkirim, tunggu 5 menit untuk meminta lagi."
+			}); return;
 		}
 		// Mengambil data antrian
 		if (err){ 
