@@ -1,0 +1,152 @@
+<script src="qrcodejs/qrcode.min.js"></script>
+<script src="jquery-3.5.1.min.js"></script>
+<style>
+    @font-face {
+        font-family: 'MainFonts';
+        src: url(fonts/MPLUSRounded1c-Medium.ttf);
+    }
+    *, *::before, *::after {
+        box-sizing: border-box;
+    }
+    html{
+        font-family: "MainFonts";
+        scroll-behavior: smooth;
+        overflow: hidden;
+        overflow-y: auto;
+        font-size: 14px;
+        color: black;
+    }
+    body{
+        display: flex;
+        flex-wrap: wrap;
+        align-items: flex-start;
+        justify-content: flex-start;
+        padding: 0px;
+        margin: 0px;
+    }
+    img{
+        max-width: 100%;
+    }
+    h1, .h1,
+    h2, .h2,
+    h3, .h3,
+    h4, .h4,
+    h5, .h5,
+    h6, .h6 {
+        margin:0rem;
+        padding:0px; 
+        font-weight: normal;
+        line-height: 1;
+        font-weight: bolder;
+        color: var(--text-color);
+    }
+    a{
+        -webkit-tap-highlight-color: transparent;
+        text-decoration: none;
+    }
+    p{
+        margin: 0rem;
+        padding: 0px;
+        font-size: 1rem;
+        font-weight: bolder;
+    }
+    label{
+        padding: 4px 0px;
+        font-size: 1rem;
+        font-weight: normal;
+    }
+    :root{
+        --sheet-w: calc(448px);
+        --sheet-h: calc(236px); /* 236 , 118, 62 */ 
+        --background-color-light: #25d366;
+        --background-color: #199d49;
+        --text-color: white;
+    }
+    .sheet{
+        display: flex;
+        width: var(--sheet-w);
+        height: var(--sheet-h);
+        flex-direction: column;
+        transform: scale(1);
+        transform-origin: top left;
+        background-color: white;
+    }
+    .page{
+        display: flex;
+        flex: 1;
+        height: 50%;
+    }
+    .section{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        height: 100%;
+        padding: 1rem;
+        z-index:  5;
+    }
+
+    /* Front 1 */
+    .front-1.page{
+        text-align: left;
+        background-color: var(--background-color);
+        color: white;
+    }
+    .front-1.page .qr{
+        width: 120px;
+        height: 120px;
+        padding: 1rem;
+        border-radius: 1rem;
+        background-color: white;
+    }
+
+    /* Front 2 */
+    .front-2.page .bg{
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        background-image: var(--bg-url);
+        background-position: center;
+        background-size: cover;
+        filter: brightness(50%);
+    }
+    .front-2.page .judul{
+        width: 100%;
+        display: flex;flex-direction: column;
+        justify-content: flex-start;
+        align-items: center;
+        z-index: 3;
+        margin-top: 2rem;
+    }
+    .front-2.page .judul h1, .front-2.page .judul h2, .front-2.page .judul h3{
+        color: white !important;
+    }
+</style>
+<div class="sheet">
+    <div class="page front-1">
+        <div class="section" style="margin-left: 1rem;">
+            <div class="qr" id="QR2022807008"></div>
+            <script>
+                new QRCode("QR2022807008", "2022807008");
+            </script>
+        </div>
+        <div class="section" style="align-items: flex-start;justify-content: center;">
+            <h2>RIZKI IRFAN ANSHORI</h2>
+            <h3><span>2022807008</span> - <span>11 MIPA 1</span></h3>
+            <div style="margin-top: 1rem;">
+                <img style="margin-bottom: 0.5rem;" src="qrcode-icon.png" alt="">
+                <p class="info">Scan QR disamping dengan aplikasi untuk menyiapkan akun.</p><br>
+                <p class="info">Nomor WhatsApp aktif diperlukan.</p>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="sheet">
+    <div class="page front-2 reverse">
+        <div class="bg" style="--bg-url: url('bg-back.jpeg');"></div>
+        <div class="judul">
+            <h1>Goes to Campus 2023</h1>
+            <h2>SMAN 3 Kabupaten Tangerang</h2>
+        </div>
+    </div>
+</div>

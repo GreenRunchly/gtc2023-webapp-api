@@ -14,9 +14,12 @@ app.on('uncaughtException', function (err) {
 
 // Library Tambahan untuk melengkapi fitur yang dipakai
 const fs = require('fs');
-const path = require("path");
+const http = require('http');
+const https = require('https');
 const cors = require('cors');
 const alat = require('./module-tools');
+const xlsxReader = require('read-excel-file/node');
+const QRCode = require('qrcode');
 
 // Module untuk Validasi input
 const mdvld = require('express-validator');
@@ -56,6 +59,109 @@ const pooldb = mysql.createPool({
     database: process.env.DB_NAME,
     port: process.env.DB_PORT,
 	multipleStatements: true
+});
+
+// Import Data Excel
+app.get('/app/virtualcard/get/akun', [
+], (req, res) => {
+	let sqlsyn = `
+	SELECT kode_akun, kode_kelas, nama, TO_BASE64(CONCAT('00101101',kode_akun,'00101101')) AS qrcode FROM tb_akun ORDER BY kode_kelas ASC;
+	`;
+	pooldb.query(sqlsyn, (err, result) => { if (err){ /* Jika terjadi error */ }else{
+		function genQR(simpan) {
+			let hasil = result;
+			result.forEach((item, index, arr) => {
+				QRCode.toDataURL(item.qrcode, function (err, url) {
+					hasil[index]['qrcode'] = url;
+					if (index == (arr.length - 1)){ simpan(hasil); }
+				});
+			})
+		}; genQR((hasil) => {
+			res.json({
+				code : "ok",
+				msg : "Fecth Complete",
+				data : hasil
+			}); return;
+		});
+	}});
+});
+
+// Import Data Excel
+app.get('/app/update', [
+], (req, res) => {
+	const child = require("child_process").exec("curl -L 'https://docs.google.com/spreadsheets/d/18P74DZV6-WQVIUstZF_ehU-eUedOlxfRT1MfyM4P76Q/export?format=xlsx' > './data/temp.xlsx'");
+	child.on('exit', function() {
+		// Menambahkan akun siswa
+		xlsxReader('./data/temp.xlsx', { sheet: 'Siswa' }).then((rows) => { rows[0].pop();
+			rows.forEach(row => {
+				// Mengetahui akun yang sudah ada per kode akun/nis
+				let sqlsyn = `SELECT * FROM tb_akun WHERE kode_akun=?;`;
+				pooldb.query(sqlsyn, [row[1]], (err, result) => { if (err){ /* Jika terjadi error */ }else{
+					if (result.length === 0){
+						pooldb.query(`INSERT INTO tb_akun (kode_akun, nama, kode_kelas) VALUES (?,?,?)`, [
+							row[1], row[2], row[3]
+						], (err, result) => { 
+							if (err){ /* Jika terjadi error */ }else{
+								console.log(`Insert ${row[1]}`);
+							}
+						});
+					}else{
+						pooldb.query(`UPDATE tb_akun SET nama=?, kode_kelas=? WHERE kode_akun=?`, [
+							row[2], row[3], row[1]
+						], (err, result) => { 
+							if (err){ /* Jika terjadi error */ }else{
+								console.log(`Update ${row[1]}`);
+							}
+						});
+					}
+				}});
+			});
+		});
+		
+		// Menambahkan Wali Kelas
+		xlsxReader('./data/temp.xlsx', { sheet: 'Wali Kelas' }).then((rows) => { rows[0].pop();
+			rows.forEach(row => {
+				// Mengetahui akun yang sudah ada per kode akun/nis
+				let sqlsyn = `SELECT * FROM tb_akun WHERE kode_akun=? AND role=?;`;
+				pooldb.query(sqlsyn, [row[1],'guru'], (err, result) => { if (err){ /* Jika terjadi error */ }else{
+					if (result.length === 0){
+						pooldb.query(`INSERT INTO tb_akun (kode_akun, nama, kode_kelas, role) VALUES (?,?,?,?)`, [
+							row[1], row[2], row[3], 'guru'
+						], (err, result) => { 
+							if (err){ /* Jika terjadi error */ }else{
+								console.log(`Insert ${row[1]}`);
+							}
+						});
+					}else{
+						pooldb.query(`UPDATE tb_akun SET nama=?, kode_kelas=?, role=? WHERE kode_akun=?`, [
+							row[2], row[3], 'guru', row[1]
+						], (err, result) => { 
+							if (err){ /* Jika terjadi error */ }else{
+								console.log(`Update ${row[1]}`);
+							}
+						});
+					}
+				}});
+			});
+		});
+
+		// Informasi
+		xlsxReader('./data/temp.xlsx', { sheet: 'Informasi' }).then((rows) => { rows[0].pop();
+			rows.forEach(row => {
+				// Mengetahui akun yang sudah ada per kode akun/nis
+				let sqlsyn = `DELETE FROM tb_appdata_informasi WHERE kode_kelas=?;`;
+				pooldb.query(sqlsyn, [row[1]], (err, result) => { if (err){ /* Jika terjadi error */ }else{
+					pooldb.query(`
+						INSERT INTO tb_appdata_informasi (kode_kelas, konten) VALUES (?,?);
+					`, [ row[1], row[2] ], (err, result) => { 
+						if (err){ /* Jika terjadi error */ }else{
+							console.log(`Insert Info ${row[1]}`);
+						}
+					});
+				}});
+			});
+		});
+	});
 });
 
 // Check account availablity
@@ -202,8 +308,11 @@ app.post('/account/request', [
 		SELECT tb_akun.kode_akun,tb_akun.hp,tb_otp.created FROM tb_akun 
 		INNER JOIN tb_otp ON tb_otp.kode_akun=tb_akun.kode_akun
 		WHERE tb_akun.kode_akun=? AND tb_otp.updated BETWEEN (DATE_SUB(NOW(),INTERVAL 5 MINUTE)) AND NOW();
+
+		/* Cek apakah sudah ada yang memakai nomor telepon tersebut atau tidak */
+		SELECT tb_akun.kode_akun FROM tb_akun WHERE tb_akun.hp=? AND tb_akun.kode_akun<>?;
 	`;
-	pooldb.query(sqlsyn, [nis, nis], (err, result) => {
+	pooldb.query(sqlsyn, [nis, nis, nohp, nis], (err, result) => {
 
 		// Cek jika OTP sudah dikirim sebelumnya
 		if (result[1].length !== 0){
@@ -222,37 +331,44 @@ app.post('/account/request', [
 			}); return;
 		}else if ((result[0][0]['hp'] === '') || (result[0][0]['hp'] === nohp)) {
 
-			let sqlsyn = `
-				DELETE FROM tb_otp WHERE kode_akun=?;
-				INSERT INTO tb_otp (kode_akun, otp, hp) VALUES (?,?,?)
-			`;
-			pooldb.query(sqlsyn, [nis, nis, onetimepassword, nohp], (err, result) => {
-				// Mengambil data antrian
-				if (err){ 
-					// Menampilkan error terjadi
-					console.log(err);
-					res.json({
-						code : "error",
-						msg : err
-					}); return;
-				} else {
+			if (result[2].length === 0){
+				let sqlsyn = `
+					DELETE FROM tb_otp WHERE kode_akun=?;
+					INSERT INTO tb_otp (kode_akun, otp, hp) VALUES (?,?,?)
+				`;
+				pooldb.query(sqlsyn, [nis, nis, onetimepassword, nohp], (err, result) => {
+					// Mengambil data antrian
+					if (err){ 
+						// Menampilkan error terjadi
+						console.log(err);
+						res.json({
+							code : "error",
+							msg : err
+						}); return;
+					} else {
 
-					// Kirim OTP lewat WA
-					alat.webGo(`http://localhost:63000/send?destinasi=${nohp}&pesan=${onetimepassword}`);
-					
-					res.json({
-						code : "ok",
-						msg : "OTP berhasil dikirim!"
-					}); return;
+						// Kirim OTP lewat WA
+						alat.webGo(`http://localhost:63000/send?destinasi=${nohp}&pesan=${onetimepassword}`);
+						
+						res.json({
+							code : "ok",
+							msg : "OTP berhasil dikirim!"
+						}); return;
 
-				}
-			});
+					}
+				});
+			}else{
+				res.json({
+					code : "error",
+					msg : "Nomor telepon sudah disandingkan dengan akun lain."
+				}); return;
+			}
 
 		}else{
 
 			res.json({
 				code : "error",
-				msg : "Akun sudah terhubung dengan nomor wa sebelumnya, harap login dengan nomor wa yang sama dengan yang didaftarkan pertama kali."
+				msg : "Akun sudah terhubung dengan nomor wa, harap login dengan nomor wa yang sama saat didaftarkan."
 			}); return;
 
 		}
