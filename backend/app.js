@@ -65,13 +65,14 @@ const pooldb = mysql.createPool({
 app.get('/app/virtualcard/get/akun', [
 ], (req, res) => {
 	let sqlsyn = `
-	SELECT kode_akun, kode_kelas, nama, TO_BASE64(CONCAT('00101101',kode_akun,'00101101')) AS qrcode FROM tb_akun ORDER BY kode_kelas ASC;
+	SELECT kode_akun, kode_kelas, nama, TO_BASE64(TO_BASE64(CONCAT('',kode_akun,''))) AS qrcode FROM tb_akun ORDER BY kode_kelas ASC;
 	`;
 	pooldb.query(sqlsyn, (err, result) => { if (err){ /* Jika terjadi error */ }else{
 		function genQR(simpan) {
 			let hasil = result;
 			result.forEach((item, index, arr) => {
 				QRCode.toDataURL(item.qrcode, function (err, url) {
+					// hasil[index]['qrraw'] = item.qrcode;
 					hasil[index]['qrcode'] = url;
 					if (index == (arr.length - 1)){ simpan(hasil); }
 				});
