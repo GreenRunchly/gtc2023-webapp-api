@@ -13,7 +13,7 @@
         scroll-behavior: smooth;
         overflow: hidden;
         overflow-y: auto;
-        font-size: 14px;
+        font-size: 12px;
         color: black;
     }
     body{
@@ -56,8 +56,8 @@
         font-weight: normal;
     }
     :root{
-        --sheet-w: calc(448px);
-        --sheet-h: calc(236px); /* 236 , 118, 62 */ 
+        --sheet-w: calc(95mm);
+        --sheet-h: calc(50mm); /* 236 , 118, 62 */ 
         --background-color-light: #25d366;
         --background-color: #199d49;
         --text-color: white;
@@ -93,11 +93,12 @@
         color: white;
     }
     .front-1.page .qr{
-        width: 120px;
-        height: 120px;
-        padding: 1rem;
+        width: 90px;
+        height: 90px;
+        padding: 0rem;
         border-radius: 1rem;
         background-color: white;
+        overflow: hidden;
     }
 
     /* Front 2 */
@@ -125,16 +126,13 @@
 <div class="sheet">
     <div class="page front-1">
         <div class="section" style="margin-left: 1rem;">
-            <div class="qr" id="QR2022807008"></div>
-            <script>
-                new QRCode("QR2022807008", "2022807008");
-            </script>
+            <div class="qr"><img src=""></div>
         </div>
         <div class="section" style="align-items: flex-start;justify-content: center;">
-            <h2>RIZKI IRFAN ANSHORI</h2>
-            <h3><span>2022807008</span> - <span>11 MIPA 1</span></h3>
-            <div style="margin-top: 1rem;">
-                <img style="margin-bottom: 0.5rem;" src="qrcode-icon.png" alt="">
+            <h2>${title Case(option Params.nama)}</h2>
+            <h3><span>${option Params. kode_akun}</span> - <span>${option Params. kode_kelas}</span></h3>
+            <div style="margin-top: 0.5rem;">
+                <!-- <img style="margin-bottom: 0.5rem;" src="qrcode-icon.png" alt=""> -->
                 <p class="info">Scan QR disamping dengan aplikasi untuk menyiapkan akun.</p><br>
                 <p class="info">Nomor WhatsApp aktif diperlukan.</p>
             </div>

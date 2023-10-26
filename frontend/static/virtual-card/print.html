@@ -20,7 +20,7 @@
         scroll-behavior: smooth;
         overflow: hidden;
         overflow-y: auto;
-        font-size: 14px;
+        font-size: 11px;
         color: black;
     }
     body{
@@ -63,24 +63,51 @@
         font-weight: normal;
     }
     :root{
-        --sheet-w: calc(448px);
-        --sheet-h: calc(236px); /* 236 , 118, 62 */ 
+        --sheet-w: calc(204px);
+        --sheet-h: calc(323px); /* 236 , 118, 62 */ 
         --background-color-light: #25d366;
         --background-color: #199d49;
         --text-color: white;
     }
     .sheet{
         display: flex;
+        min-width: var(--sheet-w);
         width: var(--sheet-w);
+        max-width: var(--sheet-w);
+        min-height: var(--sheet-h);
         height: var(--sheet-h);
+        max-height: var(--sheet-h);
         flex-direction: column;
         transform: scale(1);
         transform-origin: top left;
         background-color: white;
+        border-bottom: 1mm solid white;
+        
+
+    }
+    .sheet:nth-child(even){
+        min-width: calc(var(--sheet-w) - 0.1mm);
+        width: calc(var(--sheet-w) - 0.1mm);
+        max-width: calc(var(--sheet-w) - 0.1mm);
+        border-right: 1mm solid white;
+    }
+    .paper{
+        display: block;
+        min-width: 148mm;
+        width: 148mm;
+        max-width: 148mm;
+        min-height: 210mm;
+        height: 210mm;
+        max-height: 210mm;
+        border: 1px solid black;
+    }
+    .gap{
+
     }
     .page{
         display: flex;
         flex: 1;
+        flex-wrap: wrap;
         height: 50%;
     }
     .section{
@@ -88,7 +115,6 @@
         align-items: center;
         justify-content: center;
         flex-direction: column;
-        height: 100%;
         padding: 1rem;
         z-index:  5;
     }
@@ -100,12 +126,22 @@
         color: white;
     }
     .front-1.page .qr{
-        width: 120px;
-        height: 120px;
+        width: 150px;
+        height: 150px;
         padding: 0rem;
         border-radius: 1rem;
         background-color: white;
         overflow: hidden;
+    }
+    .front-1.page .qricon{
+        width: 30px;
+    }
+    .front-1.page .foto{
+        position: absolute;
+        width: 95px;
+        height: 95px;
+        margin: 2.5rem;
+        border-radius: 0.5rem;
     }
 
     /* Front 2 */
@@ -129,11 +165,15 @@
     .front-2.page .judul h1, .front-2.page .judul h2, .front-2.page .judul h3{
         color: white !important;
     }
+
 </style>
 <body id="layout">
     
 </body>
 <script>
+    // let appAPIServer = 'https://gtcapp.ieu.link';
+    // let appServer = 'http://localhost:61000';
+
     let appAPIServer = 'http://localhost:62000';
     let appServer = 'http://localhost:61000';
     function loadDataKartu() {
@@ -144,8 +184,8 @@
             success: function( response ) {
                 if (response['data'] != []){
                     $.each(response['data'], function( i, v ) {
-                        if (v.kode_kelas == '11-MIPA-1'){
-                            loadSheet('#layout', 'virtual-card/print-card.html',v);
+                        if (v.role == 'guru'){
+                            loadSheet('#layout', 'virtual-card/print-single.html',v);
                         }
                     }); 
                 }
@@ -168,25 +208,14 @@
 <div class="sheet">
     <div class="page front-1">
         <div class="section" style="margin-left: 1rem;">
-            <div class="qr"><img src="${optionParams.qrcode}"></div>
+            <div class="qr"><img class="foto" src="assets/pp.png"><img src="${optionParams.qrcode}"></div>
         </div>
-        <div class="section" style="align-items: flex-start;justify-content: center;">
-            <h2>${optionParams.nama}</h2>
-            <h3><span>${optionParams.kode_akun}</span> - <span>${optionParams.kode_kelas}</span></h3>
-            <div style="margin-top: 1rem;">
-                <img style="margin-bottom: 0.5rem;" src="qrcode-icon.png" alt="">
-                <p class="info">Scan QR disamping dengan aplikasi untuk menyiapkan akun.</p><br>
-                <p class="info">Nomor WhatsApp aktif diperlukan.</p>
+        <div class="section" style="align-items: center;justify-content: center;">
+            <h2 style="margin-bottom:0.4rem;text-align:center;">${titleCase(optionParams.nama)}</h2>
+            <h3 style="text-align:center;"><span>${optionParams.kode_akun}</span><br><span>${optionParams.kode_kelas}</span></h3>
+            <div style="margin-top: 1.5rem;">
+                <p style="text-align:center;" class="info">Scan QR disamping dengan aplikasi untuk menyiapkan akun.</p>
             </div>
-        </div>
-    </div>
-</div>
-<div class="sheet">
-    <div class="page front-2 reverse">
-        <div class="bg" style="--bg-url: url('bg-back.jpeg');"></div>
-        <div class="judul">
-            <h1>Goes to Campus 2023</h1>
-            <h2>SMAN 3 Kabupaten Tangerang</h2>
         </div>
     </div>
 </div>
@@ -199,5 +228,17 @@
             }
         })
     }
+    function titleCase(str) {
+        var splitStr = str.toLowerCase().split(' ');
+        for (var i = 0; i < splitStr.length; i++) {
+            // You do not need to check if i is larger than splitStr length, as your for does that for you
+            // Assign it back to the array
+            splitStr[i] = splitStr[i].charAt(0).toUpperCase() + splitStr[i].substring(1);     
+        }
+        // Directly return the joined string
+        return splitStr.join(' '); 
+    }
+
+
 </script>
 </html>
