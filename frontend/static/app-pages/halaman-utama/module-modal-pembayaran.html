@@ -1,11 +1,97 @@
-<div class="modal off" id="module-pembayaran">
-    <div class="container">
-        <h2 class="title"><i class="fas fa-badge-check"></i>&nbsp;Info Pembayaran</h2>
-        <p>Pembayaran GTC anda belum lunas..<br>💪💪✊️</p>
-        <br>
-        <a class="tombol toggle" toggle-id="module-pembayaran">
-            <h2><span><i class="fas fa-check"></i></h2>
-            <h4>Tutup</h4>
-        </a>
+<!-- <div class="modal on" >
+    
+</div> -->
+<style>
+    #module-pembayaran .progress-bar{
+        display: flex;
+        width: 100%;
+    }
+    #module-pembayaran .progress-bar .wrapper{
+        display: block;
+        width: 100%;
+        height: 2rem;
+        padding: 0.5rem;
+        background-color: var(--background-color-button-light);
+        border-radius: 1rem;
+        overflow: hidden;
+    }
+    #module-pembayaran .progress-bar .wrapper .fill{
+        background-color: var(--background-color-button);
+        width: var(--progress-fill);
+        border-radius: 1rem;
+        min-width: 0%;
+        max-width: 100%;
+        height: 100%;
+        animation: flashing 1s infinite;
+    }
+    @keyframes flashing {
+        0%{
+            filter: brightness(0.5);
+        }
+        100%{
+            filter: brightness(1);
+        }
+    }
+</style>
+<div class="container" id="module-pembayaran"><br>
+    <h2 class="wide"><i class="fas fa-badge-check"></i>&nbsp;Info Pembayaran</h2>
+    <div class="swiper module-pembayaran-listing round">
+        <div class="swiper-wrapper">
+            <div class="swiper-slide">
+                Loading...
+            </div>
+        </div>
     </div>
+    <h1><span>50%</span></h1>
+    <div class="progress-bar">
+        <div class="wrapper">
+            <div class="fill" style="--progress-fill: 50%;"></div>
+        </div>
+    </div>
+    <p>Pembayaran GTC anda belum lunas..<br>💪💪✊️</p>
+    <br>
 </div>
+<script>
+    function modulePembayaranListing() {
+        // Init Jumbotron
+        let modulePembayaranListing = new Swiper('.module-pembayaran-listing', {
+            slidesPerView: 'auto',
+            spaceBetween: 14,
+            autoplay: {
+                delay: 2000,
+                disableOnInteraction: false,
+            }, loop: true
+        });
+
+        // Load Latest Thumbnail Banner from server
+        let procOncePembayaranListing = setInterval(() => {
+            let target = modulePembayaranListing;
+            let data = appData.pembayaran;
+
+            let ohtml = '';
+            if (data != []){
+                $.each(data, function( i, v ) {
+                    ohtml += `
+                        <div class="swiper-slide">
+                            <p>Rizki Irfan Anshori</p>
+                        </div>
+                    `;
+                }); 
+            }else{
+                ohtml += `
+                    <div class="swiper-slide">
+                        <p>Rizki Irfan Anshori</p>
+                    </div>
+                `;
+            }
+
+            // Menghapus isi slide yang ada dan timpa html dengan yang baru dari urlSource
+            target.removeAllSlides();
+            target.appendSlide(ohtml);
+
+            // Done loading Thumbnail
+            clearInterval(procOncePembayaranListing);
+        }, 1000);
+    }
+    modulePembayaranListing();
+</script>

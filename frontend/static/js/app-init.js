@@ -8,6 +8,9 @@ let appAPIServer = 'https://gtcapp.ieu.link';
 // let appServer = '';
 // let appAPIServer = 'http://rizkis-macbook-air.local:62000';
 
+// let appServer = 'https://local.ieu.link';
+// let appAPIServer = 'https://server-local.ieu.link';
+
 // Penyetelan Tanggal dan Waktu
 let appDate = new Date();
 let appDateTime = appDate.getTime();

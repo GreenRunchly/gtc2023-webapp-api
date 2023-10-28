@@ -14,17 +14,30 @@
         let ohtml = ``;
         if (appDateHour != []){
             if (appDateHour > 20) {
-                ohtml = `Selamat Malam, ${namaPanggilan}! <i class="fas fa-moon-stars"></i>`;
+                ohtml = `Selamat Malam! <i class="fas fa-moon-stars"></i>`;
             } else if (appDateHour > 15) {
-                ohtml = `Selamat Sore, ${namaPanggilan}! <i class="fas fa-sun-haze"></i>`;
+                ohtml = `Selamat Sore! <i class="fas fa-sun-haze"></i>`;
             } else if (appDateHour > 10) {
-                ohtml = `Selamat Siang, ${namaPanggilan}! <i class="fas fa-sun"></i>`;
+                ohtml = `Selamat Siang! <i class="fas fa-sun"></i>`;
             } else{
-                ohtml = `Selamat Pagi, ${namaPanggilan}! <i class="fas fa-sun-haze"></i>`;
+                ohtml = `Selamat Pagi! <i class="fas fa-sun-haze"></i>`;
             }
         }else{
-            ohtml = `Selamat Pagi, ${namaPanggilan}! <i class="fas fa-sun-haze"></i>`;
+            ohtml = `Selamat Pagi! <i class="fas fa-sun-haze"></i>`;
         }
+        // if (appDateHour != []){
+        //     if (appDateHour > 20) {
+        //         ohtml = `Selamat Malam, ${namaPanggilan}! <i class="fas fa-moon-stars"></i>`;
+        //     } else if (appDateHour > 15) {
+        //         ohtml = `Selamat Sore, ${namaPanggilan}! <i class="fas fa-sun-haze"></i>`;
+        //     } else if (appDateHour > 10) {
+        //         ohtml = `Selamat Siang, ${namaPanggilan}! <i class="fas fa-sun"></i>`;
+        //     } else{
+        //         ohtml = `Selamat Pagi, ${namaPanggilan}! <i class="fas fa-sun-haze"></i>`;
+        //     }
+        // }else{
+        //     ohtml = `Selamat Pagi, ${namaPanggilan}! <i class="fas fa-sun-haze"></i>`;
+        // }
         targetGreeting.html(ohtml);
 
         // Menulis kelas dan nis

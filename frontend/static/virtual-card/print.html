@@ -66,8 +66,8 @@
         --sheet-w: calc(204px);
         --sheet-h: calc(323px); /* 236 , 118, 62 */ 
         --background-color-light: #25d366;
-        --background-color: rgb(180, 0, 245);
-        /* --background-color: #199d49; */
+        /* --background-color: rgb(180, 0, 245); */
+        --background-color: #199d49;
         	
         --text-color: white;
     }
@@ -118,6 +118,7 @@
         justify-content: center;
         flex-direction: column;
         padding: 1rem;
+        width: 100%;
         z-index:  5;
     }
 
@@ -128,9 +129,9 @@
         color: white;
     }
     .front-1.page .qr{
-        width: 150px;
-        height: 150px;
-        padding: 0rem;
+        width: 130px;
+        height: 130px;
+        padding: 1rem;
         border-radius: 1rem;
         background-color: white;
         overflow: hidden;
@@ -138,12 +139,19 @@
     .front-1.page .qricon{
         width: 30px;
     }
+    .front-1.page .qrthing{
+        width: 100%;
+        height: 100%;
+    }
     .front-1.page .foto{
         position: absolute;
-        width: 95px;
-        height: 95px;
-        margin: 2.5rem;
-        border-radius: 0.5rem;
+        width: calc((100px - 2rem) / 2);
+        height: calc((100px - 2rem) / 2);
+        margin: calc((100px - 2rem) / 4);
+        z-index: 5;
+        padding: 1rem;
+        background-color: white;
+        border-radius: 1rem;
     }
 
     /* Front 2 */
@@ -173,11 +181,11 @@
     
 </body>
 <script>
-    // let appAPIServer = 'https://gtcapp.ieu.link';
-    // let appServer = 'http://localhost:61000';
+    let appAPIServer = 'https://server-local.ieu.link';
+    let appServer = 'https://local.ieu.link';
 
-    let appAPIServer = 'http://localhost:62000';
-    let appServer = 'http://localhost:61000';
+    // let appAPIServer = 'http://rizkis-macbook-air.local:62000';
+    // let appServer = 'http://rizkis-macbook-air.local:61000';
     function loadDataKartu() {
         // Load App Data dan User Data, please note this need to wait for it's finish
         $.ajax({
@@ -209,8 +217,8 @@
                 $(destinasi).append(`
 <div class="sheet">
     <div class="page front-1">
-        <div class="section" style="margin-left: 1rem;">
-            <div class="qr"><img class="foto" src="assets/pp.png"><img src="${optionParams.qrcode}"></div>
+        <div class="section">
+            <div class="qr"><img class="qrthing" src="${optionParams.qrcode}"></div>
         </div>
         <div class="section" style="align-items: center;justify-content: center;">
             <h2 style="margin-bottom:0.4rem;text-align:center;">${titleCase(optionParams.nama)}</h2>

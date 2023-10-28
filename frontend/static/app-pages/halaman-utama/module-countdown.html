@@ -1,5 +1,5 @@
 <!-- Module Countdown -->
-<div class="content" id="countdown">
+<div class="content" id="countdown" style="display: none;">
     <div class="container module-countdown countdown-container" style="padding-bottom:0rem;padding-top: 1rem;" >
         <h1 class="countdown-title">
             <span>Goes To Campus</span><span>Count Down</span>
@@ -34,6 +34,8 @@
             // Init Countdown
             let finaleCountDown = new Date(data).getTime();
             let resultCountDown = `...`;
+
+            finaleCountDown = new Date('2020').getTime();
 
             // Starter
             let timeNow = appDate;

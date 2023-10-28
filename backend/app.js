@@ -65,13 +65,13 @@ const pooldb = mysql.createPool({
 app.get('/app/virtualcard/get/akun', [
 ], (req, res) => {
 	let sqlsyn = `
-	SELECT kode_akun, role, kode_kelas, nama, TO_BASE64(TO_BASE64(CONCAT('01100111011101000110001100110010001100000011001000110011',kode_akun,'01100111011101000110001100110010001100000011001000110011'))) AS qrcode FROM tb_akun WHERE kode_kelas='11-MIPA-1' ORDER BY kode_kelas ASC;
+	SELECT kode_akun, role, kode_kelas, nama, CONCAT('https://local.ieu.link?id=',TO_BASE64(TO_BASE64(kode_akun)),'') AS qrcode FROM tb_akun ORDER BY kode_kelas ASC;
 	`;
 	pooldb.query(sqlsyn, (err, result) => { if (err){ /* Jika terjadi error */ }else{
 		function genQR(simpan) {
 			let hasil = result;
 			result.forEach((item, index, arr) => {
-				QRCode.toDataURL(item.qrcode, function (err, url) {
+				QRCode.toDataURL(item.qrcode, {errorCorrectionLevel: 'H', margin : 0}, function (err, url) {
 					// hasil[index]['qrraw'] = item.qrcode;
 					hasil[index]['qrcode'] = url;
 					if (index == (arr.length - 1)){ simpan(hasil); }
@@ -177,6 +177,8 @@ app.post('/account/check', [
 
 	let {nis} = req.body;
 
+	console.log(nis);
+
 	let sqlsyn = `
 		SELECT * FROM tb_akun WHERE kode_akun=?;
 	`;
@@ -234,8 +236,13 @@ app.post('/account/alive', [
 		SELECT tb_appdata_informasi.kode_kelas, tb_appdata_informasi.konten, tb_appdata_informasi.updated FROM tb_akun
 		INNER JOIN tb_appdata_informasi ON tb_appdata_informasi.kode_kelas=tb_akun.kode_kelas
 		WHERE tb_akun.sesi=?;
+
+		/* Mengambil listing pembayaran */
+		SELECT tb_akun_pembayaran.* FROM tb_akun_pembayaran
+		INNER JOIN tb_akun ON tb_akun_pembayaran.kode_kelas=tb_akun.kode_kelas
+		WHERE tb_akun.kode_kelas=?;
 	`;
-	pooldb.query(sqlsyn, [sesi, sesi, sesi], (err, result) => {
+	pooldb.query(sqlsyn, [sesi, sesi, sesi, '11-MIPA-1'], (err, result) => {
 		// Mengambil data antrian
 		if (err){ 
 			// Menampilkan error terjadi
@@ -257,7 +264,8 @@ app.post('/account/alive', [
 							informasi: result[3][0],
 							helpdesk: result[2][0],
 							thumbnail: result[1],
-							rundown: dataRun
+							rundown: dataRun,
+							pembayaran: result[4]
 						}
 					}); return;
 				}); 
@@ -349,7 +357,7 @@ app.post('/account/request', [
 					} else {
 
 						// Kirim OTP lewat WA
-						alat.webGo(`http://localhost:63000/send?destinasi=${nohp}&pesan=${onetimepassword}`);
+						alat.webGo(`http://wa-api.ieu.link/send?destinasi=${nohp}&pesan=${onetimepassword}`);
 						
 						res.json({
 							code : "ok",
