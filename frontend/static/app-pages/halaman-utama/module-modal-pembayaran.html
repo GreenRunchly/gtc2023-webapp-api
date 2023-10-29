@@ -35,63 +35,86 @@
 </style>
 <div class="container" id="module-pembayaran"><br>
     <h2 class="wide"><i class="fas fa-badge-check"></i>&nbsp;Info Pembayaran</h2>
-    <div class="swiper module-pembayaran-listing round">
-        <div class="swiper-wrapper">
-            <div class="swiper-slide">
-                Loading...
-            </div>
-        </div>
-    </div>
-    <h1><span>50%</span></h1>
+    <h1><span class="payment-progress-percent">.......</span></h1>
+    <h4><span class="payment-current">.....</span></h4>
     <div class="progress-bar">
         <div class="wrapper">
-            <div class="fill" style="--progress-fill: 50%;"></div>
+            <div class="fill payment-progress" style="--progress-fill: 0%;"></div>
         </div>
     </div>
-    <p>Pembayaran GTC anda belum lunas..<br>💪💪✊️</p>
+    <p class="payment-pesan">.......</p>
     <br>
 </div>
 <script>
-    function modulePembayaranListing() {
-        // Init Jumbotron
-        let modulePembayaranListing = new Swiper('.module-pembayaran-listing', {
-            slidesPerView: 'auto',
-            spaceBetween: 14,
-            autoplay: {
-                delay: 2000,
-                disableOnInteraction: false,
-            }, loop: true
-        });
-
-        // Load Latest Thumbnail Banner from server
-        let procOncePembayaranListing = setInterval(() => {
-            let target = modulePembayaranListing;
+    
+    function modulePembayaranSingle() {
+        // Load data pembayaran
+        let procOncePembayaranSingle = setInterval(() => {
             let data = appData.pembayaran;
 
-            let ohtml = '';
-            if (data != []){
-                $.each(data, function( i, v ) {
-                    ohtml += `
-                        <div class="swiper-slide">
-                            <p>Rizki Irfan Anshori</p>
-                        </div>
-                    `;
-                }); 
-            }else{
-                ohtml += `
-                    <div class="swiper-slide">
-                        <p>Rizki Irfan Anshori</p>
-                    </div>
-                `;
+            // Format rupiah
+            const rupiah = (number)=>{
+                return new Intl.NumberFormat("id-ID", {
+                style: "currency",
+                currency: "IDR"
+                }).format(number);
             }
 
-            // Menghapus isi slide yang ada dan timpa html dengan yang baru dari urlSource
-            target.removeAllSlides();
-            target.appendSlide(ohtml);
+            if (data != []){
+                let payCurrent = 0;
+                let payPercent = 0;
+                let payProg = 0;
+                let payPesan = `Pembayaran GTC anda belum lunas..<br>💪💪✊️`;
+                let payInstallments = 0;
+
+                // Load masing-masing data pembayaran dan akumulasikan
+                $.each(data, function( i, v ) {
+                    payCurrent += parseInt(v.jumlah_setor);
+                    payInstallments ++;
+                }); 
+
+                // Kalkulasi progress
+                payProg = (payCurrent / 3750000);
+                // Dibuat persentase
+                payPercent = String(Math.floor(payProg*100));
+                // Jika sudah lunas
+                switch (payProg) {
+                    case 1:
+                        payPercent = 'Lunas ' + payPercent;
+                        payPesan = `Anda sudah melunasi pembayaran GTC.<br>🤝👍🏻👏`;
+                        sudahBayar(payCurrent, payPercent, payPesan, payInstallments);
+                        break;
+                    case 0:
+                        belumBayar();
+                        break;
+                    default:
+                        sudahBayar(payCurrent, payPercent, payPesan, payInstallments);
+                        break;
+                }
+                
+            }else{
+                belumBayar();
+            }
+
+            function belumBayar() {
+                $(".payment-current").text('Data pemasukan tidak ditemukan.');
+                $(".payment-progress-percent").text('Belum Bayar');
+                $(".payment-progress").css('--progress-fill','5%');
+                $(".payment-pesan").html(`
+                    Berdasarkan data dari Travel, Anda belum melakukan pembayaran GTC..<br>💪💪💪
+                `);
+            }
+
+            function sudahBayar(p1, p2, p3, p4) {
+                $(".payment-current").text(`${rupiah(p1)} (${p4}x)`);
+                $(".payment-progress-percent").text(`${p2}%`);
+                $(".payment-progress").css('--progress-fill',`${p2}%`);
+                $(".payment-pesan").html(p3);
+            }
 
             // Done loading Thumbnail
-            clearInterval(procOncePembayaranListing);
+            clearInterval(procOncePembayaranSingle);
         }, 1000);
     }
-    modulePembayaranListing();
+    modulePembayaranSingle();
 </script>
