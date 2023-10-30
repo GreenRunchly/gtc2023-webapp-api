@@ -87,66 +87,7 @@ app.get('/app/virtualcard/get/akun', [
 	}});
 });
 
-// Import Data Excel
-app.post('/app/update-pembayaran', [
-], (req, res) => {
-	const child = require("child_process").exec("curl -L 'https://docs.google.com/spreadsheets/d/1MHsGllyaTZHj9eizSueeyqsjkQTG4d4UWida_8OER8I/export?format=xlsx' > './data/temp-pembayaran.xlsx'");
-	child.on('exit', function() {
-		
-		// Mengecek keungan akun siswa
-		xlsxReader('./data/temp-pembayaran.xlsx', { sheet: 'PEMASUKAN' }).then((rows) => {
-			// Mengetahui akun yang sudah ada per kode akun/nis
-			let sqlsyn = `
-				TRUNCATE TABLE grunchly_gtc2023.tb_akun_pembayaran;
-			`;
-			pooldb.query(sqlsyn, (err, result) => { if (err){ /* Jika terjadi error */ }else{
-				rows.forEach(row => {
-					
-					let nomor = parseInt(row[0]);
-					let nama = String(row[2]);
-
-					let setor = [];
-					for (let index = 0; index <= 3; index++) {
-						let uang = parseInt(row[6+index]);
-						if ( (uang != null) && (!Number.isNaN(uang)) ){
-							setor.push(uang);
-						}
-					}
-			
-					if ( (nomor != null) && (!Number.isNaN(nomor)) ){
-						// Mengetahui akun yang sudah ada per kode akun/nis
-						let sqlsyn = `
-							SELECT kode_akun, kode_kelas FROM tb_akun WHERE nama LIKE ?;
-						`;
-						pooldb.query(sqlsyn, `%${nama}%`, (err, result) => { if (err){ /* Jika terjadi error */ }else{
-							if (result.length === 0){}else{
-								setor.forEach((item, index, arr) => {
-									let kodeakun = result[0].kode_akun;
-									let kodekelas = result[0].kode_kelas;
-									let kodesetor = index+1;
-									let jumlahsetor = item;
-									// Insert table pembayaran
-									pooldb.query(`INSERT INTO tb_akun_pembayaran (kode_akun, kode_setor, jumlah_setor, kode_kelas) VALUES (?,?,?,?)`, [
-										kodeakun, kodesetor, jumlahsetor, kodekelas
-									], (err, result) => { 
-										if (err){ /* Jika terjadi error */ console.log(err); }else{
-											// console.log(`Insert ${kodeakun}`);
-										}
-									});
-								});
-							}
-						}});
-					}
-				});
-			}});
-		});
-
-	});
-});
-
-// Import Data Excel
-app.post('/app/update', [
-], (req, res) => {
+function appUpdateData() {
 	const child = require("child_process").exec("curl -L 'https://docs.google.com/spreadsheets/d/18P74DZV6-WQVIUstZF_ehU-eUedOlxfRT1MfyM4P76Q/export?format=xlsx' > './data/temp.xlsx'");
 	child.on('exit', function() {
 		// Menambahkan akun siswa
@@ -219,7 +160,124 @@ app.post('/app/update', [
 				}});
 			});
 		});
+
+		// HelpDesk
+		xlsxReader('./data/temp.xlsx', { sheet: 'Helpdesk' }).then((rows) => { rows[0].pop();
+			console.log(rows);
+			rows.forEach(row => {
+				// Mengetahui akun yang sudah ada per kode akun/nis
+				let sqlsyn = `DELETE FROM tb_appdata_helpdesk;`;
+				pooldb.query(sqlsyn, (err, result) => { if (err){ /* Jika terjadi error */ }else{
+					console.log(`try Insert Help ${row[1]}`);
+					pooldb.query(`
+						INSERT INTO tb_appdata_helpdesk (nomor,kode_kelas) VALUES (TO_BASE64(?),?);
+					`, [row[1], row[3] ], (err, result) => { 
+						if (err){ /* Jika terjadi error */  }else{
+							console.log(`Insert Help ${row[1]}`);
+						}
+					});
+				}});
+			});
+		});
+
+		// Thumbnail
+		xlsxReader('./data/temp.xlsx', { sheet: 'Foto Slide' }).then((rows) => { rows[0].pop();
+			rows.forEach(row => {
+				// Mengetahui akun yang sudah ada per kode akun/nis
+				let sqlsyn = `DELETE FROM tb_appdata_thumbnail;`;
+				pooldb.query(sqlsyn, [row[1]], (err, result) => { if (err){ /* Jika terjadi error */ }else{
+					pooldb.query(`
+						INSERT INTO tb_appdata_thumbnail (source) VALUES (?);
+					`, [ row[1] ], (err, result) => { 
+						if (err){ /* Jika terjadi error */ }else{
+							console.log(`Insert Foto ${row[1]}`);
+						}
+					});
+				}});
+			});
+		});
 	});
+}
+
+function appUpdatePembayaran() {
+	const child = require("child_process").exec("curl -L 'https://docs.google.com/spreadsheets/d/1MHsGllyaTZHj9eizSueeyqsjkQTG4d4UWida_8OER8I/export?format=xlsx' > './data/temp-pembayaran.xlsx'");
+	child.on('exit', function() {
+		
+		// Mengecek keungan akun siswa
+		xlsxReader('./data/temp-pembayaran.xlsx', { sheet: 'PEMASUKAN' }).then((rows) => {
+			// Mengetahui akun yang sudah ada per kode akun/nis
+			let sqlsyn = `
+				TRUNCATE TABLE grunchly_gtc2023.tb_akun_pembayaran;
+			`;
+			pooldb.query(sqlsyn, (err, result) => { if (err){ /* Jika terjadi error */ }else{
+				rows.forEach(row => {
+					
+					let nomor = parseInt(row[0]);
+					let nama = String(row[2]);
+
+					let setor = [];
+					for (let index = 0; index <= 3; index++) {
+						let uang = parseInt(row[6+index]);
+						if ( (uang != null) && (!Number.isNaN(uang)) ){
+							setor.push(uang);
+						}
+					}
+			
+					if ( (nomor != null) && (!Number.isNaN(nomor)) ){
+						// Mengetahui akun yang sudah ada per kode akun/nis
+						let sqlsyn = `
+							SELECT kode_akun, kode_kelas FROM tb_akun WHERE nama LIKE ?;
+						`;
+						pooldb.query(sqlsyn, `${nama}`, (err, result) => { if (err){ /* Jika terjadi error */ }else{
+							if (result.length === 0){}else{
+								setor.forEach((item, index, arr) => {
+									let kodeakun = result[0].kode_akun;
+									let kodekelas = result[0].kode_kelas;
+									let kodesetor = index+1;
+									let jumlahsetor = item;
+									// Insert table pembayaran
+									pooldb.query(`INSERT INTO tb_akun_pembayaran (kode_akun, kode_setor, jumlah_setor, kode_kelas) VALUES (?,?,?,?)`, [
+										kodeakun, kodesetor, jumlahsetor, kodekelas
+									], (err, result) => { 
+										if (err){ /* Jika terjadi error */ console.log(err); }else{
+											// console.log(`Insert ${kodeakun}`);
+										}
+									});
+								});
+							}
+						}});
+					}
+				});
+			}});
+		});
+
+	});
+}
+
+// Import Data Excel
+app.post('/app/update', [
+], (req, res) => {
+	async function secondFunction() {
+		await appUpdateData();
+		res.json({
+			code : "ok",
+			msg : "Script berhasil di eksekusi"
+		}); return;
+	}
+	secondFunction();
+});
+
+// Import Data Excel
+app.post('/app/update-pembayaran', [
+], (req, res) => {
+	async function secondFunction() {
+		await appUpdatePembayaran();
+		res.json({
+			code : "ok",
+			msg : "Script berhasil di eksekusi"
+		}); return;
+	}
+	secondFunction();
 });
 
 // Check account availablity
@@ -298,8 +356,14 @@ app.post('/account/alive', [
 		SELECT tb_akun_pembayaran.* FROM tb_akun_pembayaran
 		INNER JOIN tb_akun ON tb_akun_pembayaran.kode_akun=tb_akun.kode_akun
 		WHERE tb_akun.sesi=?;
+
+		/* Mengambil listing pembayaran per siswa */
+		SELECT identitas_akun.nama, tb_akun_pembayaran.kode_akun, tb_akun_pembayaran.jumlah_setor FROM tb_akun_pembayaran
+		INNER JOIN tb_akun ON tb_akun_pembayaran.kode_kelas=tb_akun.kode_kelas
+		INNER JOIN tb_akun AS identitas_akun ON tb_akun_pembayaran.kode_akun=identitas_akun.kode_akun
+		WHERE tb_akun.sesi=?;
 	`;
-	pooldb.query(sqlsyn, [sesi, sesi, sesi, sesi], (err, result) => {
+	pooldb.query(sqlsyn, [sesi, sesi, sesi, sesi, sesi], (err, result) => {
 		// Mengambil data antrian
 		if (err){ 
 			// Menampilkan error terjadi
@@ -322,7 +386,8 @@ app.post('/account/alive', [
 							helpdesk: result[2][0],
 							thumbnail: result[1],
 							rundown: dataRun,
-							pembayaran: result[4]
+							pembayaran: result[4],
+							pembayaranlisting:result[5]
 						}
 					}); return;
 				}); 

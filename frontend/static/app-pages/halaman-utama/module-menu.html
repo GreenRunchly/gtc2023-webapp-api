@@ -39,7 +39,10 @@
     </div>
 </div>
 <div class="listing-container">
-    <div class="listing-content off" id="module-informasi-penting"></div>
+    <div class="listing-content off" id="module-informasi-penting">
+        <h2 class="wide"><i class="fas fa-info-circle"></i>&nbsp;Informasi</h2>
+        <p></p>
+    </div>
 </div>
 <script>
     // Untuk menus
@@ -87,7 +90,7 @@
 
     // Informasi Subpart
     function moduleInformasi() {
-        let target = $("#module-informasi-penting");
+        let target = $("#module-informasi-penting p");
         let data = appData.informasi
         if (data !== null){
             target.html(data.konten);

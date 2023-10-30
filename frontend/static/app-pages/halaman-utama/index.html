@@ -28,10 +28,9 @@
         'app-pages/halaman-utama/module-rundown.html', {replace: true});
 
         // Modal
-        if (appAccount.role == 'siswa'){
-            appLoadContent($("module-modal-pembayaran"),
-            'app-pages/halaman-utama/module-modal-pembayaran.html', {replace: true});
-        }
+        appLoadContent($("module-modal-pembayaran"),
+        'app-pages/halaman-utama/module-modal-pembayaran.html', {replace: true});
+    
     }
 
     function appLogin() {

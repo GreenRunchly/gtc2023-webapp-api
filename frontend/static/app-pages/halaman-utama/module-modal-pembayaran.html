@@ -32,6 +32,20 @@
             filter: brightness(1);
         }
     }
+
+    .module-pembayaran-listing .peserta{
+        padding: 0.5rem 1rem;
+        border-radius: 0.5rem;
+    }
+    .module-pembayaran-listing .peserta-status-1{
+        background-color: red;
+    }
+    .module-pembayaran-listing .peserta-status-2{
+        background-color: rgb(255,90,0);
+    }
+    .module-pembayaran-listing .peserta-status-3{
+        background-color: rgb(0,170,118);
+    }
 </style>
 <div class="container" id="module-pembayaran"><br>
     <h2 class="wide"><i class="fas fa-badge-check"></i>&nbsp;Info Pembayaran</h2>
@@ -42,8 +56,15 @@
             <div class="fill payment-progress" style="--progress-fill: 0%;"></div>
         </div>
     </div>
-    <p class="payment-pesan">.......</p>
-    <br>
+    <p class="payment-pesan">.......</p><br>
+    <h2 class="wide"><i class="fas fa-users"></i>&nbsp;Peserta Kelas</h2>
+    <div class="container swiper module-pembayaran-listing round">
+        <div class="swiper-wrapper">
+            <div class="swiper-slide">
+                
+            </div>
+        </div>
+    </div>
 </div>
 <script>
     
@@ -112,9 +133,80 @@
                 $(".payment-pesan").html(p3);
             }
 
+            if (appAccount.role == 'guru'){
+                $(".payment-current").text(`${rupiah(3750000)}`);
+                $(".payment-progress-percent").text(`Gratis`);
+                $(".payment-progress").css('--progress-fill',`100%`);
+                $(".payment-pesan").html(`Walas dan pendamping gratis! <br><br>Semoga GTC 2023 berjalan dengan lancar dan selamat hingga kembali ke tangerang 🤲`);
+            }
+
             // Done loading Thumbnail
             clearInterval(procOncePembayaranSingle);
         }, 1000);
     }
     modulePembayaranSingle();
+
+    function modulePembayaranListing() {
+
+        // Init Listing Pembayaran
+        let modulePembayaranListing = new Swiper('.module-pembayaran-listing', {
+            slidesPerView: 'auto',
+            spaceBetween: 14,
+            autoplay: {
+                delay: 4000,
+                disableOnInteraction: false,
+            }, loop: true
+        });
+
+        // Load data pembayaran listing
+        let procOncePembayaranListing = setInterval(() => {
+
+            let data = appData.pembayaranlisting;
+            let setoran = {};
+
+            if (data != []){
+
+                // Load masing-masing data pembayaran dan akumulasikan
+                $.each(data, function( i, v ) {
+
+                    if (setoran[v.kode_akun] == null){
+                        setoran[v.kode_akun] = {nama : '', current : 0, lunas:1};
+                    }
+                    setoran[v.kode_akun].nama = v.nama
+                    setoran[v.kode_akun].current += parseInt(v.jumlah_setor);
+                    
+                    if (setoran[v.kode_akun].current > 0){
+                        setoran[v.kode_akun].lunas = 2;
+                    }
+                    if (setoran[v.kode_akun].current == 3750000){
+                        setoran[v.kode_akun].lunas = 3;
+                    }
+
+                }); 
+                let target = modulePembayaranListing;
+                let ohtml = ``; let count = 0;
+                $.each(setoran, function( i, v ) {
+                    if (count == 0){
+                        ohtml += `<div class="swiper-slide">`;
+                    }
+                    ohtml += `
+                        <p class="peserta peserta-status-${v.lunas}">${v.nama}</p>
+                    `;
+                    count ++;
+                    if (count == 5){
+                        ohtml += `</div>`;
+                        count = 0;
+                    }
+                }); 
+                console.log(ohtml);
+                // Menghapus isi slide yang ada dan timpa html dengan yang baru dari urlSource
+                target.removeAllSlides();
+                target.appendSlide(ohtml);
+            }
+
+            // Done loading data
+            clearInterval(procOncePembayaranListing);
+        }, 1000);
+    }
+    modulePembayaranListing();
 </script>
