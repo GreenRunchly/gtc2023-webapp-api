@@ -3,11 +3,276 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Experiment</title>
-    <script src="qrcodejs/qrcode.min.js"></script>
+    <title>Virtual Card Gen</title>
     <script src="jquery-3.5.1.min.js"></script>
+    <script src="qrcodejs/qrcode.min.js"></script>
 </head>
-<body>
+<style>
+    @font-face {
+        font-family: 'MainFonts';
+        src: url(fonts/MPLUSRounded1c-Medium.ttf);
+    }
+    *, *::before, *::after {
+        box-sizing: border-box;
+    }
+    html{
+        font-family: "MainFonts";
+        scroll-behavior: smooth;
+        overflow: hidden;
+        overflow-y: auto;
+        font-size: 11px;
+        color: black;
+    }
+    body{
+        display: flex;
+        flex-wrap: wrap;
+        align-items: flex-start;
+        justify-content: flex-start;
+        padding: 0px;
+        margin: 0px;
+    }
+    img{
+        max-width: 100%;
+    }
+    h1, .h1,
+    h2, .h2,
+    h3, .h3,
+    h4, .h4,
+    h5, .h5,
+    h6, .h6 {
+        margin:0rem;
+        padding:0px; 
+        font-weight: normal;
+        line-height: 1;
+        font-weight: bolder;
+        color: var(--text-color);
+    }
+    a{
+        -webkit-tap-highlight-color: transparent;
+        text-decoration: none;
+    }
+    p{
+        margin: 0rem;
+        padding: 0px;
+        font-size: 1rem;
+        font-weight: bolder;
+    }
+    label{
+        padding: 4px 0px;
+        font-size: 1rem;
+        font-weight: normal;
+    }
+    :root{
+        --sheet-w: calc(204px);
+        --sheet-h: calc(323px); /* 236 , 118, 62   (53*85)*/ 
+        --background-color-light: #25d366;
+        /* --background-color: rgb(180, 0, 245); */
+        --background-color: #199d49;
+        	
+        --text-color: white;
+    }
+    .sheet{
+        display: flex;
+        min-width: var(--sheet-w);
+        width: var(--sheet-w);
+        max-width: var(--sheet-w);
+        min-height: var(--sheet-h);
+        height: var(--sheet-h);
+        max-height: var(--sheet-h);
+        flex-direction: column;
+        transform: scale(1);
+        transform-origin: top left;
+        background-color: white;
+        /* border-bottom: 1mm solid white; */
+        
+
+    }
+    .sheet:nth-child(even){
+        min-width: calc(var(--sheet-w));
+        width: calc(var(--sheet-w));
+        max-width: calc(var(--sheet-w));
+    }
+    .paper{
+        display: block;
+        min-width: 148mm;
+        width: 148mm;
+        max-width: 148mm;
+        min-height: 210mm;
+        height: 210mm;
+        max-height: 210mm;
+        border: 1px solid black;
+    }
+    .gap{
+
+    }
+    .page{
+        display: flex;
+        justify-content: flex-start;
+        align-items: flex-start;
+        flex: 1;
+        flex-wrap: wrap;
+        height: 50%;
+    }
+    .section{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        width: 100%;
+        z-index:  5;
+        padding: 0rem 0.5rem;
+    }
+
+    /* Front 1 */
+    .front-1.page{
+        text-align: left;
+        background-color: var(--background-color);
+        color: white;
+    }
+    .front-1.page .qr{
+        width: var(--sheet-w);
+        height: var(--sheet-w);
+        padding: 0.5rem;
+        background-color: white;
+        overflow: hidden;
+    }
+    .front-1.page .qricon{
+        width: 30px;
+    }
+    .front-1.page .qrthing{
+        width: 100%;
+        height: 100%;
+        border-radius: 0.5rem;
+        /* filter: invert(48%) sepia(54%) saturate(756%) hue-rotate(89deg) brightness(88%) contrast(82%); */
+    }
+    .front-1.page .foto{
+        position: absolute;
+        width: calc((var(--sheet-w) - 4rem) / 2);
+        height: calc((var(--sheet-w) - 4rem) / 2);
+        margin: calc((var(--sheet-w) + 2rem) / 4);
+        z-index: 5;
+        background-image: var(--foto);
+        background-color: white;
+        border-radius: 0.5rem;
+        background-size: cover;
+        background-position: top;
+        background-repeat: no-repeat;
+    }
+
+    .front-2.page{
+        
+    }
+    .front-2.page h2, .front-2.page h3, .front-2.page h4{
+        color: black !important; 
+    }
+    .front-2.page .ttd-pan{
+        width: 70%;
+        margin: -3rem;
+    }
+    .front-2.page .logo3{
+        position:absolute;
+        background-image: url('assets/logo.png');
+        background-size: 60%;
+        background-position: center;
+        background-repeat: no-repeat;
+        width: var(--sheet-w);
+        height: var(--sheet-h);
+        top: 0;
+        opacity: 0.2;
+    }
+</style>
+<body id="layout">
     
 </body>
+<script>
+    // let appAPIServer = 'https://server-local.ieu.link';
+    // let appServer = 'https://local.ieu.link';
+
+    let appAPIServer = 'http://rizkis-macbook-air.local:62000';
+    let appServer = 'http://rizkis-macbook-air.local:61000';
+    function loadDataKartu() {
+        // Load App Data dan User Data, please note this need to wait for it's finish
+        $.ajax({
+            url: `${appAPIServer}/app/virtualcard/get/akun`, dataType: "json",
+            method: "GET", data:{},
+            success: function( response ) {
+                if (response['data'] != []){
+                    $.each(response['data'], function( i, v ) {
+                        if (v.kode_kelas !== '11-MIPsA-1'){
+                            loadSheet('#layout', 'virtual-card/print-single.html',v);
+                        }
+                    }); 
+                }
+            },
+            error: function() {
+
+            }
+        });
+    }
+    loadDataKartu();
+
+    function loadSheet(destinasi, contentSource, optionParams) {
+        let data = ``;
+        $.ajax({
+            url: appServer + `/${contentSource}`,
+            dataType: "html",
+            success: function( dhasil ) { 
+                
+                $(destinasi).append(`
+<div class="sheet">
+    <div class="page front-1">
+        <div class="section">
+            <div class="qr"><div class="foto" style="--foto:url('assets/20230535.jpeg');"></div><img class="qrthing" src="${optionParams.qrcode}"></div>
+        </div>
+        <div class="section" style="align-items: center;justify-content: center;">
+            <h2 style="margin-bottom:0.8rem;text-align:center;">${titleCase(optionParams.nama)}</h2>
+            <h3 style="text-align:center;"><span>${(removeDash(optionParams.kode_akun))}</span></h3>
+            <div style="margin-top: 1.5rem;">
+                <p style="text-align:center;" class="info">Scan QR diatas dengan aplikasi untuk menyiapkan akun.</p>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="sheet">
+    <div class="page front-2">
+        <div class="section">
+            <div class="logo3"></div>
+        </div>
+        <div class="section" style="align-items: center;justify-content: center;">
+            <h2 style="margin-bottom:0.8rem;text-align:center;">Ketua Panitia</h2>
+            <img class="ttd-pan" src="assets/ttd.png">
+            <h3 style="text-align:center;"><span>Drs. Yaya Surya</span></h3>
+            <div style="margin-top: 3rem;">
+                <p style="text-align:center;" class="info">JL. RAYA CURUG KM. 2, Kabupaten Tangerang, Banten</p>
+            </div>
+        </div>
+    </div>
+</div>
+                `);
+            },
+            error: function() {
+                $(destinasi).html(`
+                    <p>Error Fetch Content</p>
+                `);
+            }
+        })
+    }
+    function titleCase(str) {
+        var splitStr = str.toLowerCase().split(' ');
+        for (var i = 0; i < splitStr.length; i++) {
+            // You do not need to check if i is larger than splitStr length, as your for does that for you
+            // Assign it back to the array
+            splitStr[i] = splitStr[i].charAt(0).toUpperCase() + splitStr[i].substring(1);     
+        }
+        // Directly return the joined string
+        return splitStr.join(' '); 
+    }
+
+    function removeDash(str) {
+        let rm = str.replaceAll('-',' ');
+        return rm;
+    }
+
+
+</script>
 </html>

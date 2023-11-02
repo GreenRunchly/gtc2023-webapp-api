@@ -33,9 +33,9 @@
 
     // Working on it
     function otentikasiLogin(secretKey) {
-        let home = 'https://stage-gtc.ieu.link';
+        let home = 'https://gtc.ieu.link';
         // home = 'https://local.ieu.link';
-        let key = appDecode(secretKey.replaceAll(`${home}?id=`,''))
+        let key = appDecode((secretKey.replaceAll(`${home}?id=`,'')))
         console.log(`${home}?id=`);
         if (key !== 'error'){
             if (typeof html5QrCode !== 'undefined'){
@@ -44,11 +44,14 @@
             $.ajax({
                 url: `${appAPIServer}/account/check`, dataType: "json", method: "POST",
                 data: {
-                    nis: appDecode(secretKey.replaceAll(`${home}?id=`,''))
+                    nis: key
                 },success: function( response ) {
                     if (response.code == 'ok'){
-                        setData(appDecode(secretKey.replaceAll(`${home}?id=`,'')), 'loginInputUsername');
+                        setData(key, 'loginInputUsername');
                         setData(response.preview, 'loginAccountPreview');
+                        if (response.hasphone !== false){
+                            setData(response.hasphone, 'loginInputHP');
+                        }
                         appSplashShow();
                         appSplashHide();
                         appLoadContent($("#app"), 

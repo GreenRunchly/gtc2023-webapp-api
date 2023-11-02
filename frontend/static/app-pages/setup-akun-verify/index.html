@@ -8,6 +8,8 @@
     appLoadContent($("login-verify-container"),
     'app-pages/setup-akun-verify/loginVerify-wa.html', {replace: false});
 
+    // console.log(loadData('loginInputHP'));
+
     // Stand alone function, jadi hanya berlaku pada page ini saja
     $(document).on('click','.tombol[aksi]',function(e){
         let aksi = $(this).attr('aksi');

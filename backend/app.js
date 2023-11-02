@@ -65,13 +65,16 @@ const pooldb = mysql.createPool({
 app.get('/app/virtualcard/get/akun', [
 ], (req, res) => {
 	let sqlsyn = `
-	SELECT kode_akun, role, kode_kelas, nama, CONCAT('https://stage-gtc.ieu.link?id=',TO_BASE64(TO_BASE64(kode_akun)),'') AS qrcode FROM tb_akun ORDER BY kode_kelas ASC;
+	SELECT kode_akun, role, kode_kelas, nama, CONCAT('https://gtc.ieu.link?id=',TO_BASE64(TO_BASE64(kode_akun))) AS qrcode FROM tb_akun WHERE kode_kelas='11-MIPA-1' ORDER BY kode_kelas ASC;
 	`;
 	pooldb.query(sqlsyn, (err, result) => { if (err){ /* Jika terjadi error */ }else{
 		function genQR(simpan) {
 			let hasil = result;
 			result.forEach((item, index, arr) => {
-				QRCode.toDataURL(item.qrcode, {errorCorrectionLevel: 'H', margin : 0}, function (err, url) {
+				QRCode.toDataURL(item.qrcode, {errorCorrectionLevel: 'L', margin : 0, color: {
+					dark: '#000000',  // Blue dots
+					light: '#0000' // Transparent background #0000
+				  }}, function (err, url) {
 					// hasil[index]['qrraw'] = item.qrcode;
 					hasil[index]['qrcode'] = url;
 					if (index == (arr.length - 1)){ simpan(hasil); }
@@ -308,10 +311,15 @@ app.post('/account/check', [
 			}); return;
 		}else{
 			if (result.length !== 0) {
+				let hasphone = false;
+				if (result[0].hp !== ''){
+					hasphone = result[0].hp;
+				}
 				res.json({
 					code : "ok",
 					msg : "Akun ditemukan!",
-					preview : result[0].nama
+					preview : result[0].nama,
+					hasphone : hasphone 
 				}); return;
 			}else{
 				res.json({
@@ -438,7 +446,7 @@ app.post('/account/request', [
 		/* Mengecek apakah OTP sudah di minta dalam waktu 5 menit */ 
 		SELECT tb_akun.kode_akun,tb_akun.hp,tb_otp.created FROM tb_akun 
 		INNER JOIN tb_otp ON tb_otp.kode_akun=tb_akun.kode_akun
-		WHERE tb_akun.kode_akun=? AND tb_otp.updated BETWEEN (DATE_SUB(NOW(),INTERVAL 5 MINUTE)) AND NOW();
+		WHERE tb_akun.kode_akun=? AND tb_otp.updated BETWEEN (DATE_SUB(NOW(),INTERVAL 1 MINUTE)) AND NOW();
 
 		/* Cek apakah sudah ada yang memakai nomor telepon tersebut atau tidak */
 		SELECT tb_akun.kode_akun FROM tb_akun WHERE tb_akun.hp=? AND tb_akun.kode_akun<>?;

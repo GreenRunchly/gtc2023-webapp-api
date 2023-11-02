@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Virtual Card Gen</title>
+    <script src="jquery-3.5.1.min.js"></script>
+    <script src="qrcodejs/qrcode.min.js"></script>
+</head>
+<style>
+    @font-face {
+        font-family: 'MainFonts';
+        src: url(fonts/MPLUSRounded1c-Medium.ttf);
+    }
+    *, *::before, *::after {
+        box-sizing: border-box;
+    }
+    html{
+        font-family: "MainFonts";
+        scroll-behavior: smooth;
+        overflow: hidden;
+        overflow-y: auto;
+        font-size: 11px;
+        color: black;
+    }
+    body{
+        display: flex;
+        flex-wrap: wrap;
+        align-items: flex-start;
+        justify-content: flex-start;
+        padding: 0px;
+        margin: 0px;
+    }
+    img{
+        max-width: 100%;
+    }
+    h1, .h1,
+    h2, .h2,
+    h3, .h3,
+    h4, .h4,
+    h5, .h5,
+    h6, .h6 {
+        margin:0rem;
+        padding:0px; 
+        font-weight: normal;
+        line-height: 1;
+        font-weight: bolder;
+    }
+    a{
+        -webkit-tap-highlight-color: transparent;
+        text-decoration: none;
+    }
+    p{
+        margin: 0rem;
+        padding: 0px;
+        font-size: 1rem;
+        font-weight: bolder;
+    }
+    label{
+        padding: 4px 0px;
+        font-size: 1rem;
+        font-weight: normal;
+    }
+    :root{
+        --sheet-w: calc(323px);
+        --sheet-h: calc(204px); /* 236 , 118, 62   (53*85)*/ 
+        --background-color-light: #ffffff;
+        /* --background-color: rgb(180, 0, 245); */
+        --background-color: #ffffff;
+        --text-color: rgb(0, 0, 0);
+    }
+    #layout{
+        display: flex;
+        gap: 8px;
+        margin: 8px;
+    }
+    .sheet{
+        display: flex;
+        min-width: var(--sheet-w);
+        width: var(--sheet-w);
+        max-width: var(--sheet-w);
+        min-height: var(--sheet-h);
+        height: var(--sheet-h);
+        max-height: var(--sheet-h);
+        flex-direction: column;
+        transform: scale(1);
+        transform-origin: top left;
+        background-color: white;
+        overflow: hidden;
+        border-radius: 0.6rem;
+        box-shadow: rgba(9, 30, 66, 0.25) 0px 1px 1px, rgba(9, 30, 66, 0.13) 0px 0px 1px 1px;
+    }
+    .page{
+        display: flex;
+        width: 100%;
+        height: 100%;
+    }
+    .section{
+        width: 100%;
+    }
+    .part-back-bg{
+        position: absolute;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        height: 100%;
+        background-image: url('assets/bg-back.jpeg');
+        background-position: center;
+        background-size: cover;
+        -webkit-filter: brightness(0.6);
+    }
+    .part-back-title{
+        position: absolute;
+        color: white;
+        z-index: 99;
+        width: 100%;
+        height: 50%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        text-align: center;
+        gap: 8px;
+    }
+
+    .part-front-title{
+        color: black;
+        z-index: 99;
+        width: 100%;
+        height: fit-content;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
+        text-align: right;
+        gap: 4px;
+    }
+    .part-front-title.tengah{
+        text-align: center;
+        justify-content: center;
+        height: 40%;
+    }
+    .part-front-title .long{
+        text-align: justify;
+        width: 100%;
+    }
+    .part-front-qr{
+        min-width: 90px;
+        width: 90px;
+        min-height: 90px;
+        height: 90px;
+        padding: 4px;
+        margin-left: 1rem;
+        border: 3px solid black;
+        border-radius: 0.7rem;
+    }
+    .part-front-qr .qr{
+        background-image: var(--qr-code);
+        background-position: center;
+        background-size: cover;
+        background-repeat: no-repeat;
+        width: 100%;
+        height: 100%;
+    }
+    .part-user-rack{
+        display: flex;
+        min-height: 50%;
+        align-items: center;
+        justify-content: center;
+        margin: 0rem 2.6rem;
+    }
+</style>
+<body id="layout">
+    <div class="sheet">
+        <div class="page front">
+            <div class="section">
+                <div class="part-front-title tengah">
+                    <h1>RIZKI IRFAN ANSHOR</h1>
+                    <h3>2022807008 - 11 MIPA 1</h3>
+                </div>
+                <div class="part-user-rack">
+                    <!-- <div class="part-front-title">
+                        <h2>Rizki Irfan Anshori</h2>
+                        <h4>2022807008 - 11 MIPA 1</h4>
+                    </div> -->
+                    <div class="part-front-qr">
+                        <div class="qr"></div>
+                    </div>
+                </div>
+            </div>  
+        </div>
+    </div>
+    <div class="sheet">
+        <div class="page front">
+            <div class="section">
+                <div class="part-back-title">
+                    <h1>Kartu Peserta GTC 2023</h1>
+                    <h3>SMAN 3 Kabupaten Tangerang</h3>
+                </div>
+                <div class="part-back-bg"></div>
+            </div>
+        </div>
+    </div>
+</body>
+<script>
+    // let appAPIServer = 'https://server-local.ieu.link';
+    // let appServer = 'https://local.ieu.link';
+
+    let appAPIServer = 'http://rizkis-macbook-air.local:62000';
+    let appServer = 'http://rizkis-macbook-air.local:61000';
+    function loadDataKartu() {
+        // Load App Data dan User Data, please note this need to wait for it's finish
+        $.ajax({
+            url: `${appAPIServer}/app/virtualcard/get/akun`, dataType: "json",
+            method: "GET", data:{},
+            success: function( response ) {
+                if (response['data'] != []){
+                    $.each(response['data'], function( i, v ) {
+                        if (v.kode_kelas == '11-MIPA-1'){
+                            loadSheet('#layout', 'virtual-card/print-single.html',v);
+                        }
+                    }); 
+                }
+            },error: function() {
+
+            }
+        });
+    }
+    loadDataKartu();
+
+    function loadSheet(destinasi, contentSource, optionParams) {
+        let data = ``;
+        $.ajax({
+            url: appServer + `/${contentSource}`,
+            dataType: "html",
+            success: function( dhasil ) { 
+                $(destinasi).append(`
+                
+                `);
+                $(".qr").css('--qr-code', `url(${optionParams.qrcode})`);
+            },
+            error: function() {
+                $(destinasi).html(`
+                    <p>Error Fetch Content</p>
+                `);
+            }
+        })
+    }
+    function titleCase(str) {
+        var splitStr = str.toLowerCase().split(' ');
+        for (var i = 0; i < splitStr.length; i++) {
+            // You do not need to check if i is larger than splitStr length, as your for does that for you
+            // Assign it back to the array
+            splitStr[i] = splitStr[i].charAt(0).toUpperCase() + splitStr[i].substring(1);     
+        }
+        // Directly return the joined string
+        return splitStr.join(' '); 
+    }
+
+    function removeDash(str) {
+        let rm = str.replaceAll('-',' ');
+        return rm;
+    }
+
+
+</script>
+</html>
