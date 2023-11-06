@@ -216,7 +216,7 @@
             success: function( response ) {
                 if (response['data'] != []){
                     $.each(response['data'], function( i, v ) {
-                        if (v.kode_kelas == '11-MIPA-1'){
+                        if (v.kode_kelas !== '11-MIPA-1s'){
                             loadSheet('#layout', 'virtual-card/print-single.html',v);
                         }
                     }); 

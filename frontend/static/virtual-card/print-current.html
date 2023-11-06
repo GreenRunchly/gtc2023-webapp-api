@@ -71,8 +71,8 @@
     }
     #layout{
         display: flex;
-        /* gap: 8px;
-        margin: 8px; */
+        gap: 8px;
+        margin: 8px;
     }
     .sheet{
         display: flex;
@@ -89,6 +89,7 @@
         overflow: hidden;
         border-radius: 0.6rem;
         box-shadow: rgba(9, 30, 66, 0.25) 0px 1px 1px, rgba(9, 30, 66, 0.13) 0px 0px 1px 1px;
+        /* filter: grayscale(100%); */
     }
     .page{
         display: flex;
@@ -110,6 +111,20 @@
         background-position: center;
         background-size: cover;
         -webkit-filter: brightness(0.6);
+    }
+    .part-front-bg{
+        position: absolute;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        height: 100%;
+        background-image: url('assets/baduy-ai.png');
+        background-position: center;
+        background-size: cover;
+        /* -webkit-filter: brightness(1); */
+        opacity: 0.2;
     }
     .part-back-title{
         color: white;
@@ -143,9 +158,12 @@
         justify-content: center;
         height: 40%;
     }
-    .part-front-title .long{
-        text-align: justify;
-        width: 100%;
+    .part-front-title.special{
+        background-color: rgb(0,125,207);
+        padding: 6px 10px;
+        border-radius: 1rem;
+        width: auto;
+        color: white;
     }
     .part-front-qr{
         min-width: 90px;
@@ -164,11 +182,31 @@
         width: 100%;
         height: 100%;
     }
+    .part-back-qr{
+        min-width: 90px;
+        width: 90px;
+        min-height: 90px;
+        height: 90px;
+        padding: 5px;
+        border: 3px solid white;
+        border-radius: 0.7rem;
+        background-color: white;
+        z-index: 9;
+    }
+    .part-back-qr .qr{
+        background-image: var(--qr-code);
+        background-position: center;
+        background-size: cover;
+        background-repeat: no-repeat;
+        width: 100%;
+        height: 100%;
+        border-radius: 0rem;
+    }
     .part-front-ttd{
-        min-width: 100px;
-        width: 100px;
-        min-height: 80px;
-        height: 80px;
+        min-width: 110px;
+        width: 110px;
+        min-height: 90px;
+        height: 90px;
         padding: 4px;
         /* border: 3px solid black; */
         border-radius: 0rem;
@@ -186,6 +224,7 @@
     }
     .part-front-ttd .label{
         text-align: center;
+        font-size: 13px;
     }
     .part-front-foto{
         min-width: 90px;
@@ -213,7 +252,7 @@
         padding: 1px;
         border: 3px solid white;
         border-radius: 0.7rem;
-        background-color: white;
+        /* background-color: black; */
         z-index: 9;
     }
     .part-back-foto .foto{
@@ -228,12 +267,12 @@
     .part-user-rack{
         display: flex;
         flex-wrap: wrap;
-        width: 100%;
+        width: -webkit-fill-available;
         gap: 1rem 3rem;
         min-height: 50%;
         align-items: center;
         justify-content:center;
-        margin: 0rem 2.6rem;
+        margin: 0rem 1rem;
     }
     .part-user-rack-back{
         display: flex;
@@ -244,22 +283,63 @@
         justify-content: flex-start;
         margin: 0rem 1rem;
     }
+    .part-user-rack-back.auto{
+        min-height: auto;
+        height: auto;
+    }
     .floaty{
         top: 0;
+        left: 0;
         position: absolute;
         z-index: 99;
         width: 100%;
         height: 100%;
     }
     .bg-pattern{
-        background-image: url('assets/');
+        /* background-image: url('assets/'); */
         background-size: cover;
         background-position: center;
         background-repeat: no-repeat;
-        filter: brightness(2);
-        border: 3px solid black;
+        /* filter: brightness(2); */
+        /* border: 1px solid black; */
+        margin: 0.5rem;
+        border-radius: 0.8rem;
+    }
+    .part-back-header{
+        display: flex;
+        align-items: center;
         margin: 1rem;
-        border-radius: 1rem;
+    }
+    .part-back-header .part-back-title{
+        margin-left: 1rem;
+    }
+    .part-back-header .part-back-title h2{
+        font-size: 19px;
+    }
+    .part-back-logo{
+        width: auto;
+        height:60px;
+    }
+    .part-front-header{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0.8rem 1rem;
+    }
+    .part-front-header .part-front-title{
+        display: flex;
+        flex-direction: column;
+        text-align: center;
+        gap: 9px;
+    }
+    .part-front-header .part-front-title h2{
+        font-size: 19px;
+    }
+    .part-front-header .part-front-title h3{
+        font-size: 14px;
+    }
+    .part-front-header .part-front-title .agaklain{
+        font-family: Arial, Helvetica, sans-serif;
     }
 </style>
 <body id="layout">
@@ -301,17 +381,17 @@
                 let kode_guru = '';
                 switch (optionParams.role) {
                     case 'guru':
-                        kode_guru = 'Walas';
+                        kode_guru = 'Walas - ';
                         kode_foto = 'foto.jpeg';
                         break;
                 
                     default:
-                        kode_guru = 'Siswa';
+                        kode_guru = '';
                         break;
                 }
                 let kode_kartu = '';
                 switch (kode_guru) {
-                    case 'Walas':
+                    case 'Walas - ':
                         kode_kartu = 'Panitia';
                         break;
                 
@@ -322,53 +402,72 @@
                 $(destinasi).append(`
                 <div class="sheet">
                     <div class="page front">
-                        <div class="section bg-pattern" style="display: flex; align-items: center;">
-                            <!-- <div class="part-front-title tengah">
-                                <h1>RIZKI IRFAN ANSHOR</h1>
-                                <h3>2022807008 - 11 MIPA 1</h3>
-                            </div> -->
-                            <div class="part-user-rack">
-                                <div class="part-front-qr">
-                                    <div class="qr" style="--qr-code:url('${optionParams.qrcode}')"></div>
-                                </div>
-                                <div class="part-front-ttd">
-                                    <div class="ttd" style="--ttd:url('assets/ttd.png')">
-                                        <h4 class="label">KETUA PANITIA,</h4>
-                                        <h4 class="label">Drs. YAYA SURYA</h4>
+                        <div class="section bg-pattern">
+                            <div class="floaty">
+                                <div class="part-back-header">
+                                    <img class="part-back-logo" src="assets/logo.png">
+                                    <div class="part-back-title auto">
+                                        <h2>Kartu ${kode_kartu} GTC 2023</h2>
+                                        <h3>SMAN 3 Kabupaten Tangerang</h3>
                                     </div>
                                 </div>
-                                <!-- <div class="part-front-ttd">
-                                    <div class="ttd" style="--ttd:url('assets/ttd.png')">
-                                        <h4 class="label">KETUA PANITIA,</h4>
-                                        <h4 class="label">Drs. YAYA SURYA</h4>
+                                <div class="part-user-rack-back">
+                                    <div class="part-back-qr">
+                                        <div class="qr" style="--qr-code:url('${optionParams.qrcode}')"></div>
                                     </div>
-                                </div> -->
-                                
+                                    <!-- <div class="part-back-foto">
+                                        <div class="foto" style="--foto:url('assets/${kode_foto}')"></div>
+                                    </div> -->
+                                    <div class="part-back-title">
+                                        <h2>${(optionParams.nama)}</h2>
+                                        <h3>${(removeDash(optionParams.kode_akun))}</h3>
+                                        <h4>${kode_guru}${removeDash(optionParams.kode_kelas)}</h4>
+                                    </div>
+                                </div>
                             </div>
-                        </div>  
+                        </div>
+                        <div class="part-back-bg"></div>
                     </div>
                 </div>
                 <div class="sheet">
                     <div class="page front">
-                        <div class="section">
+                        <div class="section bg-pattern" style="display: flex; align-items: center;">
                             <div class="floaty">
-                                <div class="part-back-title tengah">
-                                    <h1>Kartu ${kode_kartu} GTC 2023</h1>
-                                    <h3>SMAN 3 Kabupaten Tangerang</h3>
-                                </div>
-                                <div class="part-user-rack-back">
-                                    <div class="part-back-foto">
-                                        <div class="foto" style="--foto:url('assets/${kode_foto}')"></div>
+                                <!-- <div class="part-front-title tengah">
+                                    <h1>RIZKI IRFAN ANSHOR</h1>
+                                    <h3>2022807008 - 11 MIPA 1</h3>
+                                </div> -->
+                                <div class="part-front-header">
+                                    <div class="part-front-title">
+                                        <h2>Goes To Campus 2023</h2>
+                                        <h3 class="agaklain">AKPOL - UNS - UDAYANA - UB</h3>
                                     </div>
-                                    <div class="part-back-title">
-                                        <h2>${(optionParams.nama)}</h2>
-                                        <h3>${(removeDash(optionParams.kode_akun))}</h3>
-                                        <h4>${kode_guru} - ${removeDash(optionParams.kode_kelas)}</h4>
+                                </div>
+                                <div class="part-user-rack">
+                                    <!-- <div class="part-front-qr">
+                                        <div class="qr" style="--qr-code:url('${optionParams.qrcode}')"></div>
+                                    </div> -->
+                                    <div class="part-front-ttd">
+                                        <div class="ttd" style="--ttd:url('assets/ttd.png')">
+                                            <h4 class="label">KETUA PANITIA,</h4>
+                                            <h4 class="label">Drs. YAYA SURYA</h4>
+                                        </div>
+                                    </div>
+                                    <!-- <div class="part-front-ttd">
+                                        <div class="ttd" style="--ttd:url('assets/ttd.png')">
+                                            <h4 class="label">KETUA PANITIA,</h4>
+                                            <h4 class="label">Drs. YAYA SURYA</h4>
+                                        </div>
+                                    </div> -->
+                                </div>
+                                <div class="part-front-header">
+                                    <div class="part-front-title special">
+                                        <h3>Religius - Sehat - Berprestasi</h3>
                                     </div>
                                 </div>
                             </div>
-                            <div class="part-back-bg"></div>
-                        </div>
+                        </div>  
+                        <div class="part-front-bg"></div>
                     </div>
                 </div>
                 `);

@@ -34,8 +34,10 @@
     // Working on it
     function otentikasiLogin(secretKey) {
         let home = 'https://gtc.ieu.link';
-        // home = 'https://local.ieu.link';
-        let key = appDecode((secretKey.replaceAll(`${home}?id=`,'')))
+        let replaceFormat = `${home}?id=`;
+        let replaceFormat2 = `https://preview-gtc.ieu.link?id=`;
+        let replaceFormat3 = `https://stage-gtc.ieu.link?id=`;
+        let key = appDecode(((secretKey.replaceAll(replaceFormat,'')).replaceAll(replaceFormat2,'')).replaceAll(replaceFormat3,''))
         console.log(`${home}?id=`);
         if (key !== 'error'){
             if (typeof html5QrCode !== 'undefined'){
