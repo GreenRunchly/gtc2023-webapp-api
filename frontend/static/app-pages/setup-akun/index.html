@@ -30,15 +30,10 @@
                 break;
         };
     });
-
+    
     // Working on it
     function otentikasiLogin(secretKey) {
-        let home = 'https://gtc.ieu.link';
-        let replaceFormat = `${home}?id=`;
-        let replaceFormat2 = `https://preview-gtc.ieu.link?id=`;
-        let replaceFormat3 = `https://stage-gtc.ieu.link?id=`;
-        let key = appDecode(((secretKey.replaceAll(replaceFormat,'')).replaceAll(replaceFormat2,'')).replaceAll(replaceFormat3,''))
-        console.log(`${home}?id=`);
+        let key = appDecode(getAccountCode(secretKey));
         if (key !== 'error'){
             if (typeof html5QrCode !== 'undefined'){
                 html5QrCode.stop().then((ignore) => {}).catch((err) => {});
@@ -71,4 +66,10 @@
         }
     }
     
+    function getAccountCode(str) {
+        return str.substring(
+            str.indexOf("{") + 1, 
+            str.lastIndexOf("}")
+        );
+    }
 </script>

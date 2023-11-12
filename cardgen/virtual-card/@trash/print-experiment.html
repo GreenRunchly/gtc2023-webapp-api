@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project Toko</title>
+</head>
+<style>
+    form{
+        margin: 0rem;
+    }
+    body{
+        margin: 0px;
+        font-family: Arial, Helvetica, sans-serif;
+        font-size: 16px;
+    }
+    h1, h2, h3, h4{
+        margin:0rem 0rem;
+        color:white;
+    }
+    .header{
+        background-color: #3477eb;
+        width: 100%;
+        padding: 1rem 1rem;
+    }
+    .header h2.judul{
+        margin: 0rem;
+        color: white;
+    }
+    input{
+        padding: 0.5rem;
+        border:none;
+        border-bottom: 2px solid black;
+    }
+    input[type=submit]{
+        border: none;
+        background-color: #3477eb;
+        color: white;
+        border-radius: 0.3rem;
+    }
+    table{
+        margin: 0.5rem;
+    }
+    table tr td{
+       padding: 0.5rem; 
+    }
+</style>
+<body>
+    <form action="" method="post">
+        <div class="header">
+            <h2 class="judul">Produk</h2>
+            <h4>2022807008 - Rizki Irfan Anshori</h4>
+        </div>
+        <table>
+            <tr>
+                <td><label for="kode">Kode Produk</label></td>
+                <td><input type="number" name="kode" placeholder="1945" required></td>
+            </tr>
+            <tr>
+                <td><label for="namaproduk">Nama Produk</label></td>
+                <td><input type="text" name="namaproduk" placeholder="Contoh : Sereal" required></td>
+            </tr>
+            <tr>
+                <td><label for="harga">Harga Produk</label></td>
+                <td><input type="number" name="harga" placeholder="Contoh : 10000" required></td>
+            </tr>
+            <tr>
+                <td></td>
+                <td><input type="submit" name="submit" value="Tambahkan"></td>
+            </tr>
+        </table>
+    </form>
+</body>
+</html>

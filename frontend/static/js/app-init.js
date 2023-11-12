@@ -1,18 +1,21 @@
 // Penyetelan Aplikasi
 let appServer = '';
-let appAPIServer = 'https://gtcapp.ieu.link';
+// let appAPIServer = 'https://gtcapp.ieu.link';
 
-// let appServer = '';
-// let appAPIServer = 'http://localhost:62000';
+// appServer = '';
+// appAPIServer = 'http://localhost:62000';
 
-// let appServer = '';
-// let appAPIServer = 'http://rizkis-macbook-air.local:62000';
+// appServer = '';
+// appAPIServer = 'http://rizkis-macbook-air.local:62000';
 
 // appServer = 'https://local.ieu.link';
 // appAPIServer = 'https://server-local.ieu.link';
 
-appServer = 'https://preview-gtc.ieu.link';
-appAPIServer = 'https://api-preview-gtc.ieu.link';
+// appServer = 'https://preview-gtc.ieu.link';
+// appAPIServer = 'https://api-preview-gtc.ieu.link';
+
+// appServer = 'https://app-gtc.ieu.link'; 
+appAPIServer = 'https://api-app-gtc.ieu.link';
 
 // Penyetelan Tanggal dan Waktu
 let appDate = new Date();
