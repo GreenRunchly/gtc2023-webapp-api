@@ -614,6 +614,11 @@ app.post('/account/assign', [
 
 });
 
+// loaderio-920c662d495a8887480060af073552d3 Loader.io
+app.get('/loaderio-920c662d495a8887480060af073552d3', (req, res) => {
+	res.send('loaderio-920c662d495a8887480060af073552d3');
+});
+
 // Menampilkan hasil error karena mengunjungi halaman yang tidak (Lost API url)
 app.get('/*', (req, res) => {
 	res.json({
