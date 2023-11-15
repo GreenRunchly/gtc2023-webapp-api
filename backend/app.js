@@ -63,11 +63,21 @@ const pooldb = mysql.createPool({
 
 // Generate Data Kartu Virtual
 app.post('/app/virtualcard/get/akun', [
+    mdvld.body('kelas').not().isEmpty().withMessage('Kelas Kosong').trim().escape(),
 ], (req, res) => {
+    // Cek Error pada validasi input
+    if ( mdvldResult(req, res) ){ // Jika ditemukan masalah akan return true
+        return;
+	};
+
+    let {kelas} = req.body;
+
+	console.log(kelas);
+    
 	let sqlsyn = `
-	SELECT kode_akun, role, kode_kelas, nama, CONCAT('https://gtc.ieu.link?id={',TO_BASE64(TO_BASE64(kode_akun)), '}') AS qrcode FROM tb_akun WHERE kode_kelas='11-MIPA-3' ORDER BY kode_kelas ASC;
+	SELECT kode_akun, role, kode_kelas, nama, CONCAT('https://gtc.ieu.link?id={',TO_BASE64(TO_BASE64(kode_akun)), '}') AS qrcode FROM tb_akun WHERE kode_kelas='${kelas}' ORDER BY kode_kelas ASC;
 	`;
-	pooldb.query(sqlsyn, (err, result) => { if (err){ /* Jika terjadi error */ }else{
+	pooldb.query(sqlsyn, (err, result) => { if (err){ /* Jika terjadi error */ console.log(err); }else{
 		function genQR(simpan) {
 			let hasil = result;
 			result.forEach((item, index, arr) => {

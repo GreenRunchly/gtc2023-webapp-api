@@ -423,8 +423,8 @@
     }
     #layout{
         display: flex;
-        gap: 16px;
-        margin: 16px;
+        /* gap: 16px;
+        margin: 16px; */
     }
     .sheet{
         display: flex;
@@ -583,6 +583,11 @@
         text-align: center;
         font-size: 8px;
     }
+    .part-front-ttd .stamp{
+        position: absolute;
+        width: 90px;
+        height: auto;
+    }
     .part-front-foto{
         min-width: 90px;
         width: 90px;
@@ -709,13 +714,13 @@
     let appAPIServer = '';
     // appAPIServer = 'http://rizkis-macbook-air.local:62000';
     // appAPIServer = 'https://api-air-preview-gtc.ieu.link';
-    appAPIServer = 'https://api-app-gtc.ieu.link/';
+    appAPIServer = 'https://api-app-gtc.ieu.link';
 
     function loadDataKartu() {
         // Load App Data dan User Data, please note this need to wait for it's finish
         $.ajax({
             url: `${appAPIServer}/app/virtualcard/get/akun`, dataType: "json",
-            method: "POST", data:{},
+            method: "POST", data:{kelas:'11-MIPA-1'},
             success: function( response ) {
                 if (response['data'] != []){
                     $.each(response['data'], function( i, v ) {
@@ -814,6 +819,7 @@
                                 <div class="qr" style="--qr-code:url('${optionParams.qrcode}')"></div>
                             </div>
                             <div class="part-front-ttd">
+                                <img class="stamp" src="assets/stempel.png">
                                 <div class="ttd" style="--ttd:url('assets/ttd-1.png')">
                                     <h4 class="label">Kepala Sekolah,</h4>
                                     <h4 class="label">Lewiyanti Sekrenitiyanah, M.Pd.</h4>
