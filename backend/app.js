@@ -75,8 +75,11 @@ app.post('/app/virtualcard/get/akun', [
 	console.log(kelas);
     
 	let sqlsyn = `
-	SELECT kode_akun, role, kode_kelas, nama, CONCAT('https://gtc.ieu.link?id={',TO_BASE64(TO_BASE64(kode_akun)), '}') AS qrcode FROM tb_akun WHERE kode_kelas='${kelas}' ORDER BY kode_kelas ASC;
+	SELECT kode_akun, role, kode_kelas, nama, except, CONCAT('https://gtc.ieu.link?id={',TO_BASE64(TO_BASE64(kode_akun)), '}') AS qrcode FROM tb_akun WHERE kode_kelas='${kelas}' ORDER BY kode_kelas ASC;
 	`;
+// 	let sqlsyn = `
+// 	SELECT kode_akun, role, kode_kelas, nama, CONCAT('https://gtc.ieu.link?id={',TO_BASE64(TO_BASE64(kode_akun)), '}') AS qrcode FROM tb_akun WHERE role='guru' ORDER BY kode_kelas ASC;
+// 	`;
 	pooldb.query(sqlsyn, (err, result) => { if (err){ /* Jika terjadi error */ console.log(err); }else{
 		function genQR(simpan) {
 			let hasil = result;
@@ -106,22 +109,23 @@ function appUpdateData() {
 		// Menambahkan akun siswa
 		xlsxReader('./data/temp.xlsx', { sheet: 'Siswa' }).then((rows) => { rows[0].pop();
 			rows.forEach(row => {
+				// console.log(row);
 				// Mengetahui akun yang sudah ada per kode akun/nis
-				let sqlsyn = `SELECT * FROM tb_akun WHERE kode_akun=?;`;
-				pooldb.query(sqlsyn, [row[1]], (err, result) => { if (err){ /* Jika terjadi error */ }else{
+				let sqlsyn = `SELECT * FROM tb_akun WHERE kode_akun='?';`;
+				pooldb.query(sqlsyn, [row[1]], (err, result) => { if (err){ /* Jika terjadi error */ console.log(err); }else{
 					if (result.length === 0){
-						pooldb.query(`INSERT INTO tb_akun (kode_akun, nama, kode_kelas) VALUES (?,?,?)`, [
-							row[1], row[2], row[3]
+						pooldb.query(`INSERT INTO tb_akun (kode_akun, nama, kode_kelas, except) VALUES ('?',?,?,?)`, [
+							row[1], row[2], row[3], row[4]
 						], (err, result) => { 
-							if (err){ /* Jika terjadi error */ }else{
+							if (err){ /* Jika terjadi error */ console.log(err); }else{
 								console.log(`Insert ${row[1]}`);
 							}
 						});
 					}else{
-						pooldb.query(`UPDATE tb_akun SET nama=?, kode_kelas=? WHERE kode_akun=?`, [
-							row[2], row[3], row[1]
+						pooldb.query(`UPDATE tb_akun SET nama=?, kode_kelas=?, except=? WHERE kode_akun='?'`, [
+							row[2], row[3], row[4], row[1]
 						], (err, result) => { 
-							if (err){ /* Jika terjadi error */ }else{
+							if (err){ /* Jika terjadi error */ console.log(err); }else{
 								console.log(`Update ${row[1]}`);
 							}
 						});
@@ -134,22 +138,22 @@ function appUpdateData() {
 		xlsxReader('./data/temp.xlsx', { sheet: 'Wali Kelas' }).then((rows) => { rows[0].pop();
 			rows.forEach(row => {
 				// Mengetahui akun yang sudah ada per kode akun/nis
-				let sqlsyn = `SELECT * FROM tb_akun WHERE kode_akun=? AND role=?;`;
+				let sqlsyn = `SELECT * FROM tb_akun WHERE kode_akun='?' AND role=?;`;
 				pooldb.query(sqlsyn, [row[1],'guru'], (err, result) => { if (err){ /* Jika terjadi error */ }else{
 					if (result.length === 0){
-						pooldb.query(`INSERT INTO tb_akun (kode_akun, nama, kode_kelas, role) VALUES (?,?,?,?)`, [
-							row[1], row[2], row[3], 'guru'
+						pooldb.query(`INSERT INTO tb_akun (kode_akun, nama, kode_kelas, role, except) VALUES ('?',?,?,?,?)`, [
+							row[1], row[2], row[3], 'guru', 'no'
 						], (err, result) => { 
 							if (err){ /* Jika terjadi error */ }else{
-								console.log(`Insert ${row[1]}`);
+								console.log(`Insert wli ${row[1]}`);
 							}
 						});
 					}else{
-						pooldb.query(`UPDATE tb_akun SET nama=?, kode_kelas=?, role=? WHERE kode_akun=?`, [
-							row[2], row[3], 'guru', row[1]
+						pooldb.query(`UPDATE tb_akun SET nama=?, kode_kelas=?, role=?, except=? WHERE kode_akun='?'`, [
+							row[2], row[3], 'guru', row[1], 'no'
 						], (err, result) => { 
 							if (err){ /* Jika terjadi error */ }else{
-								console.log(`Update ${row[1]}`);
+								console.log(`Update wli ${row[1]}`);
 							}
 						});
 					}

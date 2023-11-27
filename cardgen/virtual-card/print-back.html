@@ -450,14 +450,15 @@
         transform-origin: top left;
         background-color: white;
         overflow: hidden;
-        /* border-radius: 0.6rem; */
-        /* box-shadow: rgba(9, 30, 66, 0.25) 0px 1px 1px, rgba(9, 30, 66, 0.13) 0px 0px 1px 1px; */
+        /* border-radius: 0.6rem;
+        box-shadow: rgba(9, 30, 66, 0.25) 0px 1px 1px, rgba(9, 30, 66, 0.13) 0px 0px 1px 1px; */
         /* filter: grayscale(100%); */
     }
     .page{
         display: flex;
         width: 100%;
         height: 100%;
+        /* transform: scaleX(-1); */
     }
     .section{
         width: 100%;
@@ -641,9 +642,6 @@
         height: 100%;
         border-radius: 0.5rem;
     }
-    .part-back-foto .foto.raw{
-        background-size: auto 175%;
-    }
     .part-user-rack{
         display: flex;
         flex-wrap: wrap;
@@ -730,20 +728,6 @@
     // appAPIServer = 'https://api-air-preview-gtc.ieu.link';
     appAPIServer = 'https://api-app-gtc.ieu.link';
 
-    function calculateRatio(num_1, num_2){
-
-        for(num=num_2; num>1; num--) {
-
-            if((num_1 % num) == 0 && (num_2 % num) == 0) {
-                num_1=num_1/num;
-                num_2=num_2/num;
-            }
-
-        }
-        var ratio = num_1+":"+num_2;
-        return ratio;
-    }
-
     function loadDataKartu() {
         // Load App Data dan User Data, please note this need to wait for it's finish
         $.ajax({
@@ -760,29 +744,9 @@
                                 nom = 0;
                             }
                         }
-                    });
+                    }); 
                     // console.log(htmlpakai);
                     $('#layout').append(htmlpakai);
-                    let ssee = setInterval(() => {
-                        $('.foto').each(function(i, obj) {
-                            
-                            let actualImage = new Image();
-                            actualImage.src = $(obj).css('background-image').replace(/"/g,"").replace(/url\(|\)$/ig, "");
-                            actualImage.onload = function() {
-                                width = this.width;
-                                height = this.height;
-                                console.log(`w:${width} h: ${height}`);
-                                console.log(calculateRatio(width,height));
-                                if (calculateRatio(width,height) == '3:2'){
-                                    //$(obj).addClass('raw');
-                                }
-                            }
-                            
-                        });
-                        
-                        
-                        clearInterval(ssee);
-                    }, 2000);
                 }
             },error: function() {
 
@@ -829,36 +793,49 @@
             appsecond = '</div>';
                 break;
         }
-        let showit = ((optionParams.except).toLowerCase()  == 'yes') ? 'none' : 'nonees';
+        let showit = ((optionParams.except).toLowerCase() == 'yes') ? 'none' : 'nonees';
         return `${htmlpakai}
         ${appfirst}
-        <div class="sheet" style="display:${showit};">
+        <div class="sheet" style="filter: grayscale(0%); display:${showit};">
             <div class="page front">
-                <div class="section bg-pattern">
+                <div class="section bg-pattern" style="display: flex; align-items: center;">
                     <div class="floaty">
-                        <div class="part-back-header">
-                            <img class="part-back-logo" src="assets/logo-trikabta.png">
-                            <div class="part-back-title auto">
-                                <h2>Kartu ${kode_kartu} GTC 2023</h2>
-                                <h3>SMAN 3 Kabupaten Tangerang</h3>
+                        <!-- <div class="part-front-title tengah">
+                            <h1>RIZKI IRFAN ANSHOR</h1>
+                            <h3>2022807008 - 11 MIPA 1</h3>
+                        </div> -->
+                        <div class="part-front-header">
+                            <div class="part-front-title new">
+                                <h2>Goes To Campus 2023</h2>
+                                <h3 class="agaklain">AKPOL - UNS - UDAYANA - UB</h3>
                             </div>
                         </div>
-                        <div class="part-user-rack-back">
-                            <!--<div class="part-back-qr">
-                                <div class="qr" style="--qr-code:url('${optionParams.qrcode}')"></div>
-                            </div>-->
-                            <div class="part-back-foto">
-                                <div class="foto" style="--foto:url('foto/${kode_foto}')"></div>
+                        <div class="part-user-rack">
+                            <div class="part-front-ttd">
+                                <div class="ttd" style="--ttd:url('assets/ttd-2.png')">
+                                    <h4 class="label">Ketua Panitia,</h4>
+                                    <h4 class="label">Drs. Yaya Surya</h4>
+                                </div>
                             </div>
-                            <div class="part-back-title">
-                                <h2>${(optionParams.nama)}</h2>
-                                <h3>${(removeDash(optionParams.kode_akun))}</h3>
-                                <h4>${kode_guru}${removeDash(optionParams.kode_kelas)}</h4>
+                            <div class="part-front-qr">
+                                <div class="qr" style="--qr-code:url('${optionParams.qrcode}')"></div>
+                            </div>
+                            <div class="part-front-ttd">
+                                <img class="stamp" src="assets/stempel.png">
+                                <div class="ttd" style="--ttd:url('assets/ttd-1.png')">
+                                    <h4 class="label">Kepala Sekolah,</h4>
+                                    <h4 class="label">Lewiyanti Sekrenitiyanah, M.Pd.</h4>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="part-front-header">
+                            <div class="part-front-title special">
+                                <h3>Religius - Sehat - Berprestasi</h3>
                             </div>
                         </div>
                     </div>
-                </div>
-                <div class="part-back-bg"></div>
+                </div>  
+                <div class="part-front-bg"></div>
             </div>
         </div>
         ${appsecond}
