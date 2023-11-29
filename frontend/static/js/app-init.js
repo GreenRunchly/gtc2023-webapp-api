@@ -15,7 +15,8 @@ let appServer = '';
 // appAPIServer = 'https://api-preview-gtc.ieu.link';
 
 // appServer = 'https://app-gtc.ieu.link'; 
-appAPIServer = 'https://west-api-app-gtc.ieu.link';
+// appAPIServer = 'https://west-api-app-gtc.ieu.link';
+appAPIServer = 'https://api-app-gtc.ieu.link';
 
 // Penyetelan Tanggal dan Waktu
 let appDate = new Date();
@@ -45,3 +46,7 @@ setInterval(() => {
 var appData = [];
 var appAccount = []
 
+// Mengambil parameter
+const params = new Proxy(new URLSearchParams(window.location.search), {
+    get: (searchParams, prop) => searchParams.get(prop),
+});

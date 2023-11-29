@@ -134,10 +134,11 @@
             }
 
             if (appAccount.role == 'guru'){
-                $(".payment-current").text(`${rupiah(3750000)}`);
-                $(".payment-progress-percent").text(`Gratis`);
+                // ${rupiah(3750000)}
+                $(".payment-current").text(``);
+                $(".payment-progress-percent").text(`Tidak Ada Pembayaran`);
                 $(".payment-progress").css('--progress-fill',`100%`);
-                $(".payment-pesan").html(`Walas dan pendamping gratis! <br><br>Semoga GTC 2023 berjalan dengan lancar dan selamat hingga kembali ke tangerang 🤲`);
+                $(".payment-pesan").html(`Semoga GTC 2023 berjalan dengan lancar dan selamat hingga kembali ke tangerang 🤲`);
             }
 
             // Done loading Thumbnail

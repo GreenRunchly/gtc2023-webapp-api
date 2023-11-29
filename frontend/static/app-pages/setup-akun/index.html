@@ -31,9 +31,10 @@
         };
     });
     
-    // Working on it
+    // Otentikasi Login
     function otentikasiLogin(secretKey) {
         let key = appDecode(getAccountCode(secretKey));
+        window.alert(key);
         if (key !== 'error'){
             if (typeof html5QrCode !== 'undefined'){
                 html5QrCode.stop().then((ignore) => {}).catch((err) => {});
@@ -71,5 +72,12 @@
             str.indexOf("{") + 1, 
             str.lastIndexOf("}")
         );
+    }
+
+    // Auto in dari scan lewat kartu melalui kamera
+    if (params.autoin != null){
+        let key = params.autoin;
+        // Otomatis redirect ke otentikasi
+        otentikasiLogin(key);
     }
 </script>
