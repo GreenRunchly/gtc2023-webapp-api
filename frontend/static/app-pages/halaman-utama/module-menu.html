@@ -8,6 +8,12 @@
             </a>
         </div>
         <div class="swiper-slide">
+            <a class="tombol" role-tombol="doa">
+                <h2><span><i class="fas fa-pray"></i></span></h2>
+                <h4>Doa</h4>
+            </a>
+        </div>
+        <div class="swiper-slide">
             <a class="tombol" role-tombol="helpdesk">
                 <h2><span><i class="fab fa-whatsapp"></i></span></h2>
                 <h4>Wali Kelas</h4>
@@ -44,6 +50,12 @@
         <p></p>
     </div>
 </div>
+<div class="listing-container">
+    <div class="listing-content" id="module-informasi-kamar">
+        <h2 class="wide"><i class="fas fa-bed"></i>&nbsp;Informasi Kamar</h2>
+        <h1></h1>
+    </div>
+</div>
 <script>
     // Untuk menus
     let moduleMenu = new Swiper('.module-menu', {
@@ -65,6 +77,10 @@
             case 'ebook':
                 // Load E-Book
                 window.open('/e-book', '_blank');
+                break;
+            case 'doa':
+                // Load E-Book
+                window.open('/doa', '_blank');
                 break;
             case 'toggletema':
                 // Switch Theme
@@ -97,6 +113,16 @@
         }
     }
     moduleInformasi();
+
+    // Informasi Kamar Subpart
+    function moduleInformasiKamar() {
+        let target = $("#module-informasi-kamar h1");
+        let data = appData.informasikamar
+        if (data !== null){
+            target.html(data.konten);
+        }
+    }
+    moduleInformasiKamar();
 
     // Theme Subpart
     function moduleTheme() {

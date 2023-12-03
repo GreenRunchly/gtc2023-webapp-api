@@ -74,9 +74,12 @@ app.post('/app/virtualcard/get/akun', [
 
 	console.log(kelas);
     
-	let sqlsyn = `
-	SELECT kode_akun, role, kode_kelas, nama, except, CONCAT('https://gtc.ieu.link?id={',TO_BASE64(TO_BASE64(kode_akun)), '}') AS qrcode FROM tb_akun WHERE kode_kelas='${kelas}' ORDER BY kode_kelas ASC;
+    let sqlsyn = `
+	SELECT kode_akun, role, kode_kelas, nama, except, CONCAT('https://gtc.ieu.link?id={',TO_BASE64(TO_BASE64(kode_akun)), '}') AS qrcode FROM tb_akun WHERE role='guru' ORDER BY kode_kelas ASC;
 	`;
+// 	let sqlsyn = `
+// 	SELECT kode_akun, role, kode_kelas, nama, except, CONCAT('https://gtc.ieu.link?id={',TO_BASE64(TO_BASE64(kode_akun)), '}') AS qrcode FROM tb_akun WHERE role='siswa' ORDER BY kode_kelas ASC;
+// 	`;
 // 	let sqlsyn = `
 // 	SELECT kode_akun, role, kode_kelas, nama, CONCAT('https://gtc.ieu.link?id={',TO_BASE64(TO_BASE64(kode_akun)), '}') AS qrcode FROM tb_akun WHERE role='guru' ORDER BY kode_kelas ASC;
 // 	`;
@@ -107,53 +110,60 @@ function appUpdateData() {
 	const child = require("child_process").exec("curl -L 'https://docs.google.com/spreadsheets/d/18P74DZV6-WQVIUstZF_ehU-eUedOlxfRT1MfyM4P76Q/export?format=xlsx' > './data/temp.xlsx'");
 	child.on('exit', function() {
 		// Menambahkan akun siswa
-		xlsxReader('./data/temp.xlsx', { sheet: 'Siswa' }).then((rows) => { rows[0].pop();
+		xlsxReader('./data/temp.xlsx', { sheet: 'Siswa' }).then((rows) => { 
+		    delete rows[0];
 			rows.forEach(row => {
-				// console.log(row);
-				// Mengetahui akun yang sudah ada per kode akun/nis
-				let sqlsyn = `SELECT * FROM tb_akun WHERE kode_akun='?';`;
-				pooldb.query(sqlsyn, [row[1]], (err, result) => { if (err){ /* Jika terjadi error */ console.log(err); }else{
-					if (result.length === 0){
-						pooldb.query(`INSERT INTO tb_akun (kode_akun, nama, kode_kelas, except) VALUES ('?',?,?,?)`, [
-							row[1], row[2], row[3], row[4]
-						], (err, result) => { 
-							if (err){ /* Jika terjadi error */ console.log(err); }else{
-								console.log(`Insert ${row[1]}`);
-							}
-						});
-					}else{
-						pooldb.query(`UPDATE tb_akun SET nama=?, kode_kelas=?, except=? WHERE kode_akun='?'`, [
-							row[2], row[3], row[4], row[1]
-						], (err, result) => { 
-							if (err){ /* Jika terjadi error */ console.log(err); }else{
-								console.log(`Update ${row[1]}`);
-							}
-						});
-					}
-				}});
+			 //   console.log(row[2]);
+			        row[1] = String(row[1]);
+    				// console.log(row);
+    				// Mengetahui akun yang sudah ada per kode akun/nis
+    				let sqlsyn = `SELECT * FROM tb_akun WHERE kode_akun=? AND role=?;`;
+    				pooldb.query(sqlsyn, [row[1],'siswa'], (err, result) => { if (err){ /* Jika terjadi error */ console.log(err); }else{
+    					if (result.length === 0){
+    						pooldb.query(`INSERT INTO tb_akun (kode_akun, nama, kode_kelas, except) VALUES (?,?,?,?)`, [
+    							row[1], row[2], row[3], row[4]
+    						], (err, result) => { 
+    							if (err){ /* Jika terjadi error */ console.log(err); }else{
+    								// console.log(`Insert ${row[1]}`);
+    							}
+    						});
+    					}else{
+    						pooldb.query(`UPDATE tb_akun SET nama=?, kode_kelas=?, except=? WHERE kode_akun=?`, [
+    							row[2], row[3], row[4], row[1]
+    						], (err, result) => { 
+    							if (err){ /* Jika terjadi error */ console.log(err); 
+    							}else{
+    								// console.log(`Update ${row[1]}`);
+    							}
+    						});
+    					}
+    				}});
+			    
 			});
 		});
 		
 		// Menambahkan Wali Kelas
-		xlsxReader('./data/temp.xlsx', { sheet: 'Wali Kelas' }).then((rows) => { rows[0].pop();
+		xlsxReader('./data/temp.xlsx', { sheet: 'Wali Kelas' }).then((rows) => { 
+		    delete rows[0];
 			rows.forEach(row => {
+			    row[1] = String(row[1]);
 				// Mengetahui akun yang sudah ada per kode akun/nis
-				let sqlsyn = `SELECT * FROM tb_akun WHERE kode_akun='?' AND role=?;`;
+				let sqlsyn = `SELECT * FROM tb_akun WHERE kode_akun=? AND role=?;`;
 				pooldb.query(sqlsyn, [row[1],'guru'], (err, result) => { if (err){ /* Jika terjadi error */ }else{
 					if (result.length === 0){
-						pooldb.query(`INSERT INTO tb_akun (kode_akun, nama, kode_kelas, role, except) VALUES ('?',?,?,?,?)`, [
+						pooldb.query(`INSERT INTO tb_akun (kode_akun, nama, kode_kelas, role, except) VALUES (?,?,?,?,?)`, [
 							row[1], row[2], row[3], 'guru', 'no'
 						], (err, result) => { 
 							if (err){ /* Jika terjadi error */ }else{
-								console.log(`Insert wli ${row[1]}`);
+								// console.log(`Insert wli ${row[1]}`);
 							}
 						});
 					}else{
-						pooldb.query(`UPDATE tb_akun SET nama=?, kode_kelas=?, role=?, except=? WHERE kode_akun='?'`, [
-							row[2], row[3], 'guru', row[1], 'no'
+						pooldb.query(`UPDATE tb_akun SET nama=?, kode_kelas=?, role=?, except=? WHERE kode_akun=?`, [
+							row[2], row[3], 'guru', 'no', row[1]
 						], (err, result) => { 
 							if (err){ /* Jika terjadi error */ }else{
-								console.log(`Update wli ${row[1]}`);
+								// console.log(`Update wli ${row[1]}`);
 							}
 						});
 					}
@@ -162,7 +172,7 @@ function appUpdateData() {
 		});
 
 		// Informasi
-		xlsxReader('./data/temp.xlsx', { sheet: 'Informasi' }).then((rows) => { rows[0].pop();
+		xlsxReader('./data/temp.xlsx', { sheet: 'Informasi' }).then((rows) => {
 			rows.forEach(row => {
 				// Mengetahui akun yang sudah ada per kode akun/nis
 				let sqlsyn = `DELETE FROM tb_appdata_informasi WHERE kode_kelas=?;`;
@@ -171,7 +181,7 @@ function appUpdateData() {
 						INSERT INTO tb_appdata_informasi (kode_kelas, konten) VALUES (?,?);
 					`, [ row[1], row[2] ], (err, result) => { 
 						if (err){ /* Jika terjadi error */ }else{
-							console.log(`Insert Info ${row[1]}`);
+				// 			console.log(`Insert Info ${row[1]}`);
 						}
 					});
 				}});
@@ -179,8 +189,8 @@ function appUpdateData() {
 		});
 
 		// HelpDesk
-		xlsxReader('./data/temp.xlsx', { sheet: 'Helpdesk' }).then((rows) => { rows[0].pop();
-			console.log(rows);
+		xlsxReader('./data/temp.xlsx', { sheet: 'Helpdesk' }).then((rows) => {
+			delete rows[0];
 			rows.forEach(row => {
 				// Mengetahui akun yang sudah ada per kode akun/nis
 				let sqlsyn = `DELETE FROM tb_appdata_helpdesk;`;
@@ -190,7 +200,7 @@ function appUpdateData() {
 						INSERT INTO tb_appdata_helpdesk (nomor,kode_kelas) VALUES (TO_BASE64(?),?);
 					`, [row[1], row[3] ], (err, result) => { 
 						if (err){ /* Jika terjadi error */  }else{
-							console.log(`Insert Help ${row[1]}`);
+				// 			console.log(`Insert Help ${row[1]}`);
 						}
 					});
 				}});
@@ -207,7 +217,7 @@ function appUpdateData() {
 						INSERT INTO tb_appdata_thumbnail (source) VALUES (?);
 					`, [ row[1] ], (err, result) => { 
 						if (err){ /* Jika terjadi error */ }else{
-							console.log(`Insert Foto ${row[1]}`);
+				// 			console.log(`Insert Foto ${row[1]}`);
 						}
 					});
 				}});
@@ -233,7 +243,7 @@ function appUpdatePembayaran() {
 					let nama = String(row[2]);
 
 					let setor = [];
-					for (let index = 0; index <= 3; index++) {
+					for (let index = 0; index <= 12; index++) {
 						let uang = parseInt(row[6+index]);
 						if ( (uang != null) && (!Number.isNaN(uang)) ){
 							setor.push(uang);
@@ -272,7 +282,7 @@ function appUpdatePembayaran() {
 }
 
 // Import Data Excel
-app.post('/app/update', [
+app.get('/app/update', [
 ], (req, res) => {
 	async function secondFunction() {
 		await appUpdateData();
@@ -285,7 +295,7 @@ app.post('/app/update', [
 });
 
 // Import Data Excel
-app.post('/app/update-pembayaran', [
+app.get('/app/update-pembayaran', [
 ], (req, res) => {
 	async function secondFunction() {
 		await appUpdatePembayaran();
@@ -386,6 +396,7 @@ app.post('/account/alive', [
 		WHERE tb_akun.sesi=?;
 	`;
 	pooldb.query(sqlsyn, [sesi, sesi, sesi, sesi, sesi], (err, result) => {
+	    result[6] = {konten:'Kamar 2'}
 		// Mengambil data antrian
 		if (err){ 
 			// Menampilkan error terjadi
@@ -409,7 +420,8 @@ app.post('/account/alive', [
 							thumbnail: result[1],
 							rundown: dataRun,
 							pembayaran: result[4],
-							pembayaranlisting:result[5]
+							pembayaranlisting:result[5],
+							informasikamar:result[6]
 						}
 					}); return;
 				}); 
