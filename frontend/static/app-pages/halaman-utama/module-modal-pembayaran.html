@@ -133,7 +133,7 @@
                 $(".payment-pesan").html(p3);
             }
 
-            if (appAccount.role == 'guru'){
+            if ((appAccount.role == 'guru') || (appAccount.role == 'pendamping') || (appAccount.role == 'panitia')){
                 // ${rupiah(3750000)}
                 $(".payment-current").text(``);
                 $(".payment-progress-percent").text(`Tidak Ada Pembayaran`);

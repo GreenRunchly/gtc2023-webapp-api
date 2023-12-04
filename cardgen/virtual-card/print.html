@@ -455,6 +455,16 @@
                 kode_guru = 'Walas - ';
                 kode_foto = 'guru/' + optionParams.kode_akun + '.PNG';
                 break;
+            case 'pendamping':
+                kode_guru = 'Pendamping Kegiatan GTC ';
+                kode_foto = 'guru/' + optionParams.kode_akun + '.PNG';
+                optionParams.kode_kelas = '';
+                break;
+            case 'panitia':
+                kode_guru = 'Panitia Kegiatan GTC';
+                kode_foto = 'guru/' + optionParams.kode_akun + '.PNG';
+                optionParams.kode_kelas = '';
+                break;
             case 'siswa':
                 kode_guru = '';
                 kode_foto = 'siswa/' + removeDash(optionParams.kode_kelas) +'/'+ removeSQuote(optionParams.nama) + '.PNG';
@@ -506,6 +516,7 @@
                             </div>
                             <div class="part-back-title">
                                 <h2>${(optionParams.nama)}</h2>
+                                <!---<h3>${(removeDash(optionParams.kode_akun))}</h3>--->
                                 <h3>${(removeDash(optionParams.kode_akun))}</h3>
                                 <h4>${kode_guru}${removeDash(optionParams.kode_kelas)}</h4>
                             </div>
@@ -538,7 +549,6 @@
                             </div>
                             <div class="part-front-qr">
                                 <div class="qr" style="--qr-code:url('${optionParams.qrcode}')"></div>
-                                <p style="text-align: center;width: 100%;margin: 0.5rem 0rem;font-size: 8px;">${(removeDash(optionParams.kode_akun))}</p>
                             </div>
                             <div class="part-front-ttd">
                                 <img class="stamp" src="assets/stempel.png">
@@ -548,6 +558,7 @@
                                 </div>
                             </div>
                         </div>
+                        <p style="text-align: center;width: 100%;padding:0rem;margin:0rem;margin-top:-5px;font-size: 8px;position:absolute;">${(removeDash(optionParams.kode_akun))}</p>
                         <div class="part-front-header">
                             <div class="part-front-title special">
                                 <h3>Religius - Sehat - Berprestasi</h3>
