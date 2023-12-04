@@ -1,0 +1,33 @@
+<!-- Module Main Menu -->
+<div class="container swiper module-menu round">
+    <div class="swiper-wrapper">
+        <div class="swiper-slide">
+            <a class="tombol" role-tombol="back">
+                <h2><span><i class="fas fa-chevron-left"></i></span></h2>
+                <h4>Kembali</h4>
+            </a>
+            
+        </div>
+    </div>
+</div>
+<script>
+    // Untuk menus
+    let moduleMenu = new Swiper('.module-menu', {
+        slidesPerView: 1,
+        spaceBetween: 14
+    });
+
+    // Stand alone function, jadi hanya berlaku pada page ini saja
+    $(document).on('click','.tombol[role-tombol]',function(e){
+        let roleTombol = $(this).attr('role-tombol');
+        switch (roleTombol) {
+            case 'back':
+                // Logout
+                window.history.back();
+                break;
+        };
+    });
+
+
+</script>
+<!-- Module Main Menu -->

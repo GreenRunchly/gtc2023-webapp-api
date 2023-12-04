@@ -1,0 +1,212 @@
+<style>
+    .game-container{
+        border-radius: 1rem;
+        background-color: var(--background-color-dim-light);
+        padding: 1rem;
+        margin: 0rem;
+    }
+    .game-container .selection{
+        display: flex;
+        justify-content: space-between;
+    }
+    .game-container .selection .option{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 1rem;
+        border-radius: 50%;
+        transition: 0.5s;
+        width: 5rem;
+        height: 5rem;
+    }
+    .game-container .selection .option:active{
+        transform: scale(0.9);
+        transition: 0s;
+        background-color: var(--background-color-dim);
+    }
+    .game-container .selection .option.selected{
+        background-color: var(--background-color-dim-strong);
+    }
+    .game-container .selection .option i{
+        font-size: 3rem;
+    }
+
+    .game-container .scoreboard{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        padding: 2rem 0rem;
+    }
+    .game-container .scoreboard .scoreboard-title{
+        font-size:4rem;
+        margin: 0rem;
+    }
+    .game-container .scoreboard .scoreboard-score{
+        font-size:2rem;
+        margin: 0rem;
+    }
+</style>
+<div class="game-container" game-status="start">
+    <div class="selection bot-action">
+        <div class="option" option-identifier="gunting">
+            <i class="fas fa-hand-scissors"></i>
+        </div>
+        <div class="option" option-identifier="batu">
+            <i class="fas fa-hand-rock"></i>
+        </div>
+        <div class="option" option-identifier="kertas">
+            <i class="fas fa-hand-paper"></i>
+        </div>
+    </div>
+    <div class="scoreboard">
+        <h1 class="scoreboard-title">VS</h1>
+        <h2 class="scoreboard-score"><span>0</span> : <span>0</span></h2>
+        <h2 class="scoreboard-autolock">Pilih salah satu.</h2>
+    </div>
+    <div class="selection user-action">
+        <div class="option" option-identifier="gunting">
+            <i class="fas fa-hand-scissors"></i>
+        </div>
+        <div class="option" option-identifier="batu">
+            <i class="fas fa-hand-rock"></i>
+        </div>
+        <div class="option" option-identifier="kertas">
+            <i class="fas fa-hand-paper"></i>
+        </div>
+    </div>
+</div>
+<script>
+    // Stand alone function, jadi hanya berlaku pada page ini saja
+    $(document).on('click','.user-action .option',function(e){
+
+        let gameStatus = $(`.game-container`).attr('game-status');
+
+        if ((gameStatus == 'start') || (gameStatus == 'locked-answer')){
+            let selected = $(this).hasClass('selected');
+            if (selected !== true){
+
+                $(`.user-action .option`).removeClass('selected');
+                $(this).addClass((selected == true) ? '' : 'selected');
+                lockAnswer(); 
+
+            }
+        }
+
+    });
+
+    let waitDelay = setInterval(() => {
+        let gameStatus = $(`.game-container`).attr('game-status');
+        if (gameStatus == 'start'){
+            let time = (60 - appDateSecond);
+            $(`.scoreboard-autolock`).html(`Pilih salah satu. (${time}d)`);
+        }
+    }, 1000);
+    
+    function lockAnswer() {
+        
+        let gameStatus = $(`.game-container`).attr('game-status');
+
+        // Timer sebelum lock jawaban (Mengirim Jawaban)
+        if (gameStatus !== 'locked-answer'){
+            let time = (60 - appDateSecond);
+            let answerDelay = setInterval(() => {
+                $(`.scoreboard-autolock`).html(`Menunggu Lawan... (${time}d)`);
+                (time > 0) ? (time --) : submitAnswer(() => { clearInterval(answerDelay); }) ;
+            }, 1000);
+            // Set game status to locked answer
+            $(`.game-container`).attr('game-status', 'locked-answer');
+        }
+
+        // Mengirim Jawaban
+        function submitAnswer(clearDelay) {
+            
+            console.log('Game Result');
+            let userAnswer = $(`.user-action .selected`).attr('option-identifier');
+
+            // Clear Interval answerDelay
+            clearDelay();
+
+            // Penentuan Pemenang
+            $(`.game-container`).attr('game-status', 'result');
+            let gameResult = getAnswer(userAnswer); console.log(gameResult);
+            let gameResultMsg = ``;
+            switch (gameResult) {
+                case 'user':
+                    gameResultMsg += `Menang!`;
+                    break;
+                case 'bot':
+                    gameResultMsg += `Kalah!`;
+                    break;
+                default:
+                    gameResultMsg += `Seri!`;
+                    break;
+            }
+            $(`.scoreboard-autolock`).html(gameResultMsg);
+            
+
+            // Reset game
+            let nextRoundDelay = setInterval(() => {
+                console.log('Game Reset');
+                gameReset();
+                clearInterval(nextRoundDelay);
+            }, 3000);
+        }
+    }
+
+    function getAnswer(userAnswer) {
+        // Bot Answer
+        let possibleAnswer = ['gunting', 'batu', 'kertas'];
+        let botAnswer = possibleAnswer[(Math.floor(Math.random()*possibleAnswer.length))];
+
+        // Set opponent answer in visual
+        $(`.bot-action .option`).removeClass('selected');
+        $(`.bot-action .option[option-identifier=${botAnswer}]`).addClass('selected');
+
+        // Result winner
+        let com1 = (possibleAnswer.indexOf(userAnswer)+1);
+        let com2 = (possibleAnswer.indexOf(botAnswer)+1);
+        let comCalc = (com1 + 1); (comCalc > 3) ? comCalc -= 3 : null;
+        
+        console.log(com1, com2, comCalc);
+
+        return (com2 == com1) ? 'seri' : (com2 == comCalc) ? 'bot' : 'user';
+
+        
+        /* What i had in mind
+            1 gunting
+            2 batu
+            3 kertas
+
+            gunting gunting = seri
+            gunting batu = kalah
+            gunting kertas = menang
+
+            1 1 = seri = 2
+            1 2 = kalah = 3
+            1 3 = menang = 4
+
+            2 2 = seri = 4
+            2 3 = kalah = 5
+            2 1 = menang = 3
+
+            3 3 = seri = 6
+            3 1 = kalah = 4
+            3 2 = menang = 5
+
+            com1 = jawaban
+            com2 = 1 + (jawaban - 1)
+
+            seri = 1 + (jawaban - 1)
+            kalah = 1 + (jawaban)
+            menang = 1 + (jawaban + 1)
+        */
+
+    }
+
+    function gameReset() {
+        $(`.scoreboard-autolock`).html('Pilih salah satu.');
+        $(`.selection .option`).removeClass('selected');
+        $(`.game-container`).attr('game-status', 'start');
+    }
+</script>

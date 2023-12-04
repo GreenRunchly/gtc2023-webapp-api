@@ -1,0 +1,20 @@
+<!-- Module Greeting -->
+<div class="container">
+    <h2 class="module-greeting"><i class="fad fa-gamepad"></i>&nbsp; Batu Gunting Kertas</h2>
+    <h3 class="module-user-nama"><span></span></h3>
+</div>
+<script>
+    // Module Greeting
+    function moduleUserHeader() {
+        let namaPanggilan = (appAccount.nama).split(" ")[0];
+        let namaLengkap = (appAccount.nama);
+
+        // Menulis kelas dan nis
+        let nis = appAccount.kode_akun;
+
+        let targetNamaPanggilan = $('.module-user-nama').children();
+        targetNamaPanggilan.html(`Selamat Datang, ${namaPanggilan}!`);
+    };
+    moduleUserHeader();
+</script>      
+<!-- Module Greeting -->

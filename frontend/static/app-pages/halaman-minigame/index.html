@@ -1,7 +1,9 @@
 <div class="container">
     <div class="content">
         <module-header></module-header>
-        <module-header-jumbotron></module-header-jumbotron>
+        <module-menu></module-menu>
+        
+        <module-game></module-game>
     </div>
 </div>
 <script>    
@@ -9,10 +11,13 @@
     function appInit() {
         // Initial Page Content
         appLoadContent($("module-header"),
-        'app-pages/halaman-utama/module-header.html', {replace: true});
+        'app-pages/halaman-minigame/module-header.html', {replace: true});
+        
+        appLoadContent($("module-menu"),
+        'app-pages/halaman-minigame/module-menu.html', {replace: true});
 
-        appLoadContent($("module-header-jumbotron"),
-        'app-pages/halaman-utama/module-header-jumbotron.html', {replace: true});
+        appLoadContent($("module-game"),
+        'app-pages/halaman-minigame/module-game.html', {replace: true});
     }
 
     function appLogin() {
