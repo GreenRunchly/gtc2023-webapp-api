@@ -57,14 +57,18 @@
         </div>
     </div>
     <p class="payment-pesan">.......</p><br>
-    <h2 class="wide"><i class="fas fa-users"></i>&nbsp;Peserta Kelas</h2>
-    <div class="container swiper module-pembayaran-listing round">
-        <div class="swiper-wrapper">
-            <div class="swiper-slide">
-                
+    
+    <div id="module-pembayaran-pesertakelas">
+        <h2 class="wide"><i class="fas fa-users"></i>&nbsp;Peserta Kelas</h2>
+        <div class="container swiper module-pembayaran-listing round">
+            <div class="swiper-wrapper">
+                <div class="swiper-slide">
+                    
+                </div>
             </div>
         </div>
     </div>
+
 </div>
 <script>
     
@@ -203,6 +207,10 @@
                 // Menghapus isi slide yang ada dan timpa html dengan yang baru dari urlSource
                 target.removeAllSlides();
                 target.appendSlide(ohtml);
+
+                if (ohtml == ``){
+                    $("#module-pembayaran-pesertakelas").hide();
+                }
             }
 
             // Done loading data
