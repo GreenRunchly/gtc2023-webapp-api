@@ -47,7 +47,7 @@
                 break;
             case 'assign-number':
                 let otpNumber = $('.input_otp_number').val();
-                if (otpNumber){
+                // if (otpNumber){
                     $.ajax({
                         url: `${appAPIServer}/account/assign`, dataType: "json", method: "POST",
                         data: {
@@ -70,9 +70,9 @@
                             alert(`Error : ${err.status}, ${err.statusText}`);
                         }
                     });
-                }else{
-                    alert(`Harap isi kolom OTP.`);
-                }
+                // }else{
+                //     alert(`Harap isi kolom OTP.`);
+                // }
                 break;
             case 'kembali':
                 appLoadContent($("login-verify-container"),
