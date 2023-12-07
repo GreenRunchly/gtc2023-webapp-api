@@ -2,9 +2,13 @@
 <p class="account_preview"></p>
 <p>Silahkan masukan nomor WhatsApp aktif untuk melanjutkan!</p><br>
 <input type="tel" class="input_wa_number" value="" onInput="this.value = phoneFormat(this.value)" maxlength="24" placeholder="+62 XXX XXXX XXXX">
-<a class="tombol" aksi="check-number">
+<!-- <a class="tombol" aksi="check-number">
     <h2><span><i class="fas fa-paper-plane"></i></h2>
     <h4>Kirim OTP</h4>
+</a> -->
+<a class="tombol" aksi="check-number">
+    <h2><span><i class="fas fa-paper-plane"></i></h2>
+    <h4>Daftarkan</h4>
 </a>
 <script>
     $(".account_preview").html(`Hai, ${loadData('loginAccountPreview')}!<br>${loadData('loginInputUsername')}`);

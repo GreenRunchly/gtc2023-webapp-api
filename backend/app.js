@@ -414,7 +414,7 @@ app.post('/account/alive', [
 						msg : "Keep Alive!",
 						accountdata : result[0][0],
 						appdata : {
-							countdown: "Dec 6, 2023 00:00:00",
+							countdown: "Dec 14, 2023 09:00:00",
 							informasi: result[3][0],
 							helpdesk: result[2][0],
 							thumbnail: result[1],
