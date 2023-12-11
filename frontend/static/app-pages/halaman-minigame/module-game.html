@@ -61,7 +61,7 @@
     </div>
     <div class="scoreboard">
         <h1 class="scoreboard-title">VS</h1>
-        <h2 class="scoreboard-score"><span>0</span> : <span>0</span></h2>
+        <h2 class="scoreboard-score"><span class="user-score">0</span> : <span class="bot-score">0</span></h2>
         <h2 class="scoreboard-autolock">Pilih salah satu.</h2>
     </div>
     <div class="selection user-action">
@@ -77,6 +77,9 @@
     </div>
 </div>
 <script>
+
+    setData(0,'minigame-score');
+    setData(0,'minigame-score-bot');
     // Stand alone function, jadi hanya berlaku pada page ini saja
     $(document).on('click','.user-action .option',function(e){
 
@@ -111,7 +114,7 @@
         if (gameStatus !== 'locked-answer'){
             let time = (60 - appDateSecond);
             let answerDelay = setInterval(() => {
-                $(`.scoreboard-autolock`).html(`Menunggu Lawan... (${time}d)`);
+                $(`.scoreboard-autolock`).html(`Menunggu Hasil... (${time}d)`);
                 (time > 0) ? (time --) : submitAnswer(() => { clearInterval(answerDelay); }) ;
             }, 1000);
             // Set game status to locked answer
@@ -126,7 +129,7 @@
 
             // Clear Interval answerDelay
             clearDelay();
-
+            
             // Penentuan Pemenang
             $(`.game-container`).attr('game-status', 'result');
             let gameResult = getAnswer(userAnswer); console.log(gameResult);
@@ -134,15 +137,24 @@
             switch (gameResult) {
                 case 'user':
                     gameResultMsg += `Menang!`;
+                    setData( parseInt(loadData('minigame-score'))+1 ,'minigame-score');
                     break;
                 case 'bot':
                     gameResultMsg += `Kalah!`;
+                    setData( parseInt(loadData('minigame-score-bot'))+1 ,'minigame-score-bot');
                     break;
                 default:
                     gameResultMsg += `Seri!`;
                     break;
             }
             $(`.scoreboard-autolock`).html(gameResultMsg);
+
+            if (loadData('minigame-score')){
+                $('.user-score').html(loadData('minigame-score'));
+            }
+            if (loadData('minigame-score-bot')){
+                $('.bot-score').html(loadData('minigame-score-bot'));
+            }
             
 
             // Reset game
